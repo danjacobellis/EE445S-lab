@@ -1,7 +1,10 @@
-# Labs
+# Contents
 ```{toctree}
 ---
 ---
+overview
+primer
+stm32h735g
 lab1
 lab2
 ```
