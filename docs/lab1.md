@@ -27,11 +27,11 @@ The aim of the experiment is to familiarize you with the following:
 
 Complete the following exercises during your lab section. Include your results in the lab report.
 
-If you are unfamiliar with a particular MATLAB function, type `doc <function>`  or `help <function>` in the matlab command window.
+If you are unfamiliar with a particular MATLAB function, type `doc <function>`  or `help <function>` in the MATLAB command window.
 
 ### DSP in MATLAB
 
-Since these exercises are intended to teach the basics of matlab, the solutions are provided.
+Since these exercises are intended to teach the basics of MATLAB, the solutions are provided.
 
 1.  Create a vector `t` representing the continuous time variable with range of one second and sampling period of of $T_s = 0.001$ sec. Please exclude the last data point, i.e., the end point becomes 1-1/fs. One way to create a vector of evenly spaced numbers in MATLAB is with the `:` operator. Alternatively, you can use the `linspace` function.
 
@@ -103,11 +103,11 @@ In order for you to get started programming the board, we have created a sample 
 
 2. Connect the blue input jack on the board to the signal generator set to a 1kHz sine wave.
 
-3. Connect the green output jack on the board to the oscilliscope.
+3. Connect the green output jack on the board to the oscilloscope.
 
-4. Configure the oscilliscope and verify the that the signal appears as expected.
+4. Configure the oscilloscope and verify the that the signal appears as expected.
 
-5. Locate the `process_left_channel` function in `lab.c`. Change the behavior from a talkthrough (output=input) to a squaring function (output = input * input.) Rerun the program and observe the result on the oscilliscope.
+5. Locate the `process_left_channel` function in `lab.c`. Change the behavior from a talkthrough (output=input) to a squaring function (output = input * input.) Rerun the program and observe the result on the oscilloscope.
 
 ## Lab Report Contents
 

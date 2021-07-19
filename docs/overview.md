@@ -10,7 +10,7 @@ Thad B. Welch, Cameron H. G. Wright, and Michael G. Morrow, [Real-Time Digital S
 
 This book is now optional, but you may find it helpful since some exercises were adapted from it.
 
-## Required Textbook
+## Required textbook
 
 The some reading assignments will include sections of the following textbook, which is available as a free download from ARM:
 
@@ -18,7 +18,7 @@ The some reading assignments will include sections of the following textbook, wh
 
 The STM32F4 discovery board used in this book is different from the hardware we will use in lab, but most of the contents on signal processing, embedded programming, and ARM Cortex-M processors is applicable to the hardware we will use.
 
-## Format of Lab
+## Format of lab
 Each laboratory section meets three hours per week. Pre-laboratory quizzes are required for laboratories 2-6, and they are to be completed individually without help from anyone. For laboratory 1, the experiment and written report are to be completed individually. For laboratories 2-6, the experiment and report are to be completed in a team of two. For laboratory 7, which is optional, the experiment and oral report are to be completed individually. The format of the written lab report is described with each lab assignment.
 
 ## Grading

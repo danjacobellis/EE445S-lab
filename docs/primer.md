@@ -41,7 +41,7 @@ The goal of the lab component of the course is threefold:
 
 **Understanding the nuances** – We make assumptions in developing the theory that are often violated in practice. For example, floating point arithmetic introduces [numerical errors][11] which must be accounted for. The lab exercises give us an opportunity to test our assumptions and correct for them when necessary.
 
-## Lab reading assignments and quizzes
+## Reading assignments and quizzes
 
 The reading assignments are intended to help you get up to speed on background and terminology so that you can communicate more efficiently with your lab partner and the TA. The quiz questions will be drawn from topics covered in the reading assignment.
 
@@ -58,7 +58,7 @@ For Labs 2-6 each team should turn in one report consisting of the following sec
 
 The goal of the report is to help cement what you learned in memory. For sections 1, 2, and 4, imagine your audience is a student who is your peer but who has not yet completed the lab.
 
-## Lab instructions
+## Instructions
 
 Each lab is accompanied by a set of instructions for tasks you should complete. For labs that extend beyond one week, the instructions are divided accordingly. The instructions are designed to be completed within the three hours allocated for lab each week. 
 
@@ -66,7 +66,7 @@ Any code, plots, oscilloscope screenshots, or timing measurements you make while
 
 The instructions may also include questions on the last slide. Answer these questions in section 5 of the report.
 
-## Lab hardware and software
+## Hardware and software
 Before the start of each lab, check out one development board for each team for labs 2-6 and one board for each individual for labs 1 and 7.
 
 The development board is the STM32H735G Discovery kit. The user manual can be [downloaded from the ST website][12]. Make sure that the board you check out is accompanied by a micro USB cable to connect to your laptop and two BNC to TS cables to connect with the oscilloscope.
