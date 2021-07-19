@@ -109,6 +109,11 @@ In order for you to get started programming the board, we have created a sample 
 
 5. Locate the `process_left_channel` function in `lab.c`. Change the behavior from a talkthrough (output=input) to a squaring function (output = input * input.) Rerun the program and observe the result on the oscilloscope.
 
+6. in `lab.c`, put a breakpoint on the line `return output_sample;` at the end of the `process_left_sample` function. 
+
+7. Allow the program to continue until it stops at the breakpoint. Add a watch expression for the variable `elapsed_cycles` and record the value. **Include this measurement in your lab report.**
+
+
 ## Lab Report Contents
 
 Be sure to include everything listed in this section when you submit your lab report.
