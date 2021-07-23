@@ -22,7 +22,31 @@ Sinusoidal waveforms will be computed in discrete time, plotted, and played as a
     
 ## Lab 2 instructions: Week 1
 
+In these exercises, we want to generate the continuous signal $x(t) = \sin(2 \pi f_0 t)$ by sending the discrete signal $x[n] = \sin \left( 2 \pi \frac{f_0}{f_s} n\right)$ to the DAC.
+
 ### Sinusoidal generation using math library and phase accumulation
+
+The first method we will use to generate a sinusoid is a math library call.
+
+1. Set the sampling rate to $\left(f_s = 16 \text{ kHz} \right)$ in lab.h.
+
+2. Determine the discrete time frequency $\omega_0$ (in radians per sample) corresponding to $f_0 = 1000$ Hz.
+
+3. In lab.c, create a variable corresponding to the current phase. Use the type float32_t.
+
+4. The math library will compute floating point values of the sinusoid in the range $[-1,1]$. Determine an appropriate scaling factor to map this to an appropriate range of the 16-bit DAC. (Hint: an int16_t can take values between −32768 and 32767.)
+
+5. In process_left_sample, replace the current talkthrough behavior with the sinusoidal generation using the math library and phase accumulation:
+
+    * Instead of setting `output_sample = input_sample` , call the math library function:  `output_sample = SCALING_FACTOR * arm_sin_f32(phase)`
+    
+    * Increment the phase by $\omega_0$
+    
+6. Using the phase accumulation method, the phase will eventually become too large and cause numerical errors. Add an if statement that prevents the phase from exceeding $2 \pi $.
+
+7. Display the output signal on the oscilloscope and verify the frequency.
+
+**Include the modified process_left_sample function in your lab report and the value of $\omega_0$ you computed.**
 
 ### Sinusoidal generation using difference equation
 
@@ -37,6 +61,9 @@ Be sure to include everything listed in this section when you submit your lab re
 ### I. Results from lab exercise
 
 1. Sinusoidal generation using math library and phase accumulation
+
+    * process_left sample function modified for math library method 
+    * value of $\omega_0$ used to generate 1 kHz sinusoid$
 
 2. Sinusoidal generation using difference equation
 
