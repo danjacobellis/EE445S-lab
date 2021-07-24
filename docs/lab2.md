@@ -46,9 +46,36 @@ The first method we will use to generate a sinusoid is a math library call.
 
 7. Display the output signal on the oscilloscope and verify the frequency.
 
-**Include the modified process_left_sample function in your lab report and the value of $\omega_0$ you computed.**
+8. Approximate the number of clock cycles that elapsed when calling the math library function by placing it between calls of the provided `tic()` and `toc()` functions. The easiest way to do this is by putting a breakpoint *after* the line `elapsed_cycles = toc()`, setting a watch expression for `elapsed_cycles`, and running the program in debug mode until it reaches the breakpoint. The `tic()` and `toc()` functions estimate the number of clock cycles by saving the value of the systick register and taking a difference. Occasionally, you will observe a very high measurement (something like 4 million) caused by overflow. If this happens, you can easily repeat the measurement by continuing the program execution until it reaches the breakpoint again.
+
+**In your lab report, please include:**
+
+* the modified process_left_sample function
+* the value of $\omega_0$ you computed
+* the clock cycle measurement for the math library call
 
 ### Sinusoidal generation using difference equation
+
+In this exercise, we will apply an impulse to a causal discrete-time linear time-invariant system governed by the difference equation
+
+$$ y[n] = (2 \cos \omega_0) y[n-1] - y[n-2] + (\sin \omega_0) x[n-1]) $$
+
+The impulse response of this system is a causal sinusoid with discrete time frequency $\omega_0$.
+
+1.  In lab.c, initialize variables corresponding to the state variables of the system. For example:
+    ```
+    float32_t x[3] = {1,0,0};
+    float32_t y[3] = {0,0,0};
+    ```
+    If using an array of values like this example, think about which element of the array should correspond to each state variable. A good convention is that `x[0]` maps to $x[n]$, `x[1]` maps to $x[n-1]$, and so on.
+    
+2. In lab.c replace the output value of process_left_sample with the output $y[n]$ of this system. Use the same value of $\omega_0$ as before.
+
+3. In lab.c, add statements to the process_left_sample function that simulate the state values moving through the delay line. Looking at the block diagram should help you determine how to update your variables.
+
+4. Run the program and view the output on the oscilloscope to verify the behavior.
+
+**Include the modified process_left_sample function in your lab report.**
 
 ## Lab 2 instructions: Week 2
 
@@ -63,19 +90,21 @@ Be sure to include everything listed in this section when you submit your lab re
 1. Sinusoidal generation using math library and phase accumulation
 
     * process_left sample function modified for math library method 
-    * value of $\omega_0$ used to generate 1 kHz sinusoid$
+    * value of $\omega_0$ used to generate 1 kHz sinusoid
 
 2. Sinusoidal generation using difference equation
+
+    * process_left sample function modified for difference equation method 
 
 3. Sinusoidal generation using lookup table
 
 ### II. Assignment questions
 
-1. Explain (mathematically) what happened when 6 kHz & 7 kHz sine waves were generated for a sample rate of 8 kHz.
+1. Explain (mathematically) what happened when the 15 kHz sine wave was generated for a sample rate of 16 kHz.
 
 2. Why is the scaling factor necessary? What would happen if the scaling factor was left out?
 
-3. When generating a sinusoid with a sampling rate of 8kHz, how many cycles would occur between samples? Assume that the processor is running at 500 MHz. 
+3. When generating a sinusoid with a sampling rate of 16 kHz, how many cycles would occur between samples? Assume that the processor is running at 500 MHz. 
 
 4. Repeat the previous question for a sampling rate of 192 kHz.
 
