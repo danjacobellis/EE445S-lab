@@ -81,6 +81,24 @@ The impulse response of this system is a causal sinusoid with discrete time freq
 
 ### Sinusoidal generation using lookup table
 
+In this exercise, we will examine the lookup table method for generating a sinusoid.
+
+#### Examining periodicity in MATLAB (optional).
+
+This section is optional, but may help you complete assignment question #6.
+
+The lookup table method requires minimal computation compared the math library call or difference equation, but the memory required depends on the desired frequency and the sampling rate. This MATLAB exercise will demonstrate this relationship.
+
+1. For a sine wave with desired frequency $f_0 = \text{1 kHz}$ and a sampling rate of $f_s = 16 \text{ kHz}$, determine the appropriate discrete-time frequency $\omega_0$ in radians per sample. 
+
+2. In MATLAB, plot the first 100 samples of the discrete-time signal in step one using the `stem` function. Notice that the signal repeats every 16 samples.
+
+3. Repeat step two for a sine wave with desired frequency $f_0 = \text{3 kHz}$ and a sampling rate of $f_s = 16 \text{ kHz}$. Notice that this signal also repeats every 16 samples.
+
+3. Repeat step two for a sine wave with desired frequency $\Omega_0 = 1000 \text{ rad/sec}$ and a sampling rate of $f_s = 8 \text{ kHz}$. Notice that this signal is *aperiodic*.
+
+#### Lookup table using DMA
+
 ## Lab report contents
 
 Be sure to include everything listed in this section when you submit your lab report.
@@ -109,5 +127,13 @@ Be sure to include everything listed in this section when you submit your lab re
 4. Repeat the previous question for a sampling rate of 192 kHz.
 
 5. Look at the measurement you obtained for the number of clock cycles required to execute the math library sin function. Compare this number to the answers obtained in the previous two question. What do these numbers tell you about the feasibility of the math library method for generating sinusoids as the sampling rate increases?
+
+6. The lookup table method for generating a sinusoid requires almost no computation, but does require memory. For which of the following conditions would the lookup table method be appropriate?
+
+    a. $f_0 = \text{1 kHz}$, $f_s = 16 \text{ kHz}$
+    
+    b. $f_0 = \text{440 Hz}$ (middle c), $f_s = 44.1 \text{ kHz}$ (CD audio)
+    
+    c.  $\Omega_0 = 1000 \text{ rad/sec}$, $f_s = 16 \text{ kHz}$.
     
 [1]:http://users.ece.utexas.edu/~bevans/courses/realtime/lectures/01_Sinusoids/lecture1.ppt
