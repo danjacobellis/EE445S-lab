@@ -97,7 +97,79 @@ The lookup table method requires minimal computation compared the math library c
 
 3. Repeat step two for a sine wave with desired frequency $\Omega_0 = 1000 \text{ rad/sec}$ and a sampling rate of $f_s = 8 \text{ kHz}$. Notice that this signal is *aperiodic*.
 
-#### Lookup table using DMA
+#### Lookup table: sample-by-sample
+
+1. For a sine wave with desired frequency $f_0 = \text{1 kHz}$ and a sampling rate of $f_s = 16 \text{ kHz}$, determine the appropriate discrete-time frequency $\omega_0$ in radians per sample. Notice that this discrete-time signal is periodic with $L=16$ samples.
+
+2. In lab.h, ensure that the sampling rate is set to 16 kHz.
+
+3. In lab.c, declare an array corresponding to a lookup table that you will build for this sinusoid. Also create a variable corresponding to the current position in the lookup table. For example:
+
+    ```
+    int16_t table[16];
+    uint32_t i_table = 0;
+    ```
+
+4. In lab.c, add code to the lab_init function to populate your lookup table. For example:
+
+    ```
+    float32_t amplitude;
+    for (uint32_t n = 0; n < 16; n+=1)
+    {
+        amplitude = arm_sin_f32(n * omega0);
+        table[n] = SCALING_FACTOR * amplitude;
+    }
+    ```
+
+5. In lab.c, modify the process_left_sample function to use the values from your lookup table. For example
+
+    ```
+    output_sample = table[i_table];
+    i_table += 1;
+    if (i_table == 16) {i_table = 0;}
+    return output_sample;
+    ```
+
+6. Run the program and view the output on the oscilloscope to verify the behavior. **Include an oscilloscope screenshot in your lab report. Make sure that either the frequency or period of the sinusoid are visible in your screenshot.**
+
+7. Change $\omega$ so that it corresponds to a desired frequency $f_0 = \text{15 kHz}$ and a sampling rate of $f_s = 16 \text{ kHz}$ (This should be a red flag!). Run the program and view the output on the oscilloscope. **Include an oscilloscope screenshot in your lab report. Make sure that either the frequency or period of the sinusoid are visible in your screenshot.**
+
+#### Lookup table: direct memory access (DMA)
+
+The starter code is configured to use the DMA controller to repeatedly transfer a buffer (corresponding to the output signal) to the DAC. Typically, this buffer is updated as new inputs are received. Since we want to generate a periodic signal, we can implement our program more efficiently by populating this buffer with our sinusoid once and then leaving it untouched.
+
+1. In lab.h, disable updates to the ouput buffer by uncommenting the statement
+
+    ```
+    # define PERIODIC_LOOKUP_TABLE
+    ```
+    
+    and commenting the statements for the processing functions
+    
+    ```
+    //   #define PROCESS_LEFT_CHANNEL
+    //   #define PROCESS_RIGHT_CHANNEL
+    //   #define PROCESS_INPUT_BUFFER
+    //   #define PROCESS_OUTPUT_BUFFER
+    ```
+    
+2. In lab.c, modify the construction of your lookup table so that the values are stored in the output buffer. Recall that the left and right channels are interleaved in the output buffer. To use the lookup table on the left channel, you might add
+
+    ```
+    for (uint32_t i_sample = 0; i_sample < FRAME_SIZE; i_sample+=1)
+    {
+        i_table = (i_sample/2) % 16;
+        output_buffer[i_sample] = table[i_table]; //left
+        i_sample += 1;
+        output_buffer[i_sample] = 0; //right
+    }
+    ```
+
+3. Run the program and view the output on the oscilloscope to verify the behavior.
+
+4. Notice the frame size (8192) is an integer multiple of our signal's period $L=16$. Recalculate $\omega0$ and $L$ corresponding to a $f_0 = \text{440 Hz}$ and update your lookup table accordingly. Run the program and observe the output on the oscilloscope. You should notice abrupt changes in your output every $\frac{8192}{16000} \approx 0.5$ seconds.
+
+5. In lab.h, change the frame size to 8000 and run the program. You should notice that the abrupt changes in your output no longer occur.
 
 ## Lab report contents
 
@@ -115,6 +187,9 @@ Be sure to include everything listed in this section when you submit your lab re
     * process_left sample function modified for difference equation method 
 
 3. Sinusoidal generation using lookup table
+
+    * oscilloscope screenshot corresponding to desired frequency $f_0 = \text{1 kHz}$
+    * oscilloscope screenshot corresponding to desired frequency $f_0 = \text{15 kHz}$
 
 ### II. Assignment questions
 

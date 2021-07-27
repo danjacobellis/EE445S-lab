@@ -62,6 +62,7 @@ static void MPU_Config(void);
 static void CPU_CACHE_Enable(void);
 static void Display_DemoDescription(void);
 static void Error_Handler(void);
+extern void lab_init(int16_t* output_buffer);
 extern int16_t process_left_sample(int16_t input_sample);
 extern int16_t process_right_sample(int16_t input_sample);
 extern void process_input_buffer(int16_t* input_buffer);
@@ -81,6 +82,7 @@ int main(void)
   BSP_PB_Init(BUTTON_USER, BUTTON_MODE_EXTI);
   arm_rfft_fast_init_f32(&fft_inst, FRAME_SIZE/4);
   audio_init();
+  lab_init(play_buffer);
   #ifdef ENABLE_VISUALIZATION
 	  UTIL_LCD_SetBackColor(UTIL_LCD_COLOR_BLACK);
 	  UTIL_LCD_Clear(UTIL_LCD_COLOR_BLACK);
@@ -161,18 +163,20 @@ void BSP_AUDIO_IN_HalfTransfer_CallBack(uint32_t Instance)
     {
 		#ifdef PROCESS_LEFT_CHANNEL
 			play_buffer[i_sample] = process_left_sample(record_buffer[i_sample]);
+		#elif defined(PERIODIC_LOOKUP_TABLE)
 		#else
 			play_buffer[i_sample] = record_buffer[i_sample];
 		#endif
 		i_sample +=1;
 		#ifdef PROCESS_RIGHT_CHANNEL
 			play_buffer[i_sample] = process_right_sample(record_buffer[i_sample]);
+		#elif defined(PERIODIC_LOOKUP_TABLE)
 		#else
 			play_buffer[i_sample] = record_buffer[i_sample];
 		#endif
     }
 	#ifdef PROCESS_OUTPUT_BUFFER
-    process_output_buffer(play_buffer);
+    	process_output_buffer(play_buffer);
 	#endif
     SCB_CleanDCache_by_Addr((uint32_t *)play_buffer, FRAME_SIZE);
     audio_buffer_offset  = BUFFER_OFFSET_HALF;
@@ -187,12 +191,14 @@ void BSP_AUDIO_IN_TransferComplete_CallBack(uint32_t Instance)
 	{
 		#ifdef PROCESS_LEFT_CHANNEL
 			play_buffer[i_sample] = process_left_sample(record_buffer[i_sample]);
+		#elif defined(PERIODIC_LOOKUP_TABLE)
 		#else
 			play_buffer[i_sample] = record_buffer[i_sample];
 		#endif
 		i_sample +=1;
 		#ifdef PROCESS_RIGHT_CHANNEL
 			play_buffer[i_sample] = process_right_sample(record_buffer[i_sample]);
+		#elif defined(PERIODIC_LOOKUP_TABLE)
 		#else
 			play_buffer[i_sample] = record_buffer[i_sample];
 		#endif

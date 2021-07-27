@@ -24,6 +24,15 @@ extern float32_t fft_mag[FRAME_SIZE/8];
 uint32_t elapsed_cycles;
 
 /*
+This function will be called once before beginning the main program loop.
+This is the best place to build a lookup table.
+*/
+void lab_init(int16_t* output_buffer)
+{
+	return;
+}
+
+/*
 This function will be called each time a complete frame of data is recorded.
 Modify this function as needed.
 Default behavior:
