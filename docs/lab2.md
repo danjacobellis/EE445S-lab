@@ -173,9 +173,19 @@ The starter code is configured to use the DMA controller to repeatedly transfer 
 
 ## Lab report contents
 
-Be sure to include everything listed in this section when you submit your lab report.
+Be sure to include everything listed in this section when you submit your lab report. The goal of the report is to help cement what you learned in memory. For sections I, II, and IV, imagine your audience is a student who is your peer but who has not yet completed the lab.
 
-### I. Results from lab exercise
+### I. Introduction
+
+Briefly explain the theory and algorithms behind the programs that you wrote. The slides and reading material might help you in writing this section.
+
+### II. Methods
+
+Describe the steps you took to implement the algorithms in your own words.
+
+### III. Results from lab exercise
+
+Present the results you obtain for each task on the assignment sheet. This section should include illustrative oscilloscope screenshots of the DSP algorithms in action. Also include any code that you wrote or modified. Please do not include all of the boilerplate code from the textbook.
 
 1. Sinusoidal generation using math library and phase accumulation
 
@@ -190,8 +200,14 @@ Be sure to include everything listed in this section when you submit your lab re
 
     * oscilloscope screenshot corresponding to desired frequency $f_0 = \text{1 kHz}$
     * oscilloscope screenshot corresponding to desired frequency $f_0 = \text{15 kHz}$
+    
+### IV. Discussion
 
-### II. Assignment questions
+In this section, discuss the takeaway from each lab. You can mention any intuition that you developed. Also mention any problems that you faced and how you rectified them.
+
+### V. Assignment questions
+
+Please answer the following questions.
 
 1. Explain (mathematically) what happened when the 15 kHz sine wave was generated for a sample rate of 16 kHz.
 
@@ -209,6 +225,6 @@ Be sure to include everything listed in this section when you submit your lab re
     
     b. $f_0 = \text{440 Hz}$ (middle c), $f_s = 44.1 \text{ kHz}$ (CD audio)
     
-    c.  $\Omega_0 = 1000 \text{ rad/sec}$, $f_s = 16 \text{ kHz}$.
+    c. $\Omega_0 = 1000 \text{ rad/sec}$, $f_s = 16 \text{ kHz}$.
     
 [1]:http://users.ece.utexas.edu/~bevans/courses/realtime/lectures/01_Sinusoids/lecture1.ppt
