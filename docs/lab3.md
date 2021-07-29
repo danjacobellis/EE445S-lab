@@ -28,7 +28,94 @@ In this experiment, you will design and implement finite impulse response (FIR) 
 
 ### FIR filter design in MATLAB
 
+We want to design a FIR bandpass filter using the following parameters:
+* Design method: Parks-McClellan (a.k.a. equiripple)
+* Filter order $N=30$ (the filter will have $N+1=31$ coefficients)
+* Sampling Frequency $F_s= 44.1 \text{ kHz}$
+* $F_{\text{stop1}}=5.9\text{ kHz}$
+* $F_{\text{pass1}}=6\text{ kHz}$
+* $F_{\text{pass2}}=16\text{ kHz}$
+* $F_{\text{stop2}}=16.1\text{ kHz}$
+* $W_{\text{stop1}}=W_{\text{pass}}=W_{\text{stop2}}$
+
+![](img/bandpass.svg)
+
+1. Open the the MATLAB Filter Designer by calling the `filterDesigner` function. Enter the parameters and design the filter.
+
+2. Export the coefficients to your workspace (File → Export → coefficients to workspace). The default variable name is `Num`, corresponding to the numerator of the transfer function.
+
+   Later, we will experimentally measure the frequency response at 1000 Hz, 2000 Hz, $\ldots$, 19000 Hz, and 20000 Hz. In order to compare with our measurements, we need to first tabulate the theoretical response at these frequencies.
+
+3. Use the `freqz` function to get the response of the filter at 10 Hz intervals:
+
+    ```
+    [h,f] = freqz(Num,1,2205,44100);
+    ```
+4. Define a function to convert the frequency response values returned by freqz from complex values to magnitude values in dB:
+
+    ```
+    dB = @(x) 20*log10(abs(x));
+    ```
+5. Tabulate the theoretical magnitude response of this filter at 1000 Hz increments up to 20 kHz:
+
+    ```
+    freq = f(101:100:2001);
+    resp_dB = dB(h(101:100:2001));
+    table(freq,resp_dB)
+    ```
+    
+    You may find it helpful to export the values to a spreadsheet so that you can record the measured values in a new column later. You can use the `xlswrite` function to export the data to a spreadsheet
+    
+    ```
+    xlswrite('theoretical_response.xlsx',[freq,resp_dB]);
+    ```
+    
+    **Include the tabulated values of the theoretical magnitude response in your lab report**     
+    
+6. We will need to define an array in C containing these coefficient. You can use the `sprintf` command in MATLAB to generate a comma separated string which you can copy into your C code:
+
+    ```
+    sprintf('%f,',Num))
+    ```
+
 ### FIR filter implementation in C
+
+1. In lab.c, define an array containing your filter coefficients.
+
+    ```
+    float32_t b[31] = {<coefficients from MATLAB>};
+    ```
+    
+2. In lab.c, define variables corresponding to the state values of the filter. An easy convention is to create an array `x` where `x[0]` corresponds with $x[n]$, `x[1]` corresponds with $x[n-1]$, and so on. Initialize your variables so that all initial conditions are zero. An easy way to do this is with the 'universal zero initializer' `{0}`, e.g. 
+
+    ```
+    float32_t x[31] = {0};
+    float32_t y = 0;
+    ```
+    
+3. In lab.c, modify the process_left_sample function to implement the filter as a tapped delay line.
+
+    ![](img/tapped_delay.svg)
+
+    i. Each time the process_left_sample function is called, we need to calculate the value of $y[n]$ from a summation. Assign `y` a value of zero to 'reset' the summation.
+    
+    ii. Create a for loop to perform the summation for the output of the tapped delay line
+    
+    $$y[n] = \sum_{i=0}^{N}{b_ix[n-i]}$$
+    
+    iii. After computing $y[n]$ we need to move the variables down the delay line. Create another for loop that reassigns the state variable to prepare them for the next output when process_left_sample is called again. (Hint: use a downcounting for loop.)
+    
+4. Connect the signal generator (set to 10 kHz) as the input and the oscilloscope as the output. Verify the operation of the program. (Since 10kHz is in the passband, you should see the signal on the output).
+
+5. Measure the frequency response of your filter at 1 kHz increments up to 20 kHz by changing the frequency on the signal generator and measuring the amplitude of the output signal. **Include the measured values in your lab report.**
+
+6. Convert the amplitude values you measured to decibels. Since your measurement is in voltage and decibels are a ratio of power, the conversion is:
+
+    $$\left| H \right|_{\text{dB}} = 10\log_{10}\left(\frac{P_{\text{out}}}{P_{\text{in}}}\right)= 20\log_{10}\left(\frac{V_{\text{out}}}{V_{\text{in}}}\right)$$
+    
+    The value for $V_{\text{out}$ is your measurement. Check your signal generator for the value of $V_{\text{in}$.
+    
+7. Plot the values of your measured response on top of or next to the values of the theoretical response. **Include this plot in your lab report.**
 
 ## Lab 3 instructions: Week 2
 
@@ -57,6 +144,14 @@ Describe the steps you took to implement the algorithms in your own words.
 ### III. Results from lab exercise
 
 Present the results you obtain for each task on the assignment sheet. This section should include illustrative oscilloscope screenshots of the DSP algorithms in action. Also include any code that you wrote or modified. Please do not include all of the boilerplate code from the textbook.
+
+In addition to the code you modified, make sure to include.
+
+1. Theoretical magnitude response values of bandpass filter.
+
+2. Measured magnitude response values of bandpass filter.
+
+3. Plot of theoretical response on top of or next to a plot of your measured response.
     
 ### IV. Discussion
 
