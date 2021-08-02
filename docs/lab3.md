@@ -44,7 +44,7 @@ We want to design a FIR bandpass filter using the following parameters:
 
 2. Export the coefficients to your workspace (File → Export → coefficients to workspace). The default variable name is `Num`, corresponding to the numerator of the transfer function.
 
-   Later, we will experimentally measure the frequency response at 1000 Hz, 2000 Hz, $\ldots$, 19000 Hz, and 20000 Hz. In order to compare with our measurements, we need to first tabulate the theoretical response at these frequencies.
+   Later, we will experimentally measure the frequency response at 1000 Hz, 2000 Hz, $\ldots$, 19000 Hz, and 20000 Hz. In order to compare with our measurements, we need to first tabulate the theoretical response at these frequencies. Steps 3-5 describe this process.
 
 3. Use the `freqz` function to get the response of the filter at 10 Hz intervals:
 
@@ -72,10 +72,10 @@ We want to design a FIR bandpass filter using the following parameters:
     
     **Include the tabulated values of the theoretical magnitude response in your lab report**     
     
-6. We will need to define an array in C containing these coefficient. You can use the `sprintf` command in MATLAB to generate a comma separated string which you can copy into your C code:
+6. We will need to define an array in C containing these coefficients. You can use the `sprintf` command in MATLAB to generate a comma separated string which you can copy into your C code:
 
     ```
-    sprintf('%f,',Num))
+    sprintf('%f,',Num)
     ```
 
 ### FIR filter implementation in C
@@ -83,10 +83,10 @@ We want to design a FIR bandpass filter using the following parameters:
 1. In lab.c, define an array containing your filter coefficients.
 
     ```
-    float32_t b[31] = {<coefficients from MATLAB>};
+    float32_t b[31] = {<coefficients>};
     ```
     
-2. In lab.c, define variables corresponding to the state values of the filter. An easy convention is to create an array `x` where `x[0]` corresponds with $x[n]$, `x[1]` corresponds with $x[n-1]$, and so on. Initialize your variables so that all initial conditions are zero. An easy way to do this is with the 'universal zero initializer' `{0}`, e.g. 
+2. In lab.c, define variables corresponding to the state values of the filter. An good convention is to create an array `x` where `x[0]` corresponds with $x[n]$, `x[1]` corresponds with $x[n-1]$, and so on. Initialize your variables so that all initial conditions are zero. An easy way to do this is with the 'universal zero initializer' `{0}`, e.g. 
 
     ```
     float32_t x[31] = {0};
@@ -96,32 +96,100 @@ We want to design a FIR bandpass filter using the following parameters:
 3. In lab.c, modify the process_left_sample function to implement the filter as a tapped delay line.
 
     ![](img/tapped_delay.svg)
+    
+    1. Each time the process_left_sample function is called, we are given a new input sample from the ADC which is a 16-bit signed integer. Convert this value to floating point, apply the appropriate scaling, and store it into the array location corresponding to $x[n]$
+    
+    ```
+    x[0] = (float32_t) input_sample) / SCALING_FACTOR;
+    ```
 
-    i. Each time the process_left_sample function is called, we need to calculate the value of $y[n]$ from a summation. Assign `y` a value of zero to 'reset' the summation.
+    2. Each time the process_left_sample function is called, we need to calculate the value of $y[n]$ from a summation. Assign `y` a value of zero to 'reset' the summation.
     
-    ii. Create a for loop to perform the summation for the output of the tapped delay line
+    3. Create a for loop to perform the summation for the output of the tapped delay line
     
-    $$y[n] = \sum_{i=0}^{N}{b_ix[n-i]}$$
+        $$y[n] = \sum_{i=0}^{N}{b_ix[n-i]}$$
     
-    iii. After computing $y[n]$ we need to move the variables down the delay line. Create another for loop that reassigns the state variable to prepare them for the next output when process_left_sample is called again. (Hint: use a downcounting for loop.)
+    4. After computing $y[n]$ we need to move the variables down the delay line. Create another for loop that reassigns the state variables to prepare them for the next output when process_left_sample is called again. (Hint: use a down counting for loop.)
     
 4. Connect the signal generator (set to 10 kHz) as the input and the oscilloscope as the output. Verify the operation of the program. (Since 10kHz is in the passband, you should see the signal on the output).
 
 5. Measure the frequency response of your filter at 1 kHz increments up to 20 kHz by changing the frequency on the signal generator and measuring the amplitude of the output signal. **Include the measured values in your lab report.**
 
-6. Convert the amplitude values you measured to decibels. Since your measurement is in voltage and decibels are a ratio of power, the conversion is:
+6. Convert the amplitude values you measured to decibels. Since your measurement is a voltage and decibels are a ratio of power, the conversion is:
 
     $$\left| H \right|_{\text{dB}} = 10\log_{10}\left(\frac{P_{\text{out}}}{P_{\text{in}}}\right)= 20\log_{10}\left(\frac{V_{\text{out}}}{V_{\text{in}}}\right)$$
     
-    The value for $V_{\text{out}$ is your measurement. Check your signal generator for the value of $V_{\text{in}$.
+    The value for $V_{\text{out}}$ is your measurement. Check the setting your signal generator to determine $V_{\text{in}}$.
     
 7. Plot the values of your measured response on top of or next to the values of the theoretical response. **Include this plot in your lab report.**
 
 ## Lab 3 instructions: Week 2
 
-### Frame-based FIR filter in the time domain
+### Frame-based FIR filter
 
-### Frame-based FIR filter in the frequency domain
+The starter code uses the DMA controller to move blocks of data (also called frames) between the ADC, main memory and DAC. In this exercise, we will implement the same FIR bandpass filter, but apply it to entire frames of data rather than sample-by-sample. To achieve this, we will put our filter in the process_input_buffer function rather than the process_left_sample function.
+  
+1. We will use the ARM CMSIS DSP library to perform filtering on a frame of data. Take a moment to read the [description of the FIR filter functions][4] in this library.
+
+2. In lab.c, initialize the variables necessary to use the `arm_fir_f32` function
+
+    1. Create buffers for the input and output of the filter.
+    
+        ```
+        float32_t filter_in[FRAME_SIZE/4] = {0};
+        float32_t filter_out[FRAME_SIZE/4] = {0};
+        ```
+        
+        *(The FRAME_SIZE constant specified in lab.h corresponds to the length of the entire circular buffer for both left and right channels. When one half of the circular buffer is accumulating data, we will work with the other half. Additionally, we are only working with one of the two channels. This is why our arrays are of length FRAME_LENGTH/4).*
+        
+    2. Create a buffer for the filter state
+    
+        ```
+        float32_t state[31+(FRAME_SIZE/4)-1] = {0};
+        ```
+        
+        *(The arm_fir_f32 function uses a state buffer of length num_taps+block_size-1 to implement the filter more efficiently.)*
+        
+    3. Create a filter instance struct.
+    
+        ```
+        arm_fir_instance_f32 filter_instance;
+        ```
+        
+3. In lab.c, initialize the filter instance in the lab_init function
+
+    ```
+    arm_fir_init_f32(&filter_instance, 31, b, state, FRAME_SIZE/4);
+    ```
+
+5. In lab.c, modify the process_input_buffer function to perform the filtering
+
+    1. Fill your filter_in buffer with the samples from the left channel.
+    
+        ```
+        for (uint32_t i_sample = 0; i_sample < FRAME_SIZE/2; i_sample+=2)
+        {
+            filter_in[i_sample/2] = ((float32_t)input_buffer[i_sample])/SCALING_FACTOR;
+        }
+        ```
+    2. Perform the filtering.
+        
+        ```
+        arm_fir_f32(&filter_instance, filter_in, filter_out, FRAME_SIZE/4);
+        ```
+        
+    3. Copy the filter output buffer back to the array used by the DMA controller.
+    
+        ```
+        for (uint32_t i_sample = 0; i_sample < FRAME_SIZE/2; i_sample+=1)
+        {
+             input_buffer[i_sample] = SCALING_FACTOR*filter_out[i_sample/2];
+             i_sample+=1;
+             input_buffer[i_sample] = 0;
+        }
+        ```
+        
+6. Connect the signal generator as the input and the oscilloscope as the output. Verify the operation of the program by sweeping through different frequencies and observing the response.
 
 ## Lab 3 instructions: Week 3
 
@@ -147,9 +215,9 @@ Present the results you obtain for each task on the assignment sheet. This secti
 
 In addition to the code you modified, make sure to include.
 
-1. Theoretical magnitude response values of bandpass filter.
+1. Theoretical magnitude response values of bandpass filter (tabulated).
 
-2. Measured magnitude response values of bandpass filter.
+2. Measured magnitude response values of bandpass filter (tabulated).
 
 3. Plot of theoretical response on top of or next to a plot of your measured response.
     
@@ -164,3 +232,4 @@ Please answer the following questions.
 [1]:http://users.ece.utexas.edu/~bevans/courses/realtime/lectures/03_Signals_Systems/lecture3.pptx
 [2]:http://users.ece.utexas.edu/~bevans/courses/realtime/lectures/05_FIR_Filters/lecture5.pptx
 [3]:http://users.ece.utexas.edu/~bevans/courses/realtime/lectures/06_IIR_Filters/lecture6.ppt
+[4]:https://www.keil.com/pack/doc/CMSIS/DSP/html/group__FIR.html
