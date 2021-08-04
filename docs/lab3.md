@@ -32,17 +32,17 @@ We want to design a FIR bandpass filter using the following parameters:
 * Design method: Parks-McClellan (a.k.a. equiripple)
 * Filter order $N=30$ (the filter will have $N+1=31$ coefficients)
 * Sampling Frequency $F_s= 44.1 \text{ kHz}$
-* $F_{\text{stop1}}=5.9\text{ kHz}$
+* $F_{\text{stop1}}=4\text{ kHz}$
 * $F_{\text{pass1}}=6\text{ kHz}$
-* $F_{\text{pass2}}=16\text{ kHz}$
-* $F_{\text{stop2}}=16.1\text{ kHz}$
-* $W_{\text{stop1}}=W_{\text{pass}}=W_{\text{stop2}}$
+* $F_{\text{pass2}}=14\text{ kHz}$
+* $F_{\text{stop2}}=16\text{ kHz}$
+* $W_{\text{stop1}}=W_{\text{stop2}}=60W_{\text{pass}}$
 
 ![](img/bandpass.svg)
 
 1. Open the the MATLAB Filter Designer by calling the `filterDesigner` function. Enter the parameters and design the filter.
 
-2. Export the coefficients to your workspace (File → Export → coefficients to workspace). The default variable name is `Num`, corresponding to the numerator of the transfer function.
+2. Export the coefficients (File → Export → coefficients to workspace). The default variable name is `Num`, corresponding to the numerator of the transfer function.
 
    Later, we will experimentally measure the frequency response at 1000 Hz, 2000 Hz, $\ldots$, 19000 Hz, and 20000 Hz. In order to compare with our measurements, we need to first tabulate the theoretical response at these frequencies. Steps 3-5 describe this process.
 
@@ -195,7 +195,125 @@ The starter code uses the DMA controller to move blocks of data (also called fra
 
 ### IIR filter design in MATLAB
 
-### IIR filter implementation
+We want to design an IIR bandpass fitler using the following parameters:
+* Design method: Elliptic
+* Filter order $N=6$
+* Sampling Frequency $F_s= 44.1 \text{ kHz}$
+* $F_{\text{pass1}}=5\text{ kHz}$
+* $F_{\text{pass2}}=15\text{ kHz}$
+* $A_{\text{stop}}=60 \text{dB}$
+* $A_{\text{pass}}=2 \text{dB}$
+
+![](img/bandpass_IIR.svg)
+
+1. Open the the MATLAB Filter Designer by calling the `filterDesigner` function. Enter the parameters and design the filter.
+
+    Notice that once the filter is designed, the filter structure is changed to `Direct Form II, Second-Order Sections` in the 'Current Filter Information' panel.
+    
+2. Choose Edit → convet to single section, and export the coefficients (File → Export → coefficients to workspace). Two variables will be created corresponding to the numerator and denominator coefficients of the transfer function.
+
+3. Use the `freqz` function to get the response of the filter at 10 Hz intervals:
+
+    ```
+    [h,f] = freqz(Num,Den,2205,44100);
+    ```
+4. Define a function to convert the frequency response values returned by freqz from complex values to magnitude values in dB:
+
+    ```
+    dB = @(x) 20*log10(abs(x));
+    ```
+5. Tabulate the theoretical magnitude response of this filter at 1000 Hz increments up to 20 kHz:
+
+    ```
+    freq = f(101:100:2001);
+    resp_dB = dB(h(101:100:2001));
+    table(freq,resp_dB)
+    ```
+    
+    You may find it helpful to export the values to a spreadsheet so that you can record the measured values in a new column later. You can use the `xlswrite` function to export the data to a spreadsheet
+    
+    ```
+    xlswrite('theoretical_response_iir.xlsx',[freq,resp_dB]);
+    ```
+    
+    **Include the tabulated values of the theoretical magnitude response in your lab report**     
+    
+6. We will need to define an array in C containing these coefficients. You can use the `sprintf` command in MATLAB to generate a comma separated string which you can copy into your C code:
+
+    ```
+    sprintf('%f,',Num)
+    sprintf('%f,',Den)
+    ```
+    
+7. In the filter designer, change the structure back to the default (Direct-Form II, Second-Order Sections) and export the coefficients. Two variables, 'SOS' and 'G' will be created.
+
+8. The first three columns of the SOS matrix that is created corresponds to the numerator coefficients of three cascaded second-order filters, and the last three columns correspond to the denominator coefficients. The G variable corresponds to the gain that is applied between sections. Later, we will use these coefficients in our C Code. You can use sprintf in MATLAB to format the coefficients for C.
+
+    Numerator coefficients:
+    ```
+    sprintf('{%f,%f,%f},\n',SOS(1,1:3),SOS(2,1:3),SOS(3,1:3))
+    ```
+    
+    Denominator coefficients:
+    ```
+    sprintf('{%f,%f,%f},\n',SOS(1,4:6),SOS(2,4:6),SOS(3,4:6))
+    ```
+    
+    Gain:
+    ```
+    sprintf('%f,',G)
+    ```
+
+### IIR filter implementation: direct form
+
+In this exercise, we will implement the IIR filter in direct form.
+
+![](img/iir_df_I.svg)
+
+1. In lab.c, initialize variables for your filter coefficients and state variables. Notice that MATLAB has assigned a value of one where the nonexistent $a_0$ coefficient would be.
+
+2. In lab.c, modify the process_left_sample function to implement the summation for the filter output. The diagram above should help you.
+
+    $$y[n] = \sum_{k=0}^{N}{b_k x[n-k]} - \sum_{m=0}^{M}{a_m y[n-m]}$$
+    
+    Recall that `input_sample` is a 16 bit integer, so you will need to scale it when converting to floating point.
+    
+3. In lab.c modify the process_left_sample function to simulate the movement of data through the delay blocks (Hint: use a down counting for loop). **Include the C code for your implementation of the filter in the lab report.** 
+
+4. Connect the signal generator as the input and the oscilloscope as the output. Measure the frequency response of your filter at 1 kHz increments up to 20 kHz by changing the frequency on the signal generator and measuring the amplitude of the output signal. Convert the amplitude values you measured to decibels. **Include the measured values in your lab report.**
+    
+5. Plot the values of your measured response on top of or next to the values of the theoretical response. **Include this plot in your lab report.**
+
+### IIR filter implementation: second order sections
+
+In this exercise, we will implement the same IIR filter but as a cascade of second order filters (biquads).
+
+![](img/cascade_biquads.svg)
+
+1. In lab.c, initialize variables for your biquad coefficients state variables, and gain. A convenient way organize the coefficients and state variables in C is with two dimensional arrays:
+
+    ```
+    float32_t B[3][3] = {
+        <first three columns of SOS matrix>
+    };
+    float32_t A[3][3] = {
+        <last three columns of SOS matrix>
+    };
+    float32_t Y[3][3] = {0};
+    float32_t X[3][3] = {0};
+    ```
+    
+2. In lab.c, add a for loop to process_left_sample that iterates over the three biquads to implement the filter.
+
+    1. The input to the first biquad should come from `input_sample`. Otherwise, the input should come from the output of the the previous biquad.
+    
+    2. Apply the appropriate gain value to the input of each biquad.
+    
+    3. For each biquad, implement the second order filter using direct form (see the diagrams above).
+    
+    The process_left_sample function should return the output of the last biquad (after appropriate scaling and conversion back to a 16 bit integer). **Include the C code for your implementation of the filter in the lab report.** 
+    
+3. Run the program and verify that it produces the expected bandpass response.
 
 ## Lab report contents
 
@@ -215,11 +333,21 @@ Present the results you obtain for each task on the assignment sheet. This secti
 
 In addition to the code you modified, make sure to include.
 
-1. Theoretical magnitude response values of bandpass filter (tabulated).
+1. Theoretical magnitude response values (tabulated).
+    * For FIR bandpass filter (week one)
+    * For IIR bandpass filter (week three)
 
-2. Measured magnitude response values of bandpass filter (tabulated).
+2. Measured magnitude response values of (tabulated).
+    * For FIR bandpass filter (week one)
+    * For IIR bandpass filter (week three)
 
 3. Plot of theoretical response on top of or next to a plot of your measured response.
+    * For FIR bandpass filter (week one)
+    * For IIR bandpass filter (week three)
+    
+4. C code for filter implementations
+    * IIR filter in direct form
+    * IIR filter using cascade of second order sections
     
 ### IV. Discussion
 
@@ -228,6 +356,12 @@ In this section, discuss the takeaway from each lab. You can mention any intuiti
 ### V. Assignment questions
 
 Please answer the following questions.
+
+1. Why use circular buffers?
+
+2. What happens if you do not multiply the scale factor in an IIR filter implementation using a cascade of second-order sections (SOS)?
+
+3. List the advantages and disadvantages of FIR vs. IIR filters.
 
 [1]:http://users.ece.utexas.edu/~bevans/courses/realtime/lectures/03_Signals_Systems/lecture3.pptx
 [2]:http://users.ece.utexas.edu/~bevans/courses/realtime/lectures/05_FIR_Filters/lecture5.pptx
