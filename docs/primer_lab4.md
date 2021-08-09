@@ -28,8 +28,46 @@ The primary application of PN sequences in lab #4 is for data scrambling and des
 
 ## Linear-feedback shift register (LFSR)
 
-In lab #4, we will use a a Fibonacci LFSR to generate PN sequences. This structure shares many similarities to the tapped delay line for filtering.
+In lab #4, we will use a a Fibonacci LFSR to (1) generate PN sequences , (2) scramble data, and (3) descramble data. This structure shares many similarities to the tapped delay line for filtering. Like the tapped delay line, the Fibonacci LFSR maintains a delay line of $m$ elements $s[n], s[n-1], \ldots, s[n-m]$. Unlike the tapped delay line for LTI filters, the values are restricted to be binary (zero or one). Instead of real-valued coefficients, the LFSR has a set of taps $h_1, h_2, \ldots, h_m$ which also have a binary state (connected or disconnected). Since all values are binary, additions are performed modulo two (equivalent to XOR).
+
+### LFSR for PN sequence generation
 
 ![](img/Fibonacci_LFSR.svg)
 
-The Fibonacci LFSR maintains an $m$-bit state. To generate an output of the PN sequence, some of the bits in the LFSR state are combined by addition modulo 2 (equivalent to and XOR operation). Then, to prepare for the next output, the states are shifted and the new
+To generate on sample of a PN sequence, we must
+
+1. Set the initial values $s[0], s[-1], \ldots, s[-m]$ appropriately (discussed later).
+
+2. Compute the addition modulo 2, equivalent to a series of XOR ($\oplus$) operations, of the connected taps in the shift register:
+
+    $$ s[n] = \left( \sum_{k=1}^{m}{h_k s[n-k]} \right) \text{ mod } 2 = \bigoplus_{k=1}^{m}{h_k s[n-k]}$$
+
+3. Shift each value along the delay line. The sample that would 'fall off' the delay line, $s[n-m]$, is conventionally taken as the output sample $y[n]$ of the system.
+
+With an appropriate choice of connected taps $h_k$ and initial values of $s$, a PN sequence generated using this method will be $2^{m-1}$ periodic. In this case, it is said to be maximal length.
+
+Proving the maximal length property mathematically for a particular configuration is difficult. For engineering applications, we can use known configurations which are known to provide this property. For example, the following configuration results in a maximal length ($2^{4-1} = 15$) PN sequence:
+![](img/example_LFSR_m4.svg)
+
+The first period of the this LFSR is listed below.
+
+| $n$  	| $s[n]$ 	| $s[n-1]$ 	| $s[n-2]$ 	| $s[n-3]$ 	| $y[n]$ 	|
+| :--- 	| :----: 	| :----: 	| :----: 	| :----: 	| :----: 	|
+| 0 	| 1 		| 0 		| 1 		| 0 		|   		|
+| 1 	| 1 		| 1 		| 0 		| 1 		| 0 		|
+| 2 	| 1 		| 1 		| 1 		| 0 		| 1 		|
+| 3 	| 1 		| 1 		| 1 		| 1 		| 0 		|
+| 4 	| 0 		| 1 		| 1 		| 1 		| 1 		|
+| 5 	| 0 		| 0 		| 1 		| 1 		| 1 		|
+| 6 	| 0 		| 0 		| 0 		| 1 		| 1 		|
+| 7 	| 1 		| 0 		| 0 		| 0 		| 1 		|
+| 8 	| 0 		| 1 		| 0 		| 0 		| 0 		|
+| 9 	| 0 		| 0 		| 1 		| 0 		| 0 		|
+| 10 	| 1 		| 0 		| 0 		| 1 		| 0 		|
+| 11 	| 1 		| 1 		| 0 		| 0 		| 1 		|
+| 12 	| 0 		| 1 		| 1 		| 0 		| 0 		|
+| 13 	| 1 		| 0 		| 1 		| 1 		| 0 		|
+| 14 	| 0 		| 1 		| 0 		| 1 		| 1 		|
+| 15 	| 1 		| 0 		| 1 		| 0 		| 1 		|
+
+### LFSR for data scrambler and descrambler
