@@ -28,46 +28,71 @@ The primary application of PN sequences in lab #4 is for data scrambling and des
 
 ## Linear-feedback shift register (LFSR)
 
-In lab #4, we will use a a Fibonacci LFSR to (1) generate PN sequences , (2) scramble data, and (3) descramble data. This structure shares many similarities to the tapped delay line for filtering. Like the tapped delay line, the Fibonacci LFSR maintains a delay line of $m$ elements $s[n], s[n-1], \ldots, s[n-m]$. Unlike the tapped delay line for LTI filters, the values are restricted to be binary (zero or one). Instead of real-valued coefficients, the LFSR has a set of taps $h_1, h_2, \ldots, h_m$ which also have a binary state (connected or disconnected). Since all values are binary, additions are performed modulo two (equivalent to XOR).
-
-### LFSR for PN sequence generation
+In Lab #4, we will use a a Fibonacci LFSR to (1) generate PN sequences, (2) scramble data, and (3) descramble data. This structure shares many similarities to the tapped delay line for filtering. Like the tapped delay line, the Fibonacci LFSR maintains a delay line of $m$ elements $s[n-1], s[n-2], \ldots, s[n-m]$. Unlike the tapped delay line for LTI filters, the values are restricted to be binary (zero or one). Instead of real-valued coefficients, the LFSR has a set of taps $h_1, h_2, \ldots, h_m$ which also have a binary state (connected or disconnected). Since all values are binary, additions are performed modulo two (equivalent to an exclusive or).
 
 ![](img/Fibonacci_LFSR.svg)
 
-To generate on sample of a PN sequence, we must
+### LFSR for PN sequence generation
 
-1. Set the initial values $s[0], s[-1], \ldots, s[-m]$ appropriately (discussed later).
+The procedure to produce a PN sequence using the LFSR consists of three steps:
 
-2. Compute the addition modulo 2, equivalent to a series of XOR ($\oplus$) operations, of the connected taps in the shift register:
+1. Set the initial values $s[-1], s[-2], \ldots, s[-m]$ so that at least one is nonzero.
+
+2. Compute the addition modulo 2, equivalent to a series of exclusive or ($\oplus$) operations, of the connected taps in the shift register:
 
     $$ s[n] = \left( \sum_{k=1}^{m}{h_k s[n-k]} \right) \text{ mod } 2 = \bigoplus_{k=1}^{m}{h_k s[n-k]}$$
 
-3. Shift each value along the delay line. The sample that would 'fall off' the delay line, $s[n-m]$, is conventionally taken as the output sample $y[n]$ of the system.
+3. Shift each value along the delay line (i.e. increment n), then repeat starting from step two.
 
-With an appropriate choice of connected taps $h_k$ and initial values of $s$, a PN sequence generated using this method will be $2^{m-1}$ periodic. In this case, it is said to be maximal length.
+With an appropriate choice of connected taps, the LFSR state will cycle through each of the $2^m - 1$ possible (nonzero) combinations of $m$ bits. In this case, we call the system a maximal-length LFSR, and $s[n]$ is a $(2^m -1)$-periodic PN sequence.
 
-Proving the maximal length property mathematically for a particular configuration is difficult. For engineering applications, we can use known configurations which are known to provide this property. For example, the following configuration results in a maximal length ($2^{4-1} = 15$) PN sequence:
-![](img/example_LFSR_m4.svg)
-
+Determining mathematically if a combination of taps produces a maximal length sequence is difficult. However, for engineering applications, we can use configurations which are known to provide this property. For example, the following configuration results in a maximal length PN sequence with period $2^3 -1 = 7$.
+![](img/example_LFSR.svg)
 The first period of the this LFSR is listed below.
 
-| $n$  	| $s[n]$ 	| $s[n-1]$ 	| $s[n-2]$ 	| $s[n-3]$ 	| $y[n]$ 	|
-| :--- 	| :----: 	| :----: 	| :----: 	| :----: 	| :----: 	|
-| 0 	| 1 		| 0 		| 1 		| 0 		|   		|
-| 1 	| 1 		| 1 		| 0 		| 1 		| 0 		|
-| 2 	| 1 		| 1 		| 1 		| 0 		| 1 		|
-| 3 	| 1 		| 1 		| 1 		| 1 		| 0 		|
-| 4 	| 0 		| 1 		| 1 		| 1 		| 1 		|
-| 5 	| 0 		| 0 		| 1 		| 1 		| 1 		|
-| 6 	| 0 		| 0 		| 0 		| 1 		| 1 		|
-| 7 	| 1 		| 0 		| 0 		| 0 		| 1 		|
-| 8 	| 0 		| 1 		| 0 		| 0 		| 0 		|
-| 9 	| 0 		| 0 		| 1 		| 0 		| 0 		|
-| 10 	| 1 		| 0 		| 0 		| 1 		| 0 		|
-| 11 	| 1 		| 1 		| 0 		| 0 		| 1 		|
-| 12 	| 0 		| 1 		| 1 		| 0 		| 0 		|
-| 13 	| 1 		| 0 		| 1 		| 1 		| 0 		|
-| 14 	| 0 		| 1 		| 0 		| 1 		| 1 		|
-| 15 	| 1 		| 0 		| 1 		| 0 		| 1 		|
+<center>
+
+|$n$	|$s[n]=s[n-2]\oplus[n-3]$	|$s[n-1]$			|$s[n-2]$			|$s[n-3]$			|
+|:---	|----:						|:----:				|:----:				|:----:				|
+|0		|<center>1</center>			|<center>1</center>	|<center>0</center>	|<center>1</center>	|
+|1		|<center>1</center>			|<center>1</center>	|<center>1</center>	|<center>0</center>	|
+|2		|<center>0</center>			|<center>1</center>	|<center>1</center>	|<center>1</center>	|
+|3		|<center>0</center>			|<center>0</center>	|<center>1</center>	|<center>1</center>	|
+|4		|<center>1</center>			|<center>0</center>	|<center>0</center>	|<center>1</center>	|
+|5		|<center>0</center>			|<center>1</center>	|<center>0</center>	|<center>0</center>	|
+|6		|<center>1</center>			|<center>0</center>	|<center>1</center>	|<center>0</center>	|
+|7		|<center>1</center>			|<center>1</center>	|<center>0</center>	|<center>1</center>	|
+
+</center>
+
+### Auto-correlation of PN sequence
+
+In order to understand some of the useful properties of PN sequences, we need to first define the auto-correlation operation, which is closely related to convolution.
+
+#### Convolution
+
+Recall that the convolution operation (denoted using $*$) for two discrete-time signals is defined as:
+
+$$x_1[n]*x_2[n] = \sum_{k=-\infty}^{\infty}x_1[k]x_2[n-k]$$
+
+This operation is often described as 'flip and slide', since $x_2[n-k]$ is a reversed and shifted version of $x_2[k]$.
+
+#### Cross-correlation
+
+The cross-correlation operation (denoted using $\star$) is nearly identical to convolution, but without the 'flip'.
+
+$$x_1[n]\star x_2[n] = \sum_{k=-\infty}^{\infty}\overline{x_1[k]}x_2[n+k]$$
+
+*Note: $\overline{x_1[k]}$ denotes the complex conjugate of $x_1[k]$, but for real valued signals $\overline{x_1[k]}=x_1[k]$.*
+
+#### Auto-correlation
+
+The auto-correlation $R[k]$ of a discrete-time signal $x[n]$ is the cross-correlation with itself:
+
+$$R[k] = x[n]\star x[n] = \sum_{k=-\infty}^{\infty}\overline{x[k]}x[n+k]$$
+
+#### Auto-correlation of a PN maximal length PN sequence
+
+#### Maximal-length PN sequences
 
 ### LFSR for data scrambler and descrambler
