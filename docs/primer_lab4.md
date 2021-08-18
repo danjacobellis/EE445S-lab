@@ -19,12 +19,16 @@ The first application is to use a PN sequence to estimate an impulse response of
 As a training signal, the PN sequence would be the digital data to be transmitted over the unknown communication channel. The receiver knows the bits that had been transmitted, and can use that knowledge to adapt receiver settings to improve communication performance (signal quality). The receiver can also estimate the impulse response of the communication channel if needed.
 
 ### Data scrambler/descrabler
-In data scramblers, PN sequences are used to prevent long strings of 0's and 1's. For baseband transmission, during a long string of 0's or 1's, the primary frequency component in the signal would be at DC, and DC does not get passed by some communication channels (e.g. voiceband and acoustic channels). For bandpass transmission, during a long string of 0's or 1's, the primary frequency of the message signal (DC) would be upconverted to sit at the carrier frequency. This presents at least two problems:
 
-* The receiver may have more difficulty for the receiver to lock onto the carrier frequency and phase
-* The receiver will have greater difficulty performing symbol synchronization if the symbol synchronization algorithm uses frequency content at the transmission bandwidth's edges for the symbol timing estimate.
+The primary application of PN sequences in lab #4 is for data scrambling and descrambling. As a data scrambling sequence, pseudonoise can (1) eliminate strong DC components (long strongs of zeros and ones) in the baseband signal and (2) disperse the power spectrum to mitigate the effects of certain channel impairments. 
 
-The primary application of PN sequences in lab #4 is for data scrambling and descrambling.
+1. **Eliminating DC components**
+
+    During a long string of zeros or ones, the primary frequency component in the signal would be at DC. For baseband transmission, this would not get passed by some communication channels (e.g. voiceband and acoustic channels). Some automatic gain control algorithms will also fail in the presence of a strong DC components. For bandpass transmission, the DC component is upconverted to sit at the carrier frequency. Strong components at this frequency will hinder the clock recovery and symbol synchronization subsystems.
+
+2. **Mitigating channel impairments**
+
+    If a baseband signal has most of its power concentrated at specific frequencies, scrambling with a PN sequence can help disperse the spectrum to mitigate certain channel impairments. For example, a common impairment caused by nonlinearity or time-variance is intermodulation, or cross-modulation. The effect of intermodulation is greatly reduced by dispersing the power spectrum and eliminating signal components concentrated at specific frequencies.
 
 ## Linear-feedback shift register (LFSR)
 
@@ -65,6 +69,8 @@ The first period of the this LFSR is listed below.
 
 </center>
 
+Typically, we map the binary $\left\{ 0,1 \right\}$ values to symmetric amplitudes $\left\{ -1,1 \right\}$ when representing the PN sequence as a signal.
+
 ### Auto-correlation of PN sequence
 
 In order to understand some of the useful properties of PN sequences, we need to first define the auto-correlation operation, which is closely related to convolution.
@@ -87,12 +93,37 @@ $$x_1[n]\star x_2[n] = \sum_{k=-\infty}^{\infty}\overline{x_1[k]}x_2[n+k]$$
 
 #### Auto-correlation
 
-The auto-correlation $R[k]$ of a discrete-time signal $x[n]$ is the cross-correlation with itself:
+The auto-correlation $R_{xx}[k]$ of a discrete-time signal $x[n]$ is the cross-correlation with itself:
 
-$$R[k] = x[n]\star x[n] = \sum_{k=-\infty}^{\infty}\overline{x[k]}x[n+k]$$
+$$R_{xx}[k] = x[n]\star x[n] = \sum_{k=-\infty}^{\infty}\overline{x[k]}x[n+k]$$
 
-#### Auto-correlation of a PN maximal length PN sequence
+For periodic signals the summation can be simplified, and the result is often normalized by the period $N$.
 
-#### Maximal-length PN sequences
+$$R_{xx}[k] \text{ for periodic signal} = \frac{1}{N}x[n]\star x[n] = \frac{1}{N}\sum_{k=1}^{N}\overline{x[k]}x[n+k]$$
 
-### LFSR for data scrambler and descrambler
+#### Auto-correlation of a maximal length PN sequence
+
+Applying the formula above to the maximal length PN sequence from the earlier example yields the following (normalized) auto-correlation:
+
+![](img/PN_autocorr.svg)
+
+The auto-correlation for this PN sequence is equal to one at integer multiples of the period $N$ and is equal to $\frac{-1}{N}$ for all other offsets. This behavior is the same for *all* maximal-length PN sequences, as long as the following two conditions are met:
+
+1. The values of the binary PN sequence are mapped to $\left\{ -1,1 \right\}$. We avoid representing the sequence with $\left\{ 0,1 \right\}$ because this would introduce a DC component.
+
+2. The auto-correlation is taken of the infinite-length, periodically extended sequence. The auto-correlation of just one period can also be computed, but its properties will be different.
+
+### Data scrambling
+
+Suppose we have a binary data sequence $x[n]$ that we want to transmit. We can scramble the data by adding (modulo two) a scrambling sequence $s[n]$.
+
+$$x_s[n] = ( x[n] + s[n] ) \text{ mod 2} = x[n] \oplus s[n]$$
+
+When $s[n]$ is a PN sequence, the scrambler will (1) eliminate strong DC components (long strongs of zeros and ones) in the baseband signal and (2) disperse the power spectrum to mitigate the effects of certain channel impairments. 
+
+We can 'undo' the scrambler (i.e. descramble the data) using the same process:
+
+$$x_d[n] = ( x_s[n] + s[n] ) \text{ mod 2} = x_s[n] \oplus s[n]$$
+
+If the same scrambling sequence $s[n]$ is used for the scrambler and descrambler, then $x_d[n]=x[n].$
+By initializing two two LFSRs (one at the transmitter and one at the receiever) with the same initial conditions and connected taps $h_k$, this process can be made extremely efficient.
