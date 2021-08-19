@@ -153,6 +153,31 @@ void display_spectrum(float32_t *fft_mag)
 	}
 }
 
+void display_image(uint32_t* binary_image, uint32_t width, uint32_t height)
+{
+	uint32_t mask = 1;
+	uint32_t i_word = 0;
+	uint32_t word = binary_image[i_word];
+	uint32_t pixel = word & mask;
+	UTIL_LCD_Clear(UTIL_LCD_COLOR_BLACK);
+	for (uint32_t x = 0; x < width; x+=1)
+	{
+		for (uint32_t y = 0; y < height; y+=1)
+		{
+			if(pixel){
+				UTIL_LCD_FillRect(2*x, 2*y, 2, 2, UTIL_LCD_COLOR_WHITE);
+			}
+			mask <<= 1;
+			if (mask == 0){
+				i_word += 1;
+				mask = 1;
+				word = binary_image[i_word];
+			}
+			pixel = word & mask;
+		}
+	}
+}
+
 void BSP_AUDIO_IN_HalfTransfer_CallBack(uint32_t Instance)
 {
     SCB_InvalidateDCache_by_Addr((uint32_t *) record_buffer, FRAME_SIZE*2);

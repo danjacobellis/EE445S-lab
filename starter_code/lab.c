@@ -14,6 +14,9 @@ You can also configure which of the four functions are active in lab.h
 extern void tic(void);
 extern uint32_t toc(void);
 
+//Function to display a binary image
+void display_image(uint32_t* binary_image, uint32_t width, uint32_t height);
+
 //variables used for the spectrum visualization
 extern arm_rfft_fast_instance_f32 fft_inst;
 extern float32_t fft_in[FRAME_SIZE/4];
