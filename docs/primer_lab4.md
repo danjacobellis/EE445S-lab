@@ -136,7 +136,7 @@ In lab #4, you will implement the LFSR in C. To prepare, it is useful to review 
 
 Although it would be convenient to think of our generated PN sequence as an 'array of bits' there is no datatype in C that would allow this, since the smallest addressable unit of data in C is a byte (8 bits).
 
-Typically, the refer to the unit of addressable data in an array as a 'word'. For example, if we have an array of ```int16_t```s, then we would say that $1 \text{ word} = 16 \text{ bits}$. If the array is composed of ```float32_t```s, then $1 \text{ word} = 16 \text{ bits}$, and so on.
+Typically, we refer to the unit of addressable data in an array as a 'word'. For example, if we have an array of ```int16_t```s, then we would say that $1 \text{ word} = 16 \text{ bits}$. If the array is composed of ```float32_t```s, then $1 \text{ word} = 32 \text{ bits}$, and so on.
 
 If we need to address individual bits in a long sequence of data in C, we can instead create an array of conveniently sized words and use bitwise operations to access individual bits in each word.
 
@@ -144,51 +144,51 @@ If we need to address individual bits in a long sequence of data in C, we can in
 
 There are six bitwise operations in c: *and* `&`, *or* `|`, *xor* `^`, *left shift* `<<`, *right shift* `>>`, and *not*`~`.
 
-Most of these behave as you would expect, but the right shift `>>`is an exception. The behavior of the right shift ```>>``` operation depends on if the datatype is signed or unsigned, and varies depending on the compiler used. This is because there are two possible behaviors for the right shift operation
+Most of these behave as you would expect, but the right shift `>>` is an exception. The behavior of the right shift ```>>``` operation depends on if the datatype is signed or unsigned, and varies depending on the compiler used. This is because there are two possible behaviors for the right shift operation
 
-1. In a logical right shift, the most significant bit receives a value of zero. This is the behavior that is occurs when operating on an unsigned datatype.
+1. In a logical right shift, the most significant bit receives a value of zero. This is the behavior that occurs when operating on an unsigned datatype.
 
 2. In an arithmetic right shift, the most significant bit (which is the sign bit for signed datatypes) is unchanged.
 
-*Takeaway: use unsigned datatypes when implementing the LFSR in C*
+*Takeaway: use unsigned datatypes when implementing the LFSR in C to ensure that all shifts are logical shifts.*
 
 For left shift operations, the least significant bit always receives a value of zero in C, regardless of the data type.
 
 ### Addressing individual bits
 
-There are many ways to use the bitwise operations above to perform addressing of individual bits. The easiest way to demonstrate is with an example.
-
-Suppose we have a variable `x` in C with the datatype `uint32_t` and we want to perform the following operation:
+There are many ways to use the bitwise operations above to perform addressing of individual bits. The easiest way to demonstrate is with an example. Suppose we have a variable `x` in C with the datatype `uint32_t` and we want to perform the following operation:
 
 *Example operation: Set the 6th least significant bit equal to the xor of the 4th and 2nd least significant bits.* 
 
 Let's outline one approach:
 
-1. Create expressions corresponding to the 4th and 2nd least significant bits shifted to the least significant position: `x>>3` and `x>>1`.
+1. Create expressions corresponding to the 4th and 2nd least significant bits shifted to the least significant position:
 
-2. Calculate the bitwise xor of these expressions:
+    `x>>3` and `x>>1`
 
-```
-(x>>3) ^ (x>>1)
-```
+2. Calculate the bitwise XOR of these expressions:
+
+    ```
+    (x>>3) ^ (x>>1)
+    ```
 
 3. Mask out all other bits
 
-```
-( (x >> 3) ^ (x >> 1) ) & 1
-```
+    ```
+    ( (x >> 3) ^ (x >> 1) ) & 1
+    ```
 
 4. Shift the expression to the desired position
 
-```
-( ( (x >> 3) ^ (x >> 1) ) & 1 ) << 5
-```
+    ```
+    ( ( (x >> 3) ^ (x >> 1) ) & 1 ) << 5
+    ```
 
 5. Assign the result back to `x`
 
-```
-x |= ( ( (x >> 3) ^ (x >> 1) ) & 1 ) << 5
-```
+    ```
+    x |= ( ( (x >> 3) ^ (x >> 1) ) & 1 ) << 5
+    ```
 
 At this point, the code has become very difficult to read! Although whitespace does not change the behavior, it can make the code somewhat more readable.
 
