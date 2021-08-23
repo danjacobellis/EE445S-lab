@@ -1,0 +1,339 @@
+
+
+<!DOCTYPE html>
+<html class="writer-html5" lang="en" >
+<head>
+  <meta charset="utf-8" />
+  
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  
+  <title>EE 445S Lab Component &mdash; 445S Lab Manual  documentation</title>
+  
+
+  
+  <link rel="stylesheet" href="_static/css/theme.css" type="text/css" />
+  <link rel="stylesheet" href="_static/pygments.css" type="text/css" />
+  <link rel="stylesheet" href="_static/pygments.css" type="text/css" />
+  <link rel="stylesheet" href="_static/css/theme.css" type="text/css" />
+
+  
+  
+
+  
+  
+
+  
+
+  
+  <!--[if lt IE 9]>
+    <script src="_static/js/html5shiv.min.js"></script>
+  <![endif]-->
+  
+    
+      <script type="text/javascript" id="documentation_options" data-url_root="./" src="_static/documentation_options.js"></script>
+        <script data-url_root="./" id="documentation_options" src="_static/documentation_options.js"></script>
+        <script src="_static/jquery.js"></script>
+        <script src="_static/underscore.js"></script>
+        <script src="_static/doctools.js"></script>
+    
+    <script type="text/javascript" src="_static/js/theme.js"></script>
+
+    
+    <link rel="index" title="Index" href="genindex.html" />
+    <link rel="search" title="Search" href="search.html" />
+    <link rel="next" title="Lab Primer" href="primer.html" />
+    <link rel="prev" title="Contents" href="index.html" /> 
+</head>
+
+<body class="wy-body-for-nav">
+
+   
+  <div class="wy-grid-for-nav">
+    
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side">
+      <div class="wy-side-scroll">
+        <div class="wy-side-nav-search" >
+          
+
+          
+            <a href="index.html" class="icon icon-home"> 445S Lab Manual
+          
+
+          
+          </a>
+
+          
+            
+            
+          
+
+          
+<div role="search">
+  <form id="rtd-search-form" class="wy-form" action="search.html" method="get">
+    <input type="text" name="q" placeholder="Search docs" />
+    <input type="hidden" name="check_keywords" value="yes" />
+    <input type="hidden" name="area" value="default" />
+  </form>
+</div>
+
+          
+        </div>
+
+        
+        <div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="main navigation">
+          
+            
+            
+              
+            
+            
+              <ul class="current">
+<li class="toctree-l1 current"><a class="current reference internal" href="#">EE 445S Lab Component</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="#required-textbook">Required textbook</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#format-of-lab">Format of lab</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#grading">Grading</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#schedule">Schedule</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="primer.html">Lab Primer</a></li>
+<li class="toctree-l1"><a class="reference internal" href="stm32h735g.html">STM32H735G Discovery Kit Setup Guide</a></li>
+<li class="toctree-l1"><a class="reference internal" href="lab1.html">Lab 1. Overview of Hardware and Software Tools</a></li>
+<li class="toctree-l1"><a class="reference internal" href="lab2.html">Lab 2. Generating Cosine and Sine Waves</a></li>
+<li class="toctree-l1"><a class="reference internal" href="lab3.html">Lab 3. Digital Filters</a></li>
+<li class="toctree-l1"><a class="reference internal" href="primer_lab4.html">Lab 4 Primer</a></li>
+<li class="toctree-l1"><a class="reference internal" href="data.html">Managing data between MATLAB and C</a></li>
+<li class="toctree-l1"><a class="reference internal" href="lab4.html">Lab 4. Pseudo-Random Binary Sequences and Data Scramblers</a></li>
+</ul>
+
+            
+          
+        </div>
+        
+      </div>
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap">
+
+      
+      <nav class="wy-nav-top" aria-label="top navigation">
+        
+          <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+          <a href="index.html">445S Lab Manual</a>
+        
+      </nav>
+
+
+      <div class="wy-nav-content">
+        
+        <div class="rst-content">
+        
+          
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<div role="navigation" aria-label="breadcrumbs navigation">
+
+  <ul class="wy-breadcrumbs">
+    
+      <li><a href="index.html" class="icon icon-home"></a> &raquo;</li>
+        
+      <li>EE 445S Lab Component</li>
+    
+    
+      <li class="wy-breadcrumbs-aside">
+        
+          
+            <a href="_sources/overview.md.txt" rel="nofollow"> View page source</a>
+          
+        
+      </li>
+    
+  </ul>
+
+  
+  <hr/>
+</div>
+          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
+           <div itemprop="articleBody">
+            
+  <div class="tex2jax_ignore mathjax_ignore section" id="ee-445s-lab-component">
+<h1>EE 445S Lab Component<a class="headerlink" href="#ee-445s-lab-component" title="Permalink to this headline">¶</a></h1>
+<p>As of Fall 2021, the instructions for the lab exercises will be entirely self contained in this lab manual.</p>
+<p>The exercises now use the <a class="reference external" href="https://www.st.com/en/evaluation-tools/stm32h735g-dk.html">STM32H735G Discovery Kit</a>. Prior to fall 2021, the laboratory component used the <a class="reference external" href="http://www.ti.com/tool/tmdslcdk138">OMAP-L138 Low-Cost Developer’s Kit</a> (LCDK) and the following book</p>
+<p>Thad B. Welch, Cameron H. G. Wright, and Michael G. Morrow, <em><a class="reference external" href="http://www.rt-dsp.com/">Real-Time Digital Signal Processing from MATLAB to C with the TMS320C6x DSPs</a></em>, CRC Press, 3rd ed., Jan. 2017, ISBN 978-1498781015.</p>
+<p>This book is now optional, but you may find it helpful since some exercises were adapted from it.</p>
+<div class="section" id="required-textbook">
+<h2>Required textbook<a class="headerlink" href="#required-textbook" title="Permalink to this headline">¶</a></h2>
+<p>Some reading assignments will include sections of the following textbook, which is available as a free download from ARM:</p>
+<p><a class="reference external" href="https://www.arm.com/resources/ebook/digital-signal-processing">Digital Signal Processing using Arm Cortex-M based Microcontrollers by Cem Ünsalan, M. Erkin Yücel, H. Deniz Gürhan.</a></p>
+<p>The STM32F4 discovery board used in this book is different from the hardware we will use in lab, but most of the contents on signal processing, embedded programming, and ARM Cortex-M processors is applicable to the hardware we will use.</p>
+</div>
+<div class="section" id="format-of-lab">
+<h2>Format of lab<a class="headerlink" href="#format-of-lab" title="Permalink to this headline">¶</a></h2>
+<p>Each laboratory section meets three hours per week. Pre-laboratory quizzes are required for laboratories 2-6, and they are to be completed individually without help from anyone. For laboratory 1, the experiment and written report are to be completed individually. For laboratories 2-6, the experiment and report are to be completed in a team of two. For laboratory 7, which is optional, the experiment and oral report are to be completed individually. The format of the written lab report is described with each lab assignment.</p>
+</div>
+<div class="section" id="grading">
+<h2>Grading<a class="headerlink" href="#grading" title="Permalink to this headline">¶</a></h2>
+<p>Each lab is worth 40 points. Lap report grading consists of 30 points for the reported contents and accuracy. The report should be typed and submitted on canvas.</p>
+<p>The remaining 10 points are for attendance and participation of lab recitation. Lab recitation will be held at the beginning 15-20 minutes each lab.</p>
+<p>For partial credit, please submit all work even if incomplete or incorrect.</p>
+</div>
+<div class="section" id="schedule">
+<h2>Schedule<a class="headerlink" href="#schedule" title="Permalink to this headline">¶</a></h2>
+<table class="colwidths-auto docutils align-default">
+<thead>
+<tr class="row-odd"><th class="text-align:left head"><p>Week</p></th>
+<th class="text-align:center head"><p>Prelab Quiz Due</p></th>
+<th class="text-align:center head"><p>Lab Work To Complete</p></th>
+<th class="text-align:center head"><p>Lab Report Due</p></th>
+</tr>
+</thead>
+<tbody>
+<tr class="row-even"><td class="text-align:left"><p>Aug. 23</p></td>
+<td class="text-align:center"><p></p></td>
+<td class="text-align:center"><p></p></td>
+<td class="text-align:center"><p></p></td>
+</tr>
+<tr class="row-odd"><td class="text-align:left"><p>Aug. 30</p></td>
+<td class="text-align:center"><p></p></td>
+<td class="text-align:center"><p>1. Intro to Hardware and Software</p></td>
+<td class="text-align:center"><p></p></td>
+</tr>
+<tr class="row-even"><td class="text-align:left"><p>Sept. 6</p></td>
+<td class="text-align:center"><p>Lab 2</p></td>
+<td class="text-align:center"><p>2. Sinusoidal Generation Part 1</p></td>
+<td class="text-align:center"><p>Lab 1</p></td>
+</tr>
+<tr class="row-odd"><td class="text-align:left"><p>Sept. 13</p></td>
+<td class="text-align:center"><p></p></td>
+<td class="text-align:center"><p>2. Sinusoidal Generation Part 2</p></td>
+<td class="text-align:center"><p></p></td>
+</tr>
+<tr class="row-even"><td class="text-align:left"><p>Sept. 20</p></td>
+<td class="text-align:center"><p>Lab 3</p></td>
+<td class="text-align:center"><p>3. Digital Filters Part 1</p></td>
+<td class="text-align:center"><p>Lab 2</p></td>
+</tr>
+<tr class="row-odd"><td class="text-align:left"><p>Sept. 27</p></td>
+<td class="text-align:center"><p></p></td>
+<td class="text-align:center"><p>3. Digital Filters Part 2</p></td>
+<td class="text-align:center"><p></p></td>
+</tr>
+<tr class="row-even"><td class="text-align:left"><p>Oct. 4</p></td>
+<td class="text-align:center"><p></p></td>
+<td class="text-align:center"><p>3. Digital Filters Part 3</p></td>
+<td class="text-align:center"><p></p></td>
+</tr>
+<tr class="row-odd"><td class="text-align:left"><p>Oct. 11</p></td>
+<td class="text-align:center"><p></p></td>
+<td class="text-align:center"><p></p></td>
+<td class="text-align:center"><p></p></td>
+</tr>
+<tr class="row-even"><td class="text-align:left"><p>Oct. 18</p></td>
+<td class="text-align:center"><p>Lab 4</p></td>
+<td class="text-align:center"><p>4. Data Scramblers</p></td>
+<td class="text-align:center"><p>Lab 3</p></td>
+</tr>
+<tr class="row-odd"><td class="text-align:left"><p>Oct. 25</p></td>
+<td class="text-align:center"><p>Lab 5</p></td>
+<td class="text-align:center"><p>5. Pulse Amplitude Modulation Part 1</p></td>
+<td class="text-align:center"><p>Lab 4</p></td>
+</tr>
+<tr class="row-even"><td class="text-align:left"><p>Nov. 1</p></td>
+<td class="text-align:center"><p></p></td>
+<td class="text-align:center"><p>5. Pulse Amplitude Modulation Part 2</p></td>
+<td class="text-align:center"><p></p></td>
+</tr>
+<tr class="row-odd"><td class="text-align:left"><p>Nov. 8</p></td>
+<td class="text-align:center"><p></p></td>
+<td class="text-align:center"><p>5. Pulse Amplitude Modulation Part 3</p></td>
+<td class="text-align:center"><p></p></td>
+</tr>
+<tr class="row-even"><td class="text-align:left"><p>Nov. 15</p></td>
+<td class="text-align:center"><p>Lab 6</p></td>
+<td class="text-align:center"><p>6. Quadrature Amplitude Modulation</p></td>
+<td class="text-align:center"><p>Lab 5</p></td>
+</tr>
+<tr class="row-odd"><td class="text-align:left"><p>Nov. 22</p></td>
+<td class="text-align:center"><p></p></td>
+<td class="text-align:center"><p></p></td>
+<td class="text-align:center"><p></p></td>
+</tr>
+<tr class="row-even"><td class="text-align:left"><p>Nov. 29</p></td>
+<td class="text-align:center"><p>Lab 7</p></td>
+<td class="text-align:center"><p>7. Audio Effects</p></td>
+<td class="text-align:center"><p>Lab 6</p></td>
+</tr>
+<tr class="row-odd"><td class="text-align:left"><p>Dec. 6</p></td>
+<td class="text-align:center"><p></p></td>
+<td class="text-align:center"><p></p></td>
+<td class="text-align:center"><p></p></td>
+</tr>
+</tbody>
+</table>
+</div>
+</div>
+
+
+           </div>
+           
+          </div>
+          <footer>
+    <div class="rst-footer-buttons" role="navigation" aria-label="footer navigation">
+        <a href="primer.html" class="btn btn-neutral float-right" title="Lab Primer" accesskey="n" rel="next">Next <span class="fa fa-arrow-circle-right" aria-hidden="true"></span></a>
+        <a href="index.html" class="btn btn-neutral float-left" title="Contents" accesskey="p" rel="prev"><span class="fa fa-arrow-circle-left" aria-hidden="true"></span> Previous</a>
+    </div>
+
+  <hr/>
+
+  <div role="contentinfo">
+    <p>
+        &#169; Copyright 2021.
+
+    </p>
+  </div>
+    
+    
+    
+    Built with <a href="https://www.sphinx-doc.org/">Sphinx</a> using a
+    
+    <a href="https://github.com/readthedocs/sphinx_rtd_theme">theme</a>
+    
+    provided by <a href="https://readthedocs.org">Read the Docs</a>. 
+
+</footer>
+        </div>
+      </div>
+
+    </section>
+
+  </div>
+  
+
+  <script type="text/javascript">
+      jQuery(function () {
+          SphinxRtdTheme.Navigation.enable(true);
+      });
+  </script>
+
+  
+  
+    
+   
+
+</body>
+</html>

@@ -1,0 +1,342 @@
+
+
+<!DOCTYPE html>
+<html class="writer-html5" lang="en" >
+<head>
+  <meta charset="utf-8" />
+  
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  
+  <title>Lab 4. Pseudo-Random Binary Sequences and Data Scramblers &mdash; 445S Lab Manual  documentation</title>
+  
+
+  
+  <link rel="stylesheet" href="_static/css/theme.css" type="text/css" />
+  <link rel="stylesheet" href="_static/pygments.css" type="text/css" />
+  <link rel="stylesheet" href="_static/pygments.css" type="text/css" />
+  <link rel="stylesheet" href="_static/css/theme.css" type="text/css" />
+
+  
+  
+
+  
+  
+
+  
+
+  
+  <!--[if lt IE 9]>
+    <script src="_static/js/html5shiv.min.js"></script>
+  <![endif]-->
+  
+    
+      <script type="text/javascript" id="documentation_options" data-url_root="./" src="_static/documentation_options.js"></script>
+        <script data-url_root="./" id="documentation_options" src="_static/documentation_options.js"></script>
+        <script src="_static/jquery.js"></script>
+        <script src="_static/underscore.js"></script>
+        <script src="_static/doctools.js"></script>
+        <script async="async" src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-mml-chtml.js"></script>
+        <script>window.MathJax = {"options": {"processHtmlClass": "tex2jax_process|mathjax_process|math|output_area"}}</script>
+    
+    <script type="text/javascript" src="_static/js/theme.js"></script>
+
+    
+    <link rel="index" title="Index" href="genindex.html" />
+    <link rel="search" title="Search" href="search.html" />
+    <link rel="prev" title="Managing data between MATLAB and C" href="data.html" /> 
+</head>
+
+<body class="wy-body-for-nav">
+
+   
+  <div class="wy-grid-for-nav">
+    
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side">
+      <div class="wy-side-scroll">
+        <div class="wy-side-nav-search" >
+          
+
+          
+            <a href="index.html" class="icon icon-home"> 445S Lab Manual
+          
+
+          
+          </a>
+
+          
+            
+            
+          
+
+          
+<div role="search">
+  <form id="rtd-search-form" class="wy-form" action="search.html" method="get">
+    <input type="text" name="q" placeholder="Search docs" />
+    <input type="hidden" name="check_keywords" value="yes" />
+    <input type="hidden" name="area" value="default" />
+  </form>
+</div>
+
+          
+        </div>
+
+        
+        <div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="main navigation">
+          
+            
+            
+              
+            
+            
+              <ul class="current">
+<li class="toctree-l1"><a class="reference internal" href="overview.html">EE 445S Lab Component</a></li>
+<li class="toctree-l1"><a class="reference internal" href="primer.html">Lab Primer</a></li>
+<li class="toctree-l1"><a class="reference internal" href="stm32h735g.html">STM32H735G Discovery Kit Setup Guide</a></li>
+<li class="toctree-l1"><a class="reference internal" href="lab1.html">Lab 1. Overview of Hardware and Software Tools</a></li>
+<li class="toctree-l1"><a class="reference internal" href="lab2.html">Lab 2. Generating Cosine and Sine Waves</a></li>
+<li class="toctree-l1"><a class="reference internal" href="lab3.html">Lab 3. Digital Filters</a></li>
+<li class="toctree-l1"><a class="reference internal" href="primer_lab4.html">Lab 4 Primer</a></li>
+<li class="toctree-l1"><a class="reference internal" href="data.html">Managing data between MATLAB and C</a></li>
+<li class="toctree-l1 current"><a class="current reference internal" href="#">Lab 4. Pseudo-Random Binary Sequences and Data Scramblers</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="#aim-of-the-experiment">Aim of the experiment</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#reading-assignment">Reading assignment</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#lab-4-instructions">Lab 4 instructions</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="#linear-feedback-shift-register-for-psuedonoise-sequence-generation">Linear-feedback shift register for psuedonoise sequence generation</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#data-scrambler-descrabler">Data scrambler / descrabler</a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="#lab-report-contents">Lab report contents</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="#i-introduction">I. Introduction</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#ii-methods">II. Methods</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#iii-results-from-lab-exercise">III. Results from lab exercise</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#iv-discussion">IV. Discussion</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#v-assignment-questions">V. Assignment questions</a></li>
+</ul>
+</li>
+</ul>
+</li>
+</ul>
+
+            
+          
+        </div>
+        
+      </div>
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap">
+
+      
+      <nav class="wy-nav-top" aria-label="top navigation">
+        
+          <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+          <a href="index.html">445S Lab Manual</a>
+        
+      </nav>
+
+
+      <div class="wy-nav-content">
+        
+        <div class="rst-content">
+        
+          
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<div role="navigation" aria-label="breadcrumbs navigation">
+
+  <ul class="wy-breadcrumbs">
+    
+      <li><a href="index.html" class="icon icon-home"></a> &raquo;</li>
+        
+      <li>Lab 4. Pseudo-Random Binary Sequences and Data Scramblers</li>
+    
+    
+      <li class="wy-breadcrumbs-aside">
+        
+          
+            <a href="_sources/lab4.md.txt" rel="nofollow"> View page source</a>
+          
+        
+      </li>
+    
+  </ul>
+
+  
+  <hr/>
+</div>
+          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
+           <div itemprop="articleBody">
+            
+  <div class="tex2jax_ignore mathjax_ignore section" id="lab-4-pseudo-random-binary-sequences-and-data-scramblers">
+<h1>Lab 4. Pseudo-Random Binary Sequences and Data Scramblers<a class="headerlink" href="#lab-4-pseudo-random-binary-sequences-and-data-scramblers" title="Permalink to this headline">¶</a></h1>
+<div class="section" id="aim-of-the-experiment">
+<h2>Aim of the experiment<a class="headerlink" href="#aim-of-the-experiment" title="Permalink to this headline">¶</a></h2>
+<p>In this experiment, you will generate pseudo-random binary sequences using linear feedback shift registers. You will use the generated sequence for a data scrambler and descrambler.</p>
+</div>
+<div class="section" id="reading-assignment">
+<h2>Reading assignment<a class="headerlink" href="#reading-assignment" title="Permalink to this headline">¶</a></h2>
+<ul class="simple">
+<li><p>Lab 4 Primer</p></li>
+</ul>
+</div>
+<div class="section" id="lab-4-instructions">
+<h2>Lab 4 instructions<a class="headerlink" href="#lab-4-instructions" title="Permalink to this headline">¶</a></h2>
+<div class="section" id="linear-feedback-shift-register-for-psuedonoise-sequence-generation">
+<h3>Linear-feedback shift register for psuedonoise sequence generation<a class="headerlink" href="#linear-feedback-shift-register-for-psuedonoise-sequence-generation" title="Permalink to this headline">¶</a></h3>
+<p>In this exercise, we will implement a <span class="math notranslate nohighlight">\(m=14\)</span> bit LFSR with <span class="math notranslate nohighlight">\(h_1=h_3=h_4=\cdots=h_{11}=0\)</span> and <span class="math notranslate nohighlight">\(h_2=h_{12}=h_{13}=h_{14}=1.\)</span> This will generate a maximal length PN sequence with period <span class="math notranslate nohighlight">\(N=2^{14}-1=16,383\)</span>.</p>
+<ol>
+<li><p>In lab.c, create a variable to act as the ‘shift register’. Since we will be using the right shift <code class="docutils literal notranslate"><span class="pre">&gt;&gt;</span></code> operation later, use an unsigned datatype such as uint32_t. Initialize it with a nonzero value.</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">uint32_t</span> <span class="n">s</span> <span class="o">=</span> <span class="mi">1</span><span class="p">;</span>
+</pre></div>
+</div>
+</li>
+<li><p>In lab.c, create an array to store the generated PN sequence and initialize it to zero. Make the array large enough to store one full period plus an additional 14 (or more) bits to verify that the sequence repeats after the expected period.</p>
+<p>If we use a 32-bit datatype, then the PN sequence would require <span class="math notranslate nohighlight">\(\frac{2^{14} \text{ bits}}{32 \text{ bits per word}}=512\)</span> words. We want to store slightly more elements to check the periodicity, so give the array a length of at least 513.</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">uint32_t</span> <span class="n">PN</span><span class="p">[</span><span class="mi">513</span><span class="p">]</span> <span class="o">=</span> <span class="p">{</span><span class="mi">0</span><span class="p">};</span>
+</pre></div>
+</div>
+</li>
+<li><p>Implement the LFSR. Since we will not need any I/O functionality for this exercise, you can put all of your code inside the lab_init() function in lab.c.</p>
+<ol>
+<li><p>Since each iteration of the LFSR corresponds to generating a single bit, we need to keep track of (1) our bit position in the current word and (2) the current word in the array. Create two variables corresponding to the current location in our <code class="docutils literal notranslate"><span class="pre">PN</span></code> array:</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">uint32_t</span> <span class="n">i_bit</span> <span class="o">=</span> <span class="mi">0</span><span class="p">;</span>
+<span class="n">uint32_t</span> <span class="n">i_word</span> <span class="o">=</span> <span class="mi">0</span><span class="p">;</span>
+</pre></div>
+</div>
+</li>
+<li><p>Create a for loop with index variable <span class="math notranslate nohighlight">\(n\)</span> representing the current time. Since we want to generate one period plus several additional samples to verify that the sequence repeats, allow the for loop to stop after <span class="math notranslate nohighlight">\(2^m - 1 + 32 = 16415\)</span> iterations.</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="k">for</span> <span class="p">(</span><span class="n">uint32_t</span> <span class="n">n</span> <span class="o">=</span> <span class="mi">0</span><span class="p">;</span> <span class="n">n</span><span class="o">&lt;</span><span class="mi">16415</span><span class="p">;</span> <span class="n">n</span><span class="o">+=</span><span class="mi">1</span><span class="p">)</span>
+<span class="p">{</span>
+    <span class="o">.</span>
+    <span class="o">.</span>
+    <span class="o">.</span>
+<span class="p">}</span>
+</pre></div>
+</div>
+</li>
+<li><p>Inside the for loop, add a statement that saves the most recent value generated by the LFSR in the <code class="docutils literal notranslate"><span class="pre">PN</span></code> array. Recall that the most recent value will be the <span class="math notranslate nohighlight">\(m=14\)</span>th most significant bit, so the expression <code class="docutils literal notranslate"><span class="pre">(s&gt;&gt;13)</span> <span class="pre">&amp;</span> <span class="pre">1</span></code> would be one one way to isolate it. The variables you created in (3a) track the bit position and current word; use them to update your PN array with the new value.</p>
+<p><em>Warning: the following line of C code is dense and contains multiple bitwise operations. Read it carefully and take time to parse its meaning!</em></p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">PN</span><span class="p">[</span><span class="n">i_word</span><span class="p">]</span> <span class="o">|=</span> <span class="p">(</span>
+                <span class="p">(</span><span class="n">s</span><span class="o">&gt;&gt;</span><span class="mi">13</span><span class="p">)</span> <span class="o">&amp;</span> <span class="mi">1</span>
+              <span class="p">)</span> <span class="o">&lt;&lt;</span> <span class="n">i_bit</span><span class="p">;</span>
+</pre></div>
+</div>
+</li>
+<li><p>Inside the for loop, update the variables that track the current position. Every 32 bits, you should move to the next word in the array.</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">i_bit</span> <span class="o">+=</span> <span class="mi">1</span><span class="p">;</span>
+<span class="k">if</span> <span class="p">(</span><span class="n">i_bit</span> <span class="o">==</span> <span class="mi">32</span><span class="p">)</span>
+<span class="p">{</span>
+	<span class="n">i_word</span> <span class="o">+=</span> <span class="mi">1</span><span class="p">;</span>
+	<span class="n">i_bit</span> <span class="o">=</span> <span class="mi">0</span><span class="p">;</span>
+<span class="p">}</span>
+</pre></div>
+</div>
+</li>
+<li><p>Inside the for loop, update the state of the LFSR.</p>
+<p><em>Warning: the following line of C code is dense and contains multiple bitwise operations. Read it carefully and take time to parse its meaning!</em></p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">s</span> <span class="o">=</span> <span class="p">(</span> <span class="n">s</span><span class="o">|</span><span class="p">(</span>
+          <span class="p">(</span><span class="mi">1</span><span class="o">&lt;&lt;</span><span class="mi">14</span><span class="p">)</span> <span class="o">&amp;</span> <span class="p">(</span>
+                      <span class="p">(</span><span class="n">s</span><span class="o">&lt;&lt;</span><span class="mi">2</span><span class="p">)</span><span class="o">^</span><span class="p">(</span><span class="n">s</span><span class="o">&lt;&lt;</span><span class="mi">12</span><span class="p">)</span><span class="o">^</span><span class="p">(</span><span class="n">s</span><span class="o">&lt;&lt;</span><span class="mi">13</span><span class="p">)</span><span class="o">^</span><span class="p">(</span><span class="n">s</span><span class="o">&lt;&lt;</span><span class="mi">14</span><span class="p">)</span>
+                    <span class="p">)</span>
+        <span class="p">)</span>
+    <span class="p">)</span> <span class="o">&gt;&gt;</span> <span class="mi">1</span><span class="p">;</span>
+</pre></div>
+</div>
+</li>
+</ol>
+</li>
+</ol>
+</div>
+<div class="section" id="data-scrambler-descrabler">
+<h3>Data scrambler / descrabler<a class="headerlink" href="#data-scrambler-descrabler" title="Permalink to this headline">¶</a></h3>
+</div>
+</div>
+<div class="section" id="lab-report-contents">
+<h2>Lab report contents<a class="headerlink" href="#lab-report-contents" title="Permalink to this headline">¶</a></h2>
+<p>Be sure to include everything listed in this section when you submit your lab report. The goal of the report is to help cement what you learned in memory. For sections I, II, and IV, imagine your audience is a student who is your peer but who has not yet completed the lab.</p>
+<div class="section" id="i-introduction">
+<h3>I. Introduction<a class="headerlink" href="#i-introduction" title="Permalink to this headline">¶</a></h3>
+<p>Briefly explain the theory and algorithms behind the programs that you wrote. The slides and reading material might help you in writing this section.</p>
+</div>
+<div class="section" id="ii-methods">
+<h3>II. Methods<a class="headerlink" href="#ii-methods" title="Permalink to this headline">¶</a></h3>
+<p>Describe the steps you took to implement the algorithms in your own words.</p>
+</div>
+<div class="section" id="iii-results-from-lab-exercise">
+<h3>III. Results from lab exercise<a class="headerlink" href="#iii-results-from-lab-exercise" title="Permalink to this headline">¶</a></h3>
+<p>Present the results you obtain for each task on the assignment sheet. This section should include illustrative oscilloscope screenshots of the DSP algorithms in action. Also include any code that you wrote or modified. Please do not include all of the boilerplate code from the textbook.</p>
+</div>
+<div class="section" id="iv-discussion">
+<h3>IV. Discussion<a class="headerlink" href="#iv-discussion" title="Permalink to this headline">¶</a></h3>
+<p>In this section, discuss the takeaway from each lab. You can mention any intuition that you developed. Also mention any problems that you faced and how you rectified them.</p>
+</div>
+<div class="section" id="v-assignment-questions">
+<h3>V. Assignment questions<a class="headerlink" href="#v-assignment-questions" title="Permalink to this headline">¶</a></h3>
+<p>Please answer the following questions.</p>
+</div>
+</div>
+</div>
+
+
+           </div>
+           
+          </div>
+          <footer>
+    <div class="rst-footer-buttons" role="navigation" aria-label="footer navigation">
+        <a href="data.html" class="btn btn-neutral float-left" title="Managing data between MATLAB and C" accesskey="p" rel="prev"><span class="fa fa-arrow-circle-left" aria-hidden="true"></span> Previous</a>
+    </div>
+
+  <hr/>
+
+  <div role="contentinfo">
+    <p>
+        &#169; Copyright 2021.
+
+    </p>
+  </div>
+    
+    
+    
+    Built with <a href="https://www.sphinx-doc.org/">Sphinx</a> using a
+    
+    <a href="https://github.com/readthedocs/sphinx_rtd_theme">theme</a>
+    
+    provided by <a href="https://readthedocs.org">Read the Docs</a>. 
+
+</footer>
+        </div>
+      </div>
+
+    </section>
+
+  </div>
+  
+
+  <script type="text/javascript">
+      jQuery(function () {
+          SphinxRtdTheme.Navigation.enable(true);
+      });
+  </script>
+
+  
+  
+    
+   
+
+</body>
+</html>

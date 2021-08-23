@@ -1,0 +1,268 @@
+
+
+<!DOCTYPE html>
+<html class="writer-html5" lang="en" >
+<head>
+  <meta charset="utf-8" />
+  
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  
+  <title>STM32H735G Discovery Kit Setup Guide &mdash; 445S Lab Manual  documentation</title>
+  
+
+  
+  <link rel="stylesheet" href="_static/css/theme.css" type="text/css" />
+  <link rel="stylesheet" href="_static/pygments.css" type="text/css" />
+  <link rel="stylesheet" href="_static/pygments.css" type="text/css" />
+  <link rel="stylesheet" href="_static/css/theme.css" type="text/css" />
+
+  
+  
+
+  
+  
+
+  
+
+  
+  <!--[if lt IE 9]>
+    <script src="_static/js/html5shiv.min.js"></script>
+  <![endif]-->
+  
+    
+      <script type="text/javascript" id="documentation_options" data-url_root="./" src="_static/documentation_options.js"></script>
+        <script data-url_root="./" id="documentation_options" src="_static/documentation_options.js"></script>
+        <script src="_static/jquery.js"></script>
+        <script src="_static/underscore.js"></script>
+        <script src="_static/doctools.js"></script>
+    
+    <script type="text/javascript" src="_static/js/theme.js"></script>
+
+    
+    <link rel="index" title="Index" href="genindex.html" />
+    <link rel="search" title="Search" href="search.html" />
+    <link rel="next" title="Lab 1. Overview of Hardware and Software Tools" href="lab1.html" />
+    <link rel="prev" title="Lab Primer" href="primer.html" /> 
+</head>
+
+<body class="wy-body-for-nav">
+
+   
+  <div class="wy-grid-for-nav">
+    
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side">
+      <div class="wy-side-scroll">
+        <div class="wy-side-nav-search" >
+          
+
+          
+            <a href="index.html" class="icon icon-home"> 445S Lab Manual
+          
+
+          
+          </a>
+
+          
+            
+            
+          
+
+          
+<div role="search">
+  <form id="rtd-search-form" class="wy-form" action="search.html" method="get">
+    <input type="text" name="q" placeholder="Search docs" />
+    <input type="hidden" name="check_keywords" value="yes" />
+    <input type="hidden" name="area" value="default" />
+  </form>
+</div>
+
+          
+        </div>
+
+        
+        <div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="main navigation">
+          
+            
+            
+              
+            
+            
+              <ul class="current">
+<li class="toctree-l1"><a class="reference internal" href="overview.html">EE 445S Lab Component</a></li>
+<li class="toctree-l1"><a class="reference internal" href="primer.html">Lab Primer</a></li>
+<li class="toctree-l1 current"><a class="current reference internal" href="#">STM32H735G Discovery Kit Setup Guide</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="#stm32cubeide-installation">STM32CubeIDE installation</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#importing-the-starter-code">Importing the starter code</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#running-the-project-on-the-discovery-board">Running the project on the discovery board</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="#running-in-debug-mode">Running in debug mode</a></li>
+</ul>
+</li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="lab1.html">Lab 1. Overview of Hardware and Software Tools</a></li>
+<li class="toctree-l1"><a class="reference internal" href="lab2.html">Lab 2. Generating Cosine and Sine Waves</a></li>
+<li class="toctree-l1"><a class="reference internal" href="lab3.html">Lab 3. Digital Filters</a></li>
+<li class="toctree-l1"><a class="reference internal" href="primer_lab4.html">Lab 4 Primer</a></li>
+<li class="toctree-l1"><a class="reference internal" href="data.html">Managing data between MATLAB and C</a></li>
+<li class="toctree-l1"><a class="reference internal" href="lab4.html">Lab 4. Pseudo-Random Binary Sequences and Data Scramblers</a></li>
+</ul>
+
+            
+          
+        </div>
+        
+      </div>
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap">
+
+      
+      <nav class="wy-nav-top" aria-label="top navigation">
+        
+          <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+          <a href="index.html">445S Lab Manual</a>
+        
+      </nav>
+
+
+      <div class="wy-nav-content">
+        
+        <div class="rst-content">
+        
+          
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<div role="navigation" aria-label="breadcrumbs navigation">
+
+  <ul class="wy-breadcrumbs">
+    
+      <li><a href="index.html" class="icon icon-home"></a> &raquo;</li>
+        
+      <li>STM32H735G Discovery Kit Setup Guide</li>
+    
+    
+      <li class="wy-breadcrumbs-aside">
+        
+          
+            <a href="_sources/stm32h735g.md.txt" rel="nofollow"> View page source</a>
+          
+        
+      </li>
+    
+  </ul>
+
+  
+  <hr/>
+</div>
+          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
+           <div itemprop="articleBody">
+            
+  <div class="tex2jax_ignore mathjax_ignore section" id="stm32h735g-discovery-kit-setup-guide">
+<h1>STM32H735G Discovery Kit Setup Guide<a class="headerlink" href="#stm32h735g-discovery-kit-setup-guide" title="Permalink to this headline">¶</a></h1>
+<p>This guide will walk you through the steps needed to install the STM32CubeIDE software, import the starter code, and program the board.</p>
+<div class="section" id="stm32cubeide-installation">
+<h2>STM32CubeIDE installation<a class="headerlink" href="#stm32cubeide-installation" title="Permalink to this headline">¶</a></h2>
+<p>The easiest way to program the discovery board is with the <a class="reference external" href="http://users.ece.utexas.edu/~bevans/courses/realtime/homework/matlab.html">STM32CubeIDE</a> Software.</p>
+<p>The software is free and available on Windows, Mac OS, and Linux, but you will need to either register an account with ST of provide your email to access it.</p>
+<p>When installing, make sure to install the suggested components: SEGGER J-Link drivers and ST-Link Drivers.</p>
+<p><img alt="" src="_images/install_choose_components.png" /></p>
+<p>Your operating system may prompt you for additional permission when installing the drivers with a prompt similar to the one below. Make sure you allow the installation.</p>
+<p><img alt="" src="_images/install_drivers.png" /></p>
+<p>When you run the program for the first time, you will be prompted to select a workspace. <strong>Make sure you note the location of your workspace.</strong> This is where your projects for the lab assignments will reside. The default location is <code class="docutils literal notranslate"><span class="pre">&lt;user&gt;/STM32CubeIDE/workspace_&lt;version&gt;</span></code>, but feel free to choose a more convenient location since you will access it often for the lab exercises.</p>
+</div>
+<div class="section" id="importing-the-starter-code">
+<h2>Importing the starter code<a class="headerlink" href="#importing-the-starter-code" title="Permalink to this headline">¶</a></h2>
+<p>We have provided a project that contains all of the starter code necessary to complete the lab exercises. With it, we have included a short MATLAB script that will help you import the code to the IDE for each lab while avoiding naming conflicts.</p>
+<p>If you do not already have a working installation of MATLAB, follow the <a class="reference external" href="http://users.ece.utexas.edu/~bevans/courses/realtime/homework/matlab.html">instructions on the course webpage</a>.</p>
+<ol class="simple">
+<li><p>Download the <a class="reference external" href="http://72.179.3.141:9996/talkthrough.zip">zip file containing the starter code</a> and <a class="reference external" href="http://72.179.3.141:9996/lab_setup.m">setup script</a> and extract the contents to a convenient location.</p></li>
+<li><p>In MATLAB, and navigate to the folder you just extracted. You can either use the ‘Current Folder’ menu in the MATLAB GUI or change directory with ```cd <downloads>/445S_lab_files’.</p></li>
+<li><p>Run the lab_setup.m script by typing <code class="docutils literal notranslate"><span class="pre">lab_setup</span></code> in the command window or by opening the file in the MATLAB editor and clicking the run icon (F5).</p></li>
+<li><p>Follow the on-screen instructions to create a new project. Make sure to choose a name for your project that does not conflict with an existing project in your workspace.</p></li>
+<li><p>Open the STM32CubeIDE and import the extracted project by clicking File -&gt; Import. Under the ‘General’ category, choose ‘existing projects into workspace.’ Select the folder you just extracted as the root directory and click finish.</p></li>
+</ol>
+</div>
+<div class="section" id="running-the-project-on-the-discovery-board">
+<h2>Running the project on the discovery board<a class="headerlink" href="#running-the-project-on-the-discovery-board" title="Permalink to this headline">¶</a></h2>
+<p>Once the project is imported, select it as the active project by double clicking it.</p>
+<p>Connect the board with a micro USB cable to your computer. There are two micro USB ports on the board. Use the one labeled ‘CN15 STLINK’.</p>
+<p>The project can now be compiled and run normally <img alt="" src="_images/run.png" /> or in debug <img alt="" src="_images/debug.png" /> mode by clicking the icon at the top.</p>
+<div class="section" id="running-in-debug-mode">
+<h3>Running in debug mode<a class="headerlink" href="#running-in-debug-mode" title="Permalink to this headline">¶</a></h3>
+<p>Running in debug mode will allow you to place breakpoints, examine the processor’s memory, and make timing measurements.</p>
+<ol class="simple">
+<li><p>Click the debug (<img alt="" src="_images/debug.png" />) icon in the top menu bar.</p></li>
+<li><p>The first time you debug the program, you will be prompted to modify the settings. No changes are necessary, so click ‘OK.’</p></li>
+<li><p>The first time you program the board, you may be prompted to update the firmware. Follow the instructions and then proceed.</p></li>
+<li><p>The program will compile and load to the board. When it is complete you should see  ‘download verified successfully’ printed in the console, and first line of the program will be highlighted, indicating that execution is paused on this line.</p></li>
+<li><p>Press F8 (or the resume <img alt="" src="_images/resume.png" /> icon) to continue the program’s execution. <strong>Note that the <img alt="" src="_images/resume.png" /> and the run <img alt="" src="_images/run.png" /> icons look similar, but perform different actions.</strong></p></li>
+</ol>
+<p>For more information on the behavior of the starter code, refer to the Lab 1 page.</p>
+</div>
+</div>
+</div>
+
+
+           </div>
+           
+          </div>
+          <footer>
+    <div class="rst-footer-buttons" role="navigation" aria-label="footer navigation">
+        <a href="lab1.html" class="btn btn-neutral float-right" title="Lab 1. Overview of Hardware and Software Tools" accesskey="n" rel="next">Next <span class="fa fa-arrow-circle-right" aria-hidden="true"></span></a>
+        <a href="primer.html" class="btn btn-neutral float-left" title="Lab Primer" accesskey="p" rel="prev"><span class="fa fa-arrow-circle-left" aria-hidden="true"></span> Previous</a>
+    </div>
+
+  <hr/>
+
+  <div role="contentinfo">
+    <p>
+        &#169; Copyright 2021.
+
+    </p>
+  </div>
+    
+    
+    
+    Built with <a href="https://www.sphinx-doc.org/">Sphinx</a> using a
+    
+    <a href="https://github.com/readthedocs/sphinx_rtd_theme">theme</a>
+    
+    provided by <a href="https://readthedocs.org">Read the Docs</a>. 
+
+</footer>
+        </div>
+      </div>
+
+    </section>
+
+  </div>
+  
+
+  <script type="text/javascript">
+      jQuery(function () {
+          SphinxRtdTheme.Navigation.enable(true);
+      });
+  </script>
+
+  
+  
+    
+   
+
+</body>
+</html>
