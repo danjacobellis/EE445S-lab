@@ -3,7 +3,7 @@
 project = u'445S Lab Manual'
 copyright = u'2021'
 source_suffix = ['.rst', '.md']
-master_doc = 'lab'
+master_doc = 'index'
 language = None
 exclude_patterns = [u'_build', 'Thumbs.db', '.DS_Store']
 pygments_style = 'sphinx'
