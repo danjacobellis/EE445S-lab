@@ -88,44 +88,44 @@ In this exercise, we will implement a $m=14$ bit LFSR with $h_1=h_3=h_4=\cdots=h
 
 In this exercise, we will use the generated PN sequence to scramble and descramble a binary image.
 
-    1. In lab.c create an array containing the binary 'tree.png' image. Please see the instructions on [managing data between MATLAB and C]. (you can copy and paste the variable declaration from this page.)
-    
-    2. In lab.c, call the provided 'display_image' function to show the tree image on the display. Put breakpoint after this function so that you have an oppurtinity to see it before the code resumes.
-    
-        ```
-        display_image(tree, 128, 128);
-        ```
-    
-    2. In lab.c, call the provided 'display_image' function to show the PN sequence on the display. Put breakpoint after this function so that you have an oppurtinity to see it before the code resumes.
-    
-        ```
-        display_image(PN, 129, 128);
-        ```
-    
-    3. Scramble each bit of the tree image by taking the XOR with the PN sequence. You may perform the operation in-place by overwriting the existing 'tree' array.
-    
-        ```
-        for (i_word = 0; i_word < 512; i_word+=1)
-        {
-            tree[i_word] ^= PN[i_word];
-        }
-        ```
-        
-        Call the display_image function again (with a breakpoint) to examine the result.
-        
-        ```
-        display_image(tree, 128, 128);
-        ```
- 
-    4. Descramble the image by again taking the XOR, and display the result. It should exactly match the original image.
-    
-        ```
-        for (i_word = 0; i_word < 512; i_word+=1)
-        {
-            tree[i_word] ^= PN[i_word];
-        }
-        display_image(tree, 128, 128);
-        ```
+1. In lab.c create an array containing the binary 'tree.png' image. Please see the instructions on [managing data between MATLAB and C][1]. (you can copy and paste the variable declaration from this page.)
+
+2. In lab.c, call the provided 'display_image' function to show the tree image on the display. Put breakpoint after this function so that you have an oppurtinity to see it before the code resumes.
+
+    ```
+    display_image(tree, 128, 128);
+    ```
+
+2. In lab.c, call the provided 'display_image' function to show the PN sequence on the display. Put breakpoint after this function so that you have an oppurtinity to see it before the code resumes.
+
+    ```
+    display_image(PN, 129, 128);
+    ```
+
+3. Scramble each bit of the tree image by taking the XOR with the PN sequence. You may perform the operation in-place by overwriting the existing 'tree' array.
+
+    ```
+    for (i_word = 0; i_word < 512; i_word+=1)
+    {
+        tree[i_word] ^= PN[i_word];
+    }
+    ```
+
+    Call the display_image function again (with a breakpoint) to examine the result.
+
+    ```
+    display_image(tree, 128, 128);
+    ```
+
+4. Descramble the image by again taking the XOR, and display the result. It should exactly match the original image.
+
+    ```
+    for (i_word = 0; i_word < 512; i_word+=1)
+    {
+        tree[i_word] ^= PN[i_word];
+    }
+    display_image(tree, 128, 128);
+    ```
 
 ## Lab report contents
 
@@ -146,3 +146,5 @@ Present the results you obtain for each task on the assignment sheet. This secti
 ### IV. Discussion
 
 In this section, discuss the takeaway from each lab. You can mention any intuition that you developed. Also mention any problems that you faced and how you rectified them.
+
+[1]:data.md

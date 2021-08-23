@@ -265,46 +265,40 @@
 <div class="section" id="data-scrambler-descrambler">
 <h3>Data scrambler / descrambler<a class="headerlink" href="#data-scrambler-descrambler" title="Permalink to this headline">¶</a></h3>
 <p>In this exercise, we will use the generated PN sequence to scramble and descramble a binary image.</p>
-<div class="highlight-none notranslate"><div class="highlight"><pre><span></span>1. In lab.c create an array containing the binary &#39;tree.png&#39; image. Please see the instructions on [managing data between MATLAB and C]. (you can copy and paste the variable declaration from this page.)
-
-2. In lab.c, call the provided &#39;display_image&#39; function to show the tree image on the display. Put breakpoint after this function so that you have an oppurtinity to see it before the code resumes.
-
-    ```
-    display_image(tree, 128, 128);
-    ```
-
-2. In lab.c, call the provided &#39;display_image&#39; function to show the PN sequence on the display. Put breakpoint after this function so that you have an oppurtinity to see it before the code resumes.
-
-    ```
-    display_image(PN, 129, 128);
-    ```
-
-3. Scramble each bit of the tree image by taking the XOR with the PN sequence. You may perform the operation in-place by overwriting the existing &#39;tree&#39; array.
-
-    ```
-    for (i_word = 0; i_word &lt; 512; i_word+=1)
-    {
-        tree[i_word] ^= PN[i_word];
-    }
-    ```
-    
-    Call the display_image function again (with a breakpoint) to examine the result.
-    
-    ```
-    display_image(tree, 128, 128);
-    ```
-
-4. Descramble the image by again taking the XOR, and display the result. It should exactly match the original image.
-
-    ```
-    for (i_word = 0; i_word &lt; 512; i_word+=1)
-    {
-        tree[i_word] ^= PN[i_word];
-    }
-    display_image(tree, 128, 128);
-    ```
+<ol>
+<li><p>In lab.c create an array containing the binary ‘tree.png’ image. Please see the instructions on <a class="reference internal" href="data.html"><span class="doc std std-doc">managing data between MATLAB and C</span></a>. (you can copy and paste the variable declaration from this page.)</p></li>
+<li><p>In lab.c, call the provided ‘display_image’ function to show the tree image on the display. Put breakpoint after this function so that you have an oppurtinity to see it before the code resumes.</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">display_image</span><span class="p">(</span><span class="n">tree</span><span class="p">,</span> <span class="mi">128</span><span class="p">,</span> <span class="mi">128</span><span class="p">);</span>
 </pre></div>
 </div>
+</li>
+<li><p>In lab.c, call the provided ‘display_image’ function to show the PN sequence on the display. Put breakpoint after this function so that you have an oppurtinity to see it before the code resumes.</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">display_image</span><span class="p">(</span><span class="n">PN</span><span class="p">,</span> <span class="mi">129</span><span class="p">,</span> <span class="mi">128</span><span class="p">);</span>
+</pre></div>
+</div>
+</li>
+<li><p>Scramble each bit of the tree image by taking the XOR with the PN sequence. You may perform the operation in-place by overwriting the existing ‘tree’ array.</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="k">for</span> <span class="p">(</span><span class="n">i_word</span> <span class="o">=</span> <span class="mi">0</span><span class="p">;</span> <span class="n">i_word</span> <span class="o">&lt;</span> <span class="mi">512</span><span class="p">;</span> <span class="n">i_word</span><span class="o">+=</span><span class="mi">1</span><span class="p">)</span>
+<span class="p">{</span>
+    <span class="n">tree</span><span class="p">[</span><span class="n">i_word</span><span class="p">]</span> <span class="o">^=</span> <span class="n">PN</span><span class="p">[</span><span class="n">i_word</span><span class="p">];</span>
+<span class="p">}</span>
+</pre></div>
+</div>
+<p>Call the display_image function again (with a breakpoint) to examine the result.</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">display_image</span><span class="p">(</span><span class="n">tree</span><span class="p">,</span> <span class="mi">128</span><span class="p">,</span> <span class="mi">128</span><span class="p">);</span>
+</pre></div>
+</div>
+</li>
+<li><p>Descramble the image by again taking the XOR, and display the result. It should exactly match the original image.</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="k">for</span> <span class="p">(</span><span class="n">i_word</span> <span class="o">=</span> <span class="mi">0</span><span class="p">;</span> <span class="n">i_word</span> <span class="o">&lt;</span> <span class="mi">512</span><span class="p">;</span> <span class="n">i_word</span><span class="o">+=</span><span class="mi">1</span><span class="p">)</span>
+<span class="p">{</span>
+    <span class="n">tree</span><span class="p">[</span><span class="n">i_word</span><span class="p">]</span> <span class="o">^=</span> <span class="n">PN</span><span class="p">[</span><span class="n">i_word</span><span class="p">];</span>
+<span class="p">}</span>
+<span class="n">display_image</span><span class="p">(</span><span class="n">tree</span><span class="p">,</span> <span class="mi">128</span><span class="p">,</span> <span class="mi">128</span><span class="p">);</span>
+</pre></div>
+</div>
+</li>
+</ol>
 </div>
 </div>
 <div class="section" id="lab-report-contents">
