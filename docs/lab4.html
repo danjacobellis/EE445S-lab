@@ -102,7 +102,7 @@
 <li class="toctree-l2"><a class="reference internal" href="#reading-assignment">Reading assignment</a></li>
 <li class="toctree-l2"><a class="reference internal" href="#lab-4-instructions">Lab 4 instructions</a><ul>
 <li class="toctree-l3"><a class="reference internal" href="#linear-feedback-shift-register-for-psuedonoise-sequence-generation">Linear-feedback shift register for psuedonoise sequence generation</a></li>
-<li class="toctree-l3"><a class="reference internal" href="#data-scrambler-descrabler">Data scrambler / descrabler</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#data-scrambler-descrambler">Data scrambler / descrambler</a></li>
 </ul>
 </li>
 <li class="toctree-l2"><a class="reference internal" href="#lab-report-contents">Lab report contents</a><ul>
@@ -110,7 +110,6 @@
 <li class="toctree-l3"><a class="reference internal" href="#ii-methods">II. Methods</a></li>
 <li class="toctree-l3"><a class="reference internal" href="#iii-results-from-lab-exercise">III. Results from lab exercise</a></li>
 <li class="toctree-l3"><a class="reference internal" href="#iv-discussion">IV. Discussion</a></li>
-<li class="toctree-l3"><a class="reference internal" href="#v-assignment-questions">V. Assignment questions</a></li>
 </ul>
 </li>
 </ul>
@@ -258,12 +257,54 @@
 </pre></div>
 </div>
 </li>
+<li><p>Put a breakpoint after the for loop and run the code. Examine the ‘PN’ array and confirm that the sequence has a period of <span class="math notranslate nohighlight">\(N=2^{14}-1=16,383\)</span>.</p></li>
 </ol>
 </li>
 </ol>
 </div>
-<div class="section" id="data-scrambler-descrabler">
-<h3>Data scrambler / descrabler<a class="headerlink" href="#data-scrambler-descrabler" title="Permalink to this headline">¶</a></h3>
+<div class="section" id="data-scrambler-descrambler">
+<h3>Data scrambler / descrambler<a class="headerlink" href="#data-scrambler-descrambler" title="Permalink to this headline">¶</a></h3>
+<p>In this exercise, we will use the generated PN sequence to scramble and descramble a binary image.</p>
+<div class="highlight-none notranslate"><div class="highlight"><pre><span></span>1. In lab.c create an array containing the binary &#39;tree.png&#39; image. Please see the instructions on [managing data between MATLAB and C]. (you can copy and paste the variable declaration from this page.)
+
+2. In lab.c, call the provided &#39;display_image&#39; function to show the tree image on the display. Put breakpoint after this function so that you have an oppurtinity to see it before the code resumes.
+
+    ```
+    display_image(tree, 128, 128);
+    ```
+
+2. In lab.c, call the provided &#39;display_image&#39; function to show the PN sequence on the display. Put breakpoint after this function so that you have an oppurtinity to see it before the code resumes.
+
+    ```
+    display_image(PN, 129, 128);
+    ```
+
+3. Scramble each bit of the tree image by taking the XOR with the PN sequence. You may perform the operation in-place by overwriting the existing &#39;tree&#39; array.
+
+    ```
+    for (i_word = 0; i_word &lt; 512; i_word+=1)
+    {
+        tree[i_word] ^= PN[i_word];
+    }
+    ```
+    
+    Call the display_image function again (with a breakpoint) to examine the result.
+    
+    ```
+    display_image(tree, 128, 128);
+    ```
+
+4. Descramble the image by again taking the XOR, and display the result. It should exactly match the original image.
+
+    ```
+    for (i_word = 0; i_word &lt; 512; i_word+=1)
+    {
+        tree[i_word] ^= PN[i_word];
+    }
+    display_image(tree, 128, 128);
+    ```
+</pre></div>
+</div>
 </div>
 </div>
 <div class="section" id="lab-report-contents">
@@ -284,10 +325,6 @@
 <div class="section" id="iv-discussion">
 <h3>IV. Discussion<a class="headerlink" href="#iv-discussion" title="Permalink to this headline">¶</a></h3>
 <p>In this section, discuss the takeaway from each lab. You can mention any intuition that you developed. Also mention any problems that you faced and how you rectified them.</p>
-</div>
-<div class="section" id="v-assignment-questions">
-<h3>V. Assignment questions<a class="headerlink" href="#v-assignment-questions" title="Permalink to this headline">¶</a></h3>
-<p>Please answer the following questions.</p>
 </div>
 </div>
 </div>
