@@ -83,9 +83,9 @@ The impulse response of this system is a causal sinusoid with discrete time freq
 
 In this exercise, we will examine the lookup table method for generating a sinusoid.
 
-#### Examining periodicity in MATLAB (optional).
+#### Examining periodicity in MATLAB.
 
-This section is optional, but may help you complete assignment question #6.
+This section may help you complete assignment question #6.
 
 The lookup table method requires minimal computation compared the math library call or difference equation, but the memory required depends on the desired frequency and the sampling rate. This MATLAB exercise will demonstrate this relationship.
 

@@ -22,11 +22,6 @@ The aim of the experiment is to familiarize you with the following:
 	
 * Course reader
 	* Lecture 0 slides on [Introduction][3]
-    
-    
-## Supplemental resources
-
-
 
 ## Lab 1 instructions
 

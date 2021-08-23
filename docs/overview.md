@@ -28,6 +28,29 @@ The remaining 10 points are for attendance and participation of lab recitation. 
 
 For partial credit, please submit all work even if incomplete or incorrect.
 
+## Schedule
+
+| Week  | Prelab Quiz Due | Lab Work To Complete | Lab Report Due |
+| :---     |:----: |                :----:                |:----: |
+| Aug. 23  |       |                                      |       |
+| Aug. 30  |       | 1. Intro to Hardware and Software    |       |
+| Sept. 6  | Lab 2 | 2. Sinusoidal Generation Part 1      | Lab 1 |
+| Sept. 13 |       | 2. Sinusoidal Generation Part 2      |       |
+| Sept. 20 | Lab 3 | 3. Digital Filters Part 1            | Lab 2 |
+| Sept. 27 |       | 3. Digital Filters Part 2            |       |
+| Oct. 4   |       | 3. Digital Filters Part 3            |       |
+| Oct. 11  |       |                                      |       |
+| Oct. 18  | Lab 4 | 4. Data Scramblers                   | Lab 3 |
+| Oct. 25  | Lab 5 | 5. Pulse Amplitude Modulation Part 1 | Lab 4 |
+| Nov. 1   |       | 5. Pulse Amplitude Modulation Part 2 |       |
+| Nov. 8   |       | 5. Pulse Amplitude Modulation Part 3 |       |
+| Nov. 15  | Lab 6 | 6. Quadrature Amplitude Modulation   | Lab 5 |
+| Nov. 22  |       |                                      |       |
+| Nov. 29  | Lab 7 | 7. Audio Effects                     | Lab 6 |
+| Dec. 6   |       |                                      |       |
+
+
+
 [1]:https://www.st.com/en/evaluation-tools/stm32h735g-dk.html
 [2]:http://www.ti.com/tool/tmdslcdk138
 [3]:http://www.rt-dsp.com/

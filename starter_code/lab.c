@@ -28,7 +28,7 @@ uint32_t elapsed_cycles;
 
 /*
 This function will be called once before beginning the main program loop.
-This is the best place to build a lookup table.
+This is the best place to build a lookup table or run code that does not require I/O
 */
 void lab_init(int16_t* output_buffer)
 {
