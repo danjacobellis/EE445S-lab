@@ -1,17 +1,7 @@
 # Building HTML
 
-1. Set the current directoy to 'lab_manual'
+The build.sh script will create two versions of the HTML files
 
-    ```cd lab_manual```
-    
-2. Build the files
+The first version is placed in the /docs folder where github pages automatically hosts from. For links to other course materials in this version, the full ece.utexas.edu URL is used. This version will be automatically published https://danjacobellis.github.io/EE445S-lab/ whenever changes are made.
 
-    ```make clean; make html```
-
-3. To make the changes visible on github pages, copy them to the docs folder
-
-    ```cp -r _build/html/* ../docs/```
-    
-Once changes are pushed, they will be visible on 
-
-https://danjacobellis.github.io/EE445S-lab/
+The build.sh script creates a second version of the HTML files in stm32h735gdk.zip This version uses relative links to reference any files in the hierarchy higher than 'courses/realtime/lectures/laboratory/stm32h735gdk' (such as lecture slides, matlab info, etc).
