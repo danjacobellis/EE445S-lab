@@ -5,11 +5,11 @@
 overview
 primer
 stm32h735g
-lab1
-lab2
-lab3
-primer_lab4
 data
-lab4
+lab1/index
+lab2/index
+lab3/index
+lab4/primer
+lab4/index
 
 ```
