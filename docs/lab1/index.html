@@ -97,6 +97,7 @@
 <li class="toctree-l1 current"><a class="current reference internal" href="#">Lab 1. Overview of Hardware and Software Tools</a><ul>
 <li class="toctree-l2"><a class="reference internal" href="#aim-of-the-experiment">Aim of the experiment</a></li>
 <li class="toctree-l2"><a class="reference internal" href="#reading-assignment">Reading assignment</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#supplemental-reading">Supplemental reading</a></li>
 <li class="toctree-l2"><a class="reference internal" href="#lab-1-instructions">Lab 1 instructions</a><ul>
 <li class="toctree-l3"><a class="reference internal" href="#dsp-in-matlab">DSP in MATLAB</a></li>
 <li class="toctree-l3"><a class="reference internal" href="#using-the-stm32h735g-discovery-kit-and-starter-code">Using the STM32H735G discovery kit and starter code</a></li>
@@ -214,6 +215,12 @@
 </li>
 </ul>
 </div>
+<div class="section" id="supplemental-reading">
+<h2>Supplemental reading<a class="headerlink" href="#supplemental-reading" title="Permalink to this headline">¶</a></h2>
+<ul class="simple">
+<li><p><a class="reference external" href="http://users.ece.utexas.edu/~bevans/courses/realtime/lectures/laboratory/c6748winDSK/lab1/CommonSignalsInMatlab.pptx">Common signals in MATLAB</a></p></li>
+</ul>
+</div>
 <div class="section" id="lab-1-instructions">
 <h2>Lab 1 instructions<a class="headerlink" href="#lab-1-instructions" title="Permalink to this headline">¶</a></h2>
 <p>Complete the following exercises during your lab section. Include your results in the lab report.</p>
@@ -234,15 +241,17 @@
 </li>
 <li><p>Create a plot that approximates the continuous time signal <span class="math notranslate nohighlight">\(x(t)=sin(2 \pi t)\)</span> for <span class="math notranslate nohighlight">\(0 \leq t \leq 1\)</span>, using the <code class="docutils literal notranslate"><span class="pre">plot</span></code> function.</p>
 <p><em>Solution 1:</em></p>
-<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">x</span> <span class="o">=</span> <span class="o">@</span><span class="p">(</span><span class="n">t</span><span class="p">)</span> <span class="n">sin</span><span class="p">(</span><span class="mi">2</span><span class="o">*</span><span class="n">pi</span><span class="o">*</span><span class="n">t</span><span class="p">);</span>
-<span class="n">plot</span><span class="p">(</span><span class="n">t</span><span class="p">,</span><span class="n">x</span><span class="p">(</span><span class="n">t</span><span class="p">));</span>
-</pre></div>
-</div>
-<p><em>Solution 2:</em></p>
 <div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">xt</span> <span class="o">=</span> <span class="n">sin</span><span class="p">(</span><span class="mi">2</span><span class="o">*</span><span class="n">pi</span><span class="o">*</span><span class="n">t</span><span class="p">);</span>
 <span class="n">plot</span><span class="p">(</span><span class="n">t</span><span class="p">,</span><span class="n">xt</span><span class="p">);</span>
 </pre></div>
 </div>
+<p><em>Explanation:</em> Many MATLAB functions that operate on scalars (including <code class="docutils literal notranslate"><span class="pre">sin</span></code>) are automatically <a class="reference external" href="https://en.wikipedia.org/wiki/Map_(parallel_pattern)">‘mapped’</a> to arrays. Since <code class="docutils literal notranslate"><span class="pre">t</span></code> is an vector, the expression <code class="docutils literal notranslate"><span class="pre">sin(2*pi*t)</span></code> applies the scalar function <span class="math notranslate nohighlight">\(x(t) = sin(2\pi t)\)</span> to each element of <code class="docutils literal notranslate"><span class="pre">t</span></code>.</p>
+<p><em>Solution 2:</em></p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">x</span> <span class="o">=</span> <span class="o">@</span><span class="p">(</span><span class="n">t</span><span class="p">)</span> <span class="n">sin</span><span class="p">(</span><span class="mi">2</span><span class="o">*</span><span class="n">pi</span><span class="o">*</span><span class="n">t</span><span class="p">);</span>
+<span class="n">plot</span><span class="p">(</span><span class="n">t</span><span class="p">,</span><span class="n">x</span><span class="p">(</span><span class="n">t</span><span class="p">));</span>
+</pre></div>
+</div>
+<p><em>Explanation:</em> The line <code class="docutils literal notranslate"><span class="pre">x</span> <span class="pre">=</span> <span class="pre">&#64;(t)</span> <span class="pre">sin(2*pi*t)</span></code> defines a new function <code class="docutils literal notranslate"><span class="pre">x</span></code>. This line can be read as ‘<code class="docutils literal notranslate"><span class="pre">x</span></code> is a function of <code class="docutils literal notranslate"><span class="pre">t</span></code> that returns <code class="docutils literal notranslate"><span class="pre">sin(2*pi*t)</span></code>’. Defining a function is useful to simplify sequences of operations. For example, if we wanted to shift <span class="math notranslate nohighlight">\(x(t)\)</span> in time by five seconds, we could use the expression <code class="docutils literal notranslate"><span class="pre">x(t-5)</span></code>.</p>
 </li>
 <li><p>Label the plot using the <code class="docutils literal notranslate"><span class="pre">xlabel</span></code>, <code class="docutils literal notranslate"><span class="pre">ylabel</span></code>, and <code class="docutils literal notranslate"><span class="pre">title</span></code> functions.</p>
 <p><em>Solution:</em></p>
@@ -254,26 +263,30 @@
 </li>
 <li><p>Obtain the value of the signal at time t = 0.32 seconds.</p>
 <p><em>Solution 1:</em></p>
-<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">x</span><span class="p">(</span><span class="mf">0.32</span><span class="p">)</span>
-</pre></div>
-</div>
-<p><em>Solution 2:</em></p>
 <div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="p">[</span><span class="o">~</span><span class="p">,</span> <span class="n">ind</span><span class="p">]</span> <span class="o">=</span> <span class="nb">min</span><span class="p">(</span><span class="nb">abs</span><span class="p">(</span><span class="n">t</span><span class="o">-</span><span class="mf">0.32</span><span class="p">));</span>
 <span class="n">xt</span><span class="p">(</span><span class="n">ind</span><span class="p">)</span>
 </pre></div>
 </div>
+<p><em>Explanation:</em> The expression <code class="docutils literal notranslate"><span class="pre">abs(t-0.32)</span></code> measures the distance of each element in <code class="docutils literal notranslate"><span class="pre">t</span></code> to the desired value of 0.32. Combining this expression with the <code class="docutils literal notranslate"><span class="pre">min</span></code> function allows us to find the element of t which is closest to 0.32. The <code class="docutils literal notranslate"><span class="pre">min</span></code> function returns two values: the value of the minimum (which we discard by assigning the special name <code class="docutils literal notranslate"><span class="pre">~</span></code>) and the index <code class="docutils literal notranslate"><span class="pre">ind</span></code> which tells us the position in the array that is closest to 0.32.</p>
+<p><em>Solution 2:</em></p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">ind</span> <span class="o">=</span> <span class="mi">1</span> <span class="o">+</span> <span class="mf">0.32</span><span class="o">/</span><span class="mf">0.001</span>
+<span class="n">xt</span><span class="p">(</span><span class="n">ind</span><span class="p">)</span>
+</pre></div>
+</div>
+<p><em>Explanation:</em> Since <code class="docutils literal notranslate"><span class="pre">t</span></code> is sampled every 0.001 seconds, we can directly calculate the index corresponding to <span class="math notranslate nohighlight">\(t=0.32\)</span> as long as we consider that array indexing in MATLAB is one-based.</p>
 </li>
 <li><p>Sample the signal at every 0.008-sec.</p>
 <p><em>Solution 1:</em></p>
-<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">xn</span> <span class="o">=</span> <span class="n">x</span><span class="p">(</span><span class="n">t</span><span class="p">(</span><span class="mi">1</span><span class="p">:</span><span class="mi">8</span><span class="p">:</span><span class="n">end</span><span class="p">));</span>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">xn</span> <span class="o">=</span> <span class="n">xt</span><span class="p">(</span><span class="mi">1</span><span class="p">:</span><span class="mi">8</span><span class="p">:</span><span class="n">end</span><span class="p">);</span>
 </pre></div>
 </div>
 <p><em>Solution 2:</em></p>
 <div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">xn</span> <span class="o">=</span> <span class="n">downsample</span><span class="p">(</span><span class="n">xt</span><span class="p">,</span><span class="mi">8</span><span class="p">);</span>
 </pre></div>
 </div>
+<p><em>Warning: the ‘downsample’ function requires the signal processing toolbox.</em></p>
 </li>
-<li><p>Overlay the sampled signal on your continous plot using the <code class="docutils literal notranslate"><span class="pre">stem</span></code> function</p>
+<li><p>Overlay the sampled signal on your continuous plot using the <code class="docutils literal notranslate"><span class="pre">stem</span></code> function</p>
 <p><em>Solution:</em></p>
 <div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">tn</span> <span class="o">=</span> <span class="n">t</span><span class="p">(</span><span class="mi">1</span><span class="p">:</span><span class="mi">8</span><span class="p">:</span><span class="n">end</span><span class="p">);</span>
 <span class="n">hold</span> <span class="nb">all</span><span class="p">;</span>

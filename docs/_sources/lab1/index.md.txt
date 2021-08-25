@@ -21,7 +21,11 @@ The aim of the experiment is to familiarize you with the following:
 	* Chapter 1
 	
 * Course reader
-	* Lecture 0 slides on [Introduction][3]
+	* Lecture 0 slides on [Introduction][2]
+    
+## Supplemental reading
+
+* [Common signals in MATLAB][3]
 
 ## Lab 1 instructions
 
@@ -48,17 +52,18 @@ Since these exercises are intended to teach the basics of MATLAB, some possible 
 
     *Solution 1:*
     ```
-    x = @(t) sin(2*pi*t);
-    plot(t,x(t));
-    ```
-
-    *Solution 2:*
-    ```
     xt = sin(2*pi*t);
     plot(t,xt);
     ```
-
-
+    *Explanation:* Many MATLAB functions that operate on scalars (including `sin`) are automatically ['mapped'][4] to arrays. Since `t` is an vector, the expression `sin(2*pi*t)` applies the scalar function $x(t) = sin(2\pi t)$ to each element of `t`.
+    
+    *Solution 2:*
+    ```
+    x = @(t) sin(2*pi*t);
+    plot(t,x(t));
+    ```
+    *Explanation:* The line `x = @(t) sin(2*pi*t)` defines a new function `x`. This line can be read as '`x` is a function of `t` that returns `sin(2*pi*t)`'. Defining a function is useful to simplify sequences of operations. For example, if we wanted to shift $x(t)$ in time by five seconds, we could use the expression `x(t-5)`.
+    
 3.  Label the plot using the `xlabel`, `ylabel`, and `title` functions.
 
     *Solution:*
@@ -72,28 +77,33 @@ Since these exercises are intended to teach the basics of MATLAB, some possible 
 
     *Solution 1:*
     ```
-    x(0.32)
-    ```
-
-    *Solution 2:*
-    ```
     [~, ind] = min(abs(t-0.32));
     xt(ind)
     ```
+    *Explanation:* The expression `abs(t-0.32)` measures the distance of each element in `t` to the desired value of 0.32. Combining this expression with the `min` function allows us to find the element of t which is closest to 0.32. The `min` function returns two values: the value of the minimum (which we discard by assigning the special name `~`) and the index `ind` which tells us the position in the array that is closest to 0.32.
+
+    *Solution 2:*
+    ```
+    ind = 1 + 0.32/0.001
+    xt(ind)
+    ```
+    *Explanation:* Since `t` is sampled every 0.001 seconds, we can directly calculate the index corresponding to $t=0.32$ as long as we consider that array indexing in MATLAB is one-based.
 
 5.  Sample the signal at every 0.008-sec.
 
     *Solution 1:* 
     ```
-    xn = x(t(1:8:end));
+    xn = xt(1:8:end);
     ```
     
     *Solution 2:* 
     ```
     xn = downsample(xt,8);
     ```
+    
+    *Warning: the 'downsample' function requires the signal processing toolbox.*
 
-6.  Overlay the sampled signal on your continous plot using the `stem` function
+6.  Overlay the sampled signal on your continuous plot using the `stem` function
 
     *Solution:*
     ```
@@ -108,7 +118,7 @@ Since these exercises are intended to teach the basics of MATLAB, some possible 
 
 In order for you to get started programming the board, we have created a sample project which passes a signal from the input jack to the output jack (this is known as a talkthrough.) Additionally, the spectrum of the input signal is visualized on the LCD.
 
-1. Follow the [instructions in the setup guide][4] to import the starter code and program the board..
+1. Follow the [instructions in the setup guide][5] to import the starter code and program the board..
 
 2. Connect the blue input jack on the board to the signal generator set to a 1kHz sine wave.
 
@@ -145,6 +155,7 @@ Be sure to include everything listed in this section when you submit your lab re
 5. How can you estimate the number of clock cycles required to execute a section of code on the STM32 board?
 
 [1]:../primer.md
-[2]:https://www.arm.com/resources/ebook/digital-signal-processing
-[3]:http://users.ece.utexas.edu/~bevans/courses/realtime/lectures/00_Introduction/lecture0.pptx
-[4]:../stm32h735g.md
+[2]:http://users.ece.utexas.edu/~bevans/courses/realtime/lectures/00_Introduction/lecture0.pptx
+[3]:http://users.ece.utexas.edu/~bevans/courses/realtime/lectures/laboratory/c6748winDSK/lab1/CommonSignalsInMatlab.pptx
+[4]:https://en.wikipedia.org/wiki/Map_(parallel_pattern)
+[5]:../stm32h735g.md
