@@ -23,11 +23,11 @@ Systems with a deadline are said to be [real-time][2]. Systems with a soft deadl
 
 ## Background: digital signal processing
 
-Computing tasks involving digital signal processing generally have unique demands. Applications such as speech processing, telecommunications, or video processing often require high [throughput][4] of data. Often, just moving the data between different areas of memory in the system is as expensive (if not more expensive) than the computations that need to be performed.
+Computing tasks involving digital signal processing generally have unique demands. Applications such as speech processing, telecommunications, or video processing often require high [throughput][5] of data. Often, just moving the data between different areas of memory in the system is as expensive (if not more expensive) than the computations that need to be performed.
  
-Peripherals that collect or transmit data, (ADC, DAC, camera, etc) often make use of a [direct memory access controller][5] to move data without explicitly using the processor’s load and store operations. Many high throughput DSP applications would simply not be possible without the increased efficiency of DMA.
+Peripherals that collect or transmit data, (ADC, DAC, camera, etc) often make use of a [direct memory access controller][6] to move data without explicitly using the processor’s load and store operations. Many high throughput DSP applications would simply not be possible without the increased efficiency of DMA.
 
-DSP computations often require many cheap or low-precision operations that are highly parallelizable, which provides advantage to [RISC architectures][6] and specialized [coprocessors][7]. Additionally, [Single instruction, multiple data (SIMD)][8] instructions are supported on many processors which exploit parallelism.
+DSP computations often require many cheap or low-precision operations that are highly parallelizable, which provides advantage to [RISC architectures][7] and specialized [coprocessors][8]. Additionally, [Single instruction, multiple data (SIMD)][9] instructions are supported on many processors which exploit parallelism.
 
 In the lab, we will use the microcontroller’s DMA to move data between the ADC, main memory, and DAC, and we will utilize SIMD operations supported by the Cortex-M7.
 
@@ -35,11 +35,11 @@ In the lab, we will use the microcontroller’s DMA to move data between the ADC
 
 The goal of the lab component of the course is threefold:
 
-**Implementing the algorithms** – We will implement DSP algorithms for tasks such as sinusoidal generation and digital filters which are building blocks to many different systems. We will use these building blocks to implement progressively advanced systems, culminating in the implementation of a [QAM][9] [modem][10], which is the same technology underpinning modern wireless systems like Wi-Fi.
+**Implementing the algorithms** – We will implement DSP algorithms for tasks such as sinusoidal generation and digital filters which are building blocks to many different systems. We will use these building blocks to implement progressively advanced systems, culminating in the implementation of a [QAM][10] [modem][11], which is the same technology underpinning modern wireless systems like Wi-Fi.
 
 **Understanding the theory** – The DSP theory covered elsewhere in the course can be incredibly dense. Completing the design flow by implementing the algorithms provides another angle for comprehension.
 
-**Understanding the nuances** – We make assumptions in developing the theory that are often violated in practice. For example, floating point arithmetic introduces [numerical errors][11] which must be accounted for. The lab exercises give us an opportunity to test our assumptions and correct for them when necessary.
+**Understanding the nuances** – We make assumptions in developing the theory that are often violated in practice. For example, floating point arithmetic introduces [numerical errors][12] which must be accounted for. The lab exercises give us an opportunity to test our assumptions and correct for them when necessary.
 
 ## Reading assignments and quizzes
 
@@ -69,22 +69,23 @@ The instructions may also include questions on the last slide. Answer these ques
 ## Hardware and software
 Before the start of each lab, check out one development board for each team for labs 2-6 and one board for each individual for labs 1 and 7.
 
-The development board is the STM32H735G Discovery kit. The user manual can be [downloaded from the ST website][12]. Make sure that the board you check out is accompanied by a micro USB cable to connect to your laptop and two BNC to TS cables to connect with the oscilloscope.
+The development board is the STM32H735G Discovery kit. The user manual can be [downloaded from the ST website][13]. Make sure that the board you check out is accompanied by a micro USB cable to connect to your laptop and two BNC to TS cables to connect with the oscilloscope.
 
 See the next section for instructions on programming the board and installing the software.
 
-We will also use MATLAB throughout the course. Please see the [instructions for MATLAB installation][13].
+We will also use MATLAB throughout the course. Please see the [instructions for MATLAB installation][14].
 
 [1]:https://en.wikipedia.org/wiki/Time_limit
-[2]:https://en.wikipedia.org/wiki/Bare_machine
-[3]:https://en.wikipedia.org/wiki/Memory_management_unit
-[4]:https://en.wikipedia.org/wiki/Throughput
-[5]:https://en.wikipedia.org/wiki/Direct_memory_access
-[6]:https://en.wikipedia.org/wiki/Reduced_instruction_set_computer
-[7]:https://en.wikipedia.org/wiki/Coprocessor
-[8]:https://en.wikipedia.org/wiki/SIMD
-[9]:https://en.wikipedia.org/wiki/Quadrature_amplitude_modulation
-[10]:https://en.wikipedia.org/wiki/Modem
-[11]:https://en.wikipedia.org/wiki/Numerical_error
-[12]:https://www.st.com/resource/en/user_manual/dm00682073-discovery-kit-with-stm32h735ig-mcu-stmicroelectronics.pdf
-[13]:http://users.ece.utexas.edu/~bevans/courses/realtime/homework/matlab.html
+[2]:https://en.wikipedia.org/wiki/Real-time_computing
+[3]:https://en.wikipedia.org/wiki/Bare_machine
+[4]:https://en.wikipedia.org/wiki/Memory_management_unit
+[5]:https://en.wikipedia.org/wiki/Throughput
+[6]:https://en.wikipedia.org/wiki/Direct_memory_access
+[7]:https://en.wikipedia.org/wiki/Reduced_instruction_set_computer
+[8]:https://en.wikipedia.org/wiki/Coprocessor
+[9]:https://en.wikipedia.org/wiki/SIMD
+[10]:https://en.wikipedia.org/wiki/Quadrature_amplitude_modulation
+[11]:https://en.wikipedia.org/wiki/Modem
+[12]:https://en.wikipedia.org/wiki/Numerical_error
+[13]:https://www.st.com/resource/en/user_manual/dm00682073-discovery-kit-with-stm32h735ig-mcu-stmicroelectronics.pdf
+[14]:http://users.ece.utexas.edu/~bevans/courses/realtime/homework/matlab.html
