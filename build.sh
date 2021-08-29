@@ -19,7 +19,6 @@ do
     sed -i 's#http://users.ece.utexas.edu/~bevans/courses/realtime/#../../../../#g' $f
 done
 cp -r _build/html/* ../stm32h735gdk/
-cp ../resources/CommonSignalsInMatlab.pptx ../stm32h735gdk/lab1/CommonSignalsInMatlab.pptx
 
 cd ..
 zip -r stm32h735gdk.zip stm32h735gdk

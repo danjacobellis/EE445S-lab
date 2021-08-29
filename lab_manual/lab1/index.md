@@ -156,6 +156,6 @@ Be sure to include everything listed in this section when you submit your lab re
 
 [1]:../primer.md
 [2]:http://users.ece.utexas.edu/~bevans/courses/realtime/lectures/00_Introduction/lecture0.pptx
-[3]:http://users.ece.utexas.edu/~bevans/courses/realtime/lectures/laboratory/stm32h735gdk/lab1/CommonSignalsInMatlab.pptx
+[3]:http://users.ece.utexas.edu/~bevans/courses/realtime/handouts/CommonSignalsInMatlab.pptx
 [4]:https://en.wikipedia.org/wiki/Map_(parallel_pattern)
 [5]:../stm32h735g.md
