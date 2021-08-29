@@ -218,7 +218,7 @@
 <div class="section" id="supplemental-reading">
 <h2>Supplemental reading<a class="headerlink" href="#supplemental-reading" title="Permalink to this headline">¶</a></h2>
 <ul class="simple">
-<li><p><a class="reference external" href="http://users.ece.utexas.edu/~bevans/courses/realtime/lectures/laboratory/c6748winDSK/lab1/CommonSignalsInMatlab.pptx">Common signals in MATLAB</a></p></li>
+<li><p><a class="reference external" href="http://users.ece.utexas.edu/~bevans/courses/realtime/lectures/laboratory/stm32h735gdk/lab1/CommonSignalsInMatlab.pptx">Common signals in MATLAB</a></p></li>
 </ul>
 </div>
 <div class="section" id="lab-1-instructions">
@@ -245,7 +245,7 @@
 <span class="n">plot</span><span class="p">(</span><span class="n">t</span><span class="p">,</span><span class="n">xt</span><span class="p">);</span>
 </pre></div>
 </div>
-<p><em>Explanation:</em> Many MATLAB functions that operate on scalars (including <code class="docutils literal notranslate"><span class="pre">sin</span></code>) are automatically <a class="reference external" href="https://en.wikipedia.org/wiki/Map_(parallel_pattern)">‘mapped’</a> to arrays. Since <code class="docutils literal notranslate"><span class="pre">t</span></code> is an vector, the expression <code class="docutils literal notranslate"><span class="pre">sin(2*pi*t)</span></code> applies the scalar function <span class="math notranslate nohighlight">\(x(t) = sin(2\pi t)\)</span> to each element of <code class="docutils literal notranslate"><span class="pre">t</span></code>.</p>
+<p><em>Explanation:</em> Many MATLAB functions that operate on scalars (including <code class="docutils literal notranslate"><span class="pre">sin</span></code>) are automatically <a class="reference external" href="https://en.wikipedia.org/wiki/Map_(parallel_pattern)">‘mapped’</a> to arrays. Since <code class="docutils literal notranslate"><span class="pre">t</span></code> is an vector, the expression <code class="docutils literal notranslate"><span class="pre">sin(2*pi*t)</span></code> applies the scalar function <span class="math notranslate nohighlight">\(x(t) = sin( 2\pi t)\)</span> to each element of <code class="docutils literal notranslate"><span class="pre">t</span></code>.</p>
 <p><em>Solution 2:</em></p>
 <div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">x</span> <span class="o">=</span> <span class="o">@</span><span class="p">(</span><span class="n">t</span><span class="p">)</span> <span class="n">sin</span><span class="p">(</span><span class="mi">2</span><span class="o">*</span><span class="n">pi</span><span class="o">*</span><span class="n">t</span><span class="p">);</span>
 <span class="n">plot</span><span class="p">(</span><span class="n">t</span><span class="p">,</span><span class="n">x</span><span class="p">(</span><span class="n">t</span><span class="p">));</span>
