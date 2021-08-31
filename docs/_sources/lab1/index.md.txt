@@ -120,7 +120,7 @@ In order for you to get started programming the board, we have created a sample 
 
 1. Follow the [instructions in the setup guide][5] to import the starter code and program the board..
 
-2. Connect the blue input jack on the board to the signal generator set to a 1kHz sine wave.
+2. Connect the blue input jack on the board to the signal generator set to a 10kHz sine wave.
 
 3. Connect the green output jack on the board to the oscilloscope.
 

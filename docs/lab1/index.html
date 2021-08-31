@@ -303,7 +303,7 @@
 <p>In order for you to get started programming the board, we have created a sample project which passes a signal from the input jack to the output jack (this is known as a talkthrough.) Additionally, the spectrum of the input signal is visualized on the LCD.</p>
 <ol class="simple">
 <li><p>Follow the <a class="reference internal" href="../stm32h735g.html"><span class="doc std std-doc">instructions in the setup guide</span></a> to import the starter code and program the board..</p></li>
-<li><p>Connect the blue input jack on the board to the signal generator set to a 1kHz sine wave.</p></li>
+<li><p>Connect the blue input jack on the board to the signal generator set to a 10kHz sine wave.</p></li>
 <li><p>Connect the green output jack on the board to the oscilloscope.</p></li>
 <li><p>Configure the oscilloscope and verify the that the signal appears as expected.</p></li>
 <li><p>Locate the <code class="docutils literal notranslate"><span class="pre">process_left_sample</span></code> function in <code class="docutils literal notranslate"><span class="pre">lab.c</span></code>. Change the behavior from a talkthrough <span class="math notranslate nohighlight">\(f(x[n]) = x[n]\)</span> to a squaring function <span class="math notranslate nohighlight">\(f(x[n]) = {(x[n])}^2\)</span> by modifying the line <code class="docutils literal notranslate"><span class="pre">output_sample</span> <span class="pre">=</span> <span class="pre">input_sample;</span></code> Rerun the program and observe the result on the oscilloscope.</p></li>
