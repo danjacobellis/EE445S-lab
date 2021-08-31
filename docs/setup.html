@@ -91,7 +91,12 @@
 <li class="toctree-l1"><a class="reference internal" href="overview.html">EE 445S Lab Component</a></li>
 <li class="toctree-l1"><a class="reference internal" href="primer.html">Lab Primer</a></li>
 <li class="toctree-l1"><a class="reference internal" href="stm32h735g.html">STM32H735G Discovery Kit Setup Guide</a></li>
-<li class="toctree-l1 current"><a class="current reference internal" href="#">Laboratory Hardware Setup</a></li>
+<li class="toctree-l1 current"><a class="current reference internal" href="#">Laboratory Hardware Setup</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="#hardware-provided-at-checkout">Hardware provided at checkout</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#hardware-available-in-lab-room">Hardware available in lab room</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#connections-for-lab-assignments">Connections for lab assignments</a></li>
+</ul>
+</li>
 <li class="toctree-l1"><a class="reference internal" href="data.html">Managing data between MATLAB and C</a></li>
 <li class="toctree-l1"><a class="reference internal" href="lab1/index.html">Lab 1. Overview of Hardware and Software Tools</a></li>
 <li class="toctree-l1"><a class="reference internal" href="lab2/index.html">Lab 2. Generating Cosine and Sine Waves</a></li>
@@ -167,9 +172,41 @@
             
   <div class="tex2jax_ignore mathjax_ignore section" id="laboratory-hardware-setup">
 <h1>Laboratory Hardware Setup<a class="headerlink" href="#laboratory-hardware-setup" title="Permalink to this headline">¶</a></h1>
+<p>To complete the lab assignmnets, the STM32H735G Discovery Kit will be connected to a signal generator and oscilloscope.</p>
+<p>The hardware is available for short term checkout only. The checkout desk is located on the first floor of EERC. A student ID is required.</p>
+<p>For lab one, you may complete the hardware component at any time the checkout desk is open.</p>
+<p>Monday – Thursday  9:00am – 10:00pm
+Friday 9:00am – 7:00pm
+Saturday 10:00am – 6:00pm
+Closed Labor Day, Monday Sept 6.</p>
+<p>For the remaining labs, one member of each group should checkout the hardware at the start of your lab meeting time.</p>
+<div class="section" id="hardware-provided-at-checkout">
+<h2>Hardware provided at checkout<a class="headerlink" href="#hardware-provided-at-checkout" title="Permalink to this headline">¶</a></h2>
+<ul class="simple">
+<li><p>STM32H735G Discovery Kit with attached micro USB cable.</p></li>
+<li><p>2x 3.5mm TRS (stereo) to RCA (mono) breakout cables</p></li>
+<li><p>2x RCA to BNC adapters (already attached to one channel.)</p></li>
+</ul>
+<p>The provided cables allow you to connect the line in / line out (3.5mm TRS) on the discovery kit to the signal generator and oscilliscope which have BNC connectors.</p>
+<p>One cable will be used to connect the green line in to the signal generator. The other cable will be used to connect the blue line out to the oscilloscope.</p>
+<p>Although the line in / line out connectors on the board are stereo, we will only use one channel at a time for the lab assignments. This is why only one RCA on each breakout cable is attached with a BNC connector. You can leave the other RCA cable on the breakout disconnected since it is unused. To switch the connected channel, the BNC adaptor can be removed from the red RCA connector and reconnected to the white one (or vice versa).</p>
 <p><img alt="" src="_images/checkout.png" /></p>
+</div>
+<div class="section" id="hardware-available-in-lab-room">
+<h2>Hardware available in lab room<a class="headerlink" href="#hardware-available-in-lab-room" title="Permalink to this headline">¶</a></h2>
+<p>The lab room (EER 1.810) has 12 stations, each with a signal generator (top) and an oscilloscope (bottom) shown below.</p>
 <p><img alt="" src="_images/signal_scope.png" /></p>
+</div>
+<div class="section" id="connections-for-lab-assignments">
+<h2>Connections for lab assignments<a class="headerlink" href="#connections-for-lab-assignments" title="Permalink to this headline">¶</a></h2>
+<p>Connect the hardware using the following configuration:</p>
+<ol class="simple">
+<li><p>Connect the discovery kit to you computer using the attached USB cable.</p></li>
+<li><p>Attach one cable from signal generator output to the blue line in on the discovery board.</p></li>
+<li><p>Attach the second cable from the oscilloscope input to the green line out on the discovery board.</p></li>
+</ol>
 <p><img alt="" src="_images/full_setup.png" /></p>
+</div>
 </div>
 
 
