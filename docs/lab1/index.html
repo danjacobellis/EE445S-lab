@@ -93,6 +93,7 @@
 <li class="toctree-l1"><a class="reference internal" href="../overview.html">EE 445S Lab Component</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../primer.html">Lab Primer</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../stm32h735g.html">STM32H735G Discovery Kit Setup Guide</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../setup.html">Laboratory Hardware Setup</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../data.html">Managing data between MATLAB and C</a></li>
 <li class="toctree-l1 current"><a class="current reference internal" href="#">Lab 1. Overview of Hardware and Software Tools</a><ul>
 <li class="toctree-l2"><a class="reference internal" href="#aim-of-the-experiment">Aim of the experiment</a></li>
@@ -305,7 +306,7 @@
 <li><p>Connect the blue input jack on the board to the signal generator set to a 1kHz sine wave.</p></li>
 <li><p>Connect the green output jack on the board to the oscilloscope.</p></li>
 <li><p>Configure the oscilloscope and verify the that the signal appears as expected.</p></li>
-<li><p>Locate the <code class="docutils literal notranslate"><span class="pre">process_left_channel</span></code> function in <code class="docutils literal notranslate"><span class="pre">lab.c</span></code>. Change the behavior from a talkthrough <span class="math notranslate nohighlight">\(f(x[n]) = x[n]\)</span> to a squaring function <span class="math notranslate nohighlight">\(f(x[n]) = {(x[n])}^2\)</span> by modifying the line <code class="docutils literal notranslate"><span class="pre">output_sample</span> <span class="pre">=</span> <span class="pre">input_sample;</span></code> Rerun the program and observe the result on the oscilloscope.</p></li>
+<li><p>Locate the <code class="docutils literal notranslate"><span class="pre">process_left_sample</span></code> function in <code class="docutils literal notranslate"><span class="pre">lab.c</span></code>. Change the behavior from a talkthrough <span class="math notranslate nohighlight">\(f(x[n]) = x[n]\)</span> to a squaring function <span class="math notranslate nohighlight">\(f(x[n]) = {(x[n])}^2\)</span> by modifying the line <code class="docutils literal notranslate"><span class="pre">output_sample</span> <span class="pre">=</span> <span class="pre">input_sample;</span></code> Rerun the program and observe the result on the oscilloscope.</p></li>
 <li><p>At the end of the <code class="docutils literal notranslate"><span class="pre">process_left_sample</span></code> function in <code class="docutils literal notranslate"><span class="pre">lab.c</span></code>, locate the line <code class="docutils literal notranslate"><span class="pre">return</span> <span class="pre">output_sample;</span></code>. Put a breakpoint at this line.</p></li>
 <li><p>Allow the program to continue until it stops at the breakpoint. Add a watch expression for the variable <code class="docutils literal notranslate"><span class="pre">elapsed_cycles</span></code> and record the value. <strong>Include this measurement in your lab report.</strong></p></li>
 </ol>

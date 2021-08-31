@@ -126,7 +126,7 @@ In order for you to get started programming the board, we have created a sample 
 
 4. Configure the oscilloscope and verify the that the signal appears as expected.
 
-5. Locate the `process_left_channel` function in `lab.c`. Change the behavior from a talkthrough $f(x[n]) = x[n]$ to a squaring function $f(x[n]) = {(x[n])}^2$ by modifying the line `output_sample = input_sample;` Rerun the program and observe the result on the oscilloscope.
+5. Locate the `process_left_sample` function in `lab.c`. Change the behavior from a talkthrough $f(x[n]) = x[n]$ to a squaring function $f(x[n]) = {(x[n])}^2$ by modifying the line `output_sample = input_sample;` Rerun the program and observe the result on the oscilloscope.
 
 6. At the end of the `process_left_sample` function in `lab.c`, locate the line `return output_sample;`. Put a breakpoint at this line.
 
