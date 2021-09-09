@@ -2,9 +2,7 @@
 
 ## Aim of the experiment
 
-The aim of this experiment is to
-
-* explore the design tradeoffs in signal quality vs. runtime complexity in computing amplitude values of sinusoidal signals.
+The aim of this experiment is to explore the design tradeoffs in signal quality vs. runtime complexity in computing amplitude values of sinusoidal signals.
 
 Sinusoidal waveforms will be computed in discrete time, plotted, and played as audio signals.
 

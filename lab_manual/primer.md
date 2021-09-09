@@ -86,6 +86,6 @@ We will also use MATLAB throughout the course. Please see the [instructions for 
 [9]:https://en.wikipedia.org/wiki/SIMD
 [10]:https://en.wikipedia.org/wiki/Quadrature_amplitude_modulation
 [11]:https://en.wikipedia.org/wiki/Modem
-[12]:https://en.wikipedia.org/wiki/Numerical_error
+[12]:https://en.wikipedia.org/wiki/Floating-point_arithmetic#Accuracy_problems
 [13]:https://www.st.com/resource/en/user_manual/dm00682073-discovery-kit-with-stm32h735ig-mcu-stmicroelectronics.pdf
 [14]:http://users.ece.utexas.edu/~bevans/courses/realtime/homework/matlab.html

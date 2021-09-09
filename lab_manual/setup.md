@@ -37,7 +37,7 @@ The lab room (EER 1.810) has 12 stations, each with a signal generator (top) and
 
 Connect the hardware using the following configuration:
 
-1. Connect the discovery kit to you computer using the attached USB cable.
+1. Connect the discovery kit to your computer using the attached USB cable.
 2. Attach one cable from signal generator output to the blue line in on the discovery board.
 3. Attach the second cable from the oscilloscope input to the green line out on the discovery board.
 
