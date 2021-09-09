@@ -37,7 +37,7 @@ If you are unfamiliar with a particular MATLAB function, type `doc <function>`  
 
 Since these exercises are intended to teach the basics of MATLAB, some possible solutions are provided.
 
-1.  Create a vector `t` representing the time variable with range of one second and sampling period of of $T_s = 0.001$ sec. One way to create a vector of evenly spaced numbers in MATLAB is with the `:` operator. Alternatively, you can use the `linspace` function.
+1.  Create a vector `t` representing the time variable with range of one second and sampling period of $T_s = 0.001$ sec. One way to create a vector of evenly spaced numbers in MATLAB is with the `:` operator. Alternatively, you can use the `linspace` function.
 
     *Solution 1:* 
     ```
@@ -55,7 +55,7 @@ Since these exercises are intended to teach the basics of MATLAB, some possible 
     xt = sin(2*pi*t);
     plot(t,xt);
     ```
-    *Explanation:* Many MATLAB functions that operate on scalars (including `sin`) are automatically ['mapped'][4] to arrays. Since `t` is an vector, the expression `sin(2*pi*t)` applies the scalar function $x(t) = sin( 2\pi t)$ to each element of `t`.
+    *Explanation:* Many MATLAB functions that operate on scalars (including `sin`) are automatically ['mapped'][4] to arrays. Since `t` is a vector, the expression `sin(2*pi*t)` applies the scalar function $x(t) = sin( 2\pi t)$ to each element of `t`.
     
     *Solution 2:*
     ```
@@ -116,7 +116,7 @@ Since these exercises are intended to teach the basics of MATLAB, some possible 
     
 ### Using the STM32H735G discovery kit and starter code
 
-In order for you to get started programming the board, we have created a sample project which passes a signal from the input jack to the output jack (this is known as a talkthrough.) Additionally, the spectrum of the input signal is visualized on the LCD.
+In order for you to get started programming the board, we have created a sample project which passes a signal from the input jack to the output jack. This is known as a talkthrough. Additionally, the spectrum of the input signal is visualized on the LCD.
 
 1. Follow the [instructions in the setup guide][5] to import the starter code and program the board..
 
