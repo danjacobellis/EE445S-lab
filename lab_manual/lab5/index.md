@@ -33,15 +33,26 @@ In this exercise, we will transmit the scrambled tree image from the STM board t
 
 ### Setting up the transmitter on the STM32 board
 
-1. In lab.c, create an array containing the data stream to transmit. The data stream will have 32 bits of header followed by 16384 bits for the tree image. If we store it as an array of 32-bit words, then we will need an array of length 513.
+1. In lab.c, create an array containing the data stream to transmit. The data stream will have 32 bits of header followed by 16384 bits for the (scrambled) tree image. If we store it as an array of 32-bit words, then we will need an array of length 513.
 
     ```
-    uint32_t data_stream[513] = {<header>, <tree>};
+    uint32_t data_stream[513] = {0};
     ```
     
-    For the header sequence, we will use the output of a maximal-length 5-bit LFSR. Rather than repeat the steps from lab 4 to generate the sequence, you can simply copy the provided sequence which has been computed for you (`<header>` = `0x967c6ea1`.)
+    For the header sequence, we will use the output of a maximal-length 5-bit LFSR. Rather than repeat the steps from lab 4 to generate the sequence, you can simply copy the provided sequence which has been computed for you.
     
-    The tree data is the same as lab four (see 'Managing data between MATLAB and C'.)
+    ```
+    data_stream[0] = 0x967c6ea1;
+    ```
+    
+    The tree data and scrambler are the same as lab four. Populate the remainder of the `data_stream` array with the scrambled tree (`tree[i]^PN[i]`).
+    
+    ```
+    for (i_word = 0; i_word < 512; i_word+=1)
+	{
+	    data_stream[i_word+1] = tree[i_word]^PN[i_word];
+	}
+    ```
 
 2. Prepare the pulse-shaping filter according the specifications below. Since the interpolating filterbank requires a filter whose length is a multiple of the upsampling factor (16), remove the last coefficient (which should be equal to zero and has no effect on the filter)
 
@@ -64,17 +75,17 @@ In this exercise, we will transmit the scrambled tree image from the STM board t
 3. In lab.c prepare the variables necessary to use the CMSIS library function for the interpolating filter. Take a moment to read the [description of the FIR interpolator function.][1]
 
     ```
-    arm_fir_interpolate_instance_f32* filter_instance; 
+    arm_fir_interpolate_instance_f32 filter_instance; 
     uint8_t upsampling_factor = 16;
     uint16_t num_taps = 64;
     float32_t state[(FRAME_SIZE/4) + 4 - 1] = {0};
     float32_t filter_in[FRAME_SIZE/64] = {0};
     float32_t filter_out[FRAME_SIZE/4] = {0};
-    float32_t cos_lut = {1,0,-1,0};
-    float32_t i_lut = 0;
+    float32_t cos_lut[4] = {1,0,-1,0};
+    uint32_t i_lut = 0;
     ```
     
-    Also create variables to keep track of our current bit position in the data stream
+    Also create variables to keep track of our current word and bit position in the data stream (just as you did in lab 4).
     
     ```
     uint32_t i_word = 0;
@@ -84,7 +95,7 @@ In this exercise, we will transmit the scrambled tree image from the STM board t
 4. Initialize the interpolating filter in the lab_init function:
 
     ```
-    arm_fir_interpolate_init_f32 (filter_instance, upsampling_factor, num_taps, pulse_shaping_coeffs, state, FRAME_SIZE/4);
+    arm_fir_interpolate_init_f32 (&filter_instance, upsampling_factor, num_taps, pulse_shaping_coeffs, state, FRAME_SIZE/4);
     ```
     
 5. In process_input_buffer, construct the buffer of symbols that we will send to the arm_fir_interpolate_f32 function. 
@@ -108,7 +119,7 @@ In this exercise, we will transmit the scrambled tree image from the STM board t
 6. Perform the filtering and copy the result to the output buffer
 
     ```
-    arm_fir_interpolate_f32 (filter_instance, filter_in, filter_out, FRAME_SIZE/64);
+    arm_fir_interpolate_f32 (&filter_instance, filter_in, filter_out, FRAME_SIZE/64);
     
     for (uint32_t i_sample = 0; i_sample < FRAME_SIZE/2; i_sample+=1)
     {
@@ -122,12 +133,12 @@ In this exercise, we will transmit the scrambled tree image from the STM board t
 
 ### Setting up the receiver in MATLAB
 
-1. With the transmitter running, record 18 seconds of data using MATLAB and save it to a file.
+1. With the transmitter running, record 12 seconds of data using MATLAB and save it to a file.
 
     ```
-    fs = 44100;
+    fs = 48000;
     rec = audiorecorder(fs,16,1);
-    recordblocking(rec, 18);
+    recordblocking(rec, 12);
     RX = getaudiodata(rec)';
     save RX RX;
     ```
@@ -137,26 +148,6 @@ In this exercise, we will transmit the scrambled tree image from the STM board t
 ## Lab 5 instructions: week 2
 
 ## Lab 5 instructions: week 3
-
-1. (Demo) Matlab to Matlab transmission without synchronization
-
-2. Pulse shaping in C
-
-3. Modulation in C
-
-4. (checkpoint) C to Matlab transmission
-
-### Week 2 
-
-1. Clock recovery in C
-
-1. Matched filter in C
-
-3. Header matching in C
-
-4. (checkpoint) Matlab to C transmission
-
-### Week 3 C to C data transmission
 
 ## Lab report contents
 
