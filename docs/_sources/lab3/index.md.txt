@@ -274,7 +274,7 @@ In this exercise, we will implement the IIR filter in direct form.
 
 2. In lab.c, modify the process_left_sample function to implement the summation for the filter output. The diagram above should help you.
 
-    $$y[n] = \sum_{k=0}^{N}{b_k x[n-k]} - \sum_{m=0}^{M}{a_m y[n-m]}$$
+    $$y[n] = \sum_{k=0}^{N}{b_k x[n-k]} - \sum_{m=1}^{M}{a_m y[n-m]}$$
     
     Recall that `input_sample` is a 16 bit integer, so you will need to scale it when converting to floating point.
     

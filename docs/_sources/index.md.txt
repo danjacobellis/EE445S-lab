@@ -12,6 +12,7 @@ lab2/index
 lab3/index
 lab4/primer
 lab4/index
+lab5/primer
 lab5/index
 
 ```

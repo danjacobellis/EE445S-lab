@@ -127,6 +127,7 @@
 </li>
 <li class="toctree-l1"><a class="reference internal" href="../lab4/primer.html">Lab 4 Primer</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../lab4/index.html">Lab 4. Pseudo-Random Binary Sequences and Data Scramblers</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../lab5/primer.html">Lab 5 Primer</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../lab5/index.html">Lab 5. Digital Data Transmission by Baseband Pulse Amplitude Modulation (PAM)</a></li>
 </ul>
 
@@ -459,7 +460,7 @@
 <li><p>In lab.c, initialize variables for your filter coefficients and state variables. Notice that MATLAB has assigned a value of one where the nonexistent <span class="math notranslate nohighlight">\(a_0\)</span> coefficient would be.</p></li>
 <li><p>In lab.c, modify the process_left_sample function to implement the summation for the filter output. The diagram above should help you.</p>
 <div class="math notranslate nohighlight">
-\[y[n] = \sum_{k=0}^{N}{b_k x[n-k]} - \sum_{m=0}^{M}{a_m y[n-m]}\]</div>
+\[y[n] = \sum_{k=0}^{N}{b_k x[n-k]} - \sum_{m=1}^{M}{a_m y[n-m]}\]</div>
 <p>Recall that <code class="docutils literal notranslate"><span class="pre">input_sample</span></code> is a 16 bit integer, so you will need to scale it when converting to floating point.</p>
 </li>
 <li><p>In lab.c modify the process_left_sample function to simulate the movement of data through the delay blocks (Hint: use a down counting for loop). <strong>Include the C code for your implementation of the filter in the lab report.</strong></p></li>
