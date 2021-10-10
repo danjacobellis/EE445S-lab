@@ -1,0 +1,286 @@
+
+
+<!DOCTYPE html>
+<html class="writer-html5" lang="en" >
+<head>
+  <meta charset="utf-8" />
+  
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  
+  <title>Lab 5 Primer &mdash; 445S Lab Manual  documentation</title>
+  
+
+  
+  <link rel="stylesheet" href="../_static/css/theme.css" type="text/css" />
+  <link rel="stylesheet" href="../_static/pygments.css" type="text/css" />
+  <link rel="stylesheet" href="../_static/pygments.css" type="text/css" />
+  <link rel="stylesheet" href="../_static/css/theme.css" type="text/css" />
+
+  
+  
+
+  
+  
+
+  
+
+  
+  <!--[if lt IE 9]>
+    <script src="../_static/js/html5shiv.min.js"></script>
+  <![endif]-->
+  
+    
+      <script type="text/javascript" id="documentation_options" data-url_root="../" src="../_static/documentation_options.js"></script>
+        <script data-url_root="../" id="documentation_options" src="../_static/documentation_options.js"></script>
+        <script src="../_static/jquery.js"></script>
+        <script src="../_static/underscore.js"></script>
+        <script src="../_static/doctools.js"></script>
+        <script async="async" src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-mml-chtml.js"></script>
+        <script>window.MathJax = {"options": {"processHtmlClass": "tex2jax_process|mathjax_process|math|output_area"}}</script>
+    
+    <script type="text/javascript" src="../_static/js/theme.js"></script>
+
+    
+    <link rel="index" title="Index" href="../genindex.html" />
+    <link rel="search" title="Search" href="../search.html" />
+    <link rel="next" title="Lab 5. Digital Data Transmission by Baseband Pulse Amplitude Modulation (PAM)" href="index.html" />
+    <link rel="prev" title="Lab 4. Pseudo-Random Binary Sequences and Data Scramblers" href="../lab4/index.html" /> 
+</head>
+
+<body class="wy-body-for-nav">
+
+   
+  <div class="wy-grid-for-nav">
+    
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side">
+      <div class="wy-side-scroll">
+        <div class="wy-side-nav-search" >
+          
+
+          
+            <a href="../index.html" class="icon icon-home"> 445S Lab Manual
+          
+
+          
+          </a>
+
+          
+            
+            
+          
+
+          
+<div role="search">
+  <form id="rtd-search-form" class="wy-form" action="../search.html" method="get">
+    <input type="text" name="q" placeholder="Search docs" />
+    <input type="hidden" name="check_keywords" value="yes" />
+    <input type="hidden" name="area" value="default" />
+  </form>
+</div>
+
+          
+        </div>
+
+        
+        <div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="main navigation">
+          
+            
+            
+              
+            
+            
+              <ul class="current">
+<li class="toctree-l1"><a class="reference internal" href="../overview.html">EE 445S Lab Component</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../primer.html">Lab Primer</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../stm32h735g.html">STM32H735G Discovery Kit Setup Guide</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../setup.html">Laboratory Hardware Setup</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../data.html">Managing data between MATLAB and C</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../lab1/index.html">Lab 1. Overview of Hardware and Software Tools</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../lab2/index.html">Lab 2. Generating Cosine and Sine Waves</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../lab3/index.html">Lab 3. Digital Filters</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../lab4/primer.html">Lab 4 Primer</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../lab4/index.html">Lab 4. Pseudo-Random Binary Sequences and Data Scramblers</a></li>
+<li class="toctree-l1 current"><a class="current reference internal" href="#">Lab 5 Primer</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="#simulation">Simulation</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="#mapping-data-to-pulses">1. Mapping data to pulses</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#modulation-and-demodulation">2. Modulation and demodulation</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#mapping-pulses-to-data">3. Mapping pulses to data</a></li>
+</ul>
+</li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="index.html">Lab 5. Digital Data Transmission by Baseband Pulse Amplitude Modulation (PAM)</a></li>
+</ul>
+
+            
+          
+        </div>
+        
+      </div>
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap">
+
+      
+      <nav class="wy-nav-top" aria-label="top navigation">
+        
+          <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+          <a href="../index.html">445S Lab Manual</a>
+        
+      </nav>
+
+
+      <div class="wy-nav-content">
+        
+        <div class="rst-content">
+        
+          
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<div role="navigation" aria-label="breadcrumbs navigation">
+
+  <ul class="wy-breadcrumbs">
+    
+      <li><a href="../index.html" class="icon icon-home"></a> &raquo;</li>
+        
+      <li>Lab 5 Primer</li>
+    
+    
+      <li class="wy-breadcrumbs-aside">
+        
+          
+            <a href="../_sources/lab5/primer.md.txt" rel="nofollow"> View page source</a>
+          
+        
+      </li>
+    
+  </ul>
+
+  
+  <hr/>
+</div>
+          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
+           <div itemprop="articleBody">
+            
+  <div class="tex2jax_ignore mathjax_ignore section" id="lab-5-primer">
+<h1>Lab 5 Primer<a class="headerlink" href="#lab-5-primer" title="Permalink to this headline">¶</a></h1>
+<p>The range of complexity for a pulse amplitude modulation (PAM) transceiver system can vary drastically. A working version that demonstrates the core principles can be simulated with just a few lines of code. In practice, many additional subsystems need to be added for reliable operation.</p>
+<div class="section" id="simulation">
+<h2>Simulation<a class="headerlink" href="#simulation" title="Permalink to this headline">¶</a></h2>
+<p>In simulation, pulse amplitude modulation is relatively straightforward, and can be achieved with just a handful steps.</p>
+<div class="section" id="mapping-data-to-pulses">
+<h3>1. Mapping data to pulses<a class="headerlink" href="#mapping-data-to-pulses" title="Permalink to this headline">¶</a></h3>
+<p>The first step in any digital communication system is <a class="reference external" href="https://en.wikipedia.org/wiki/Serialization">serialization</a>, the process of converting a useful data structure into a stream of bits. For example, the following MATLAB code serializes the ascii string “meatball” into an array of 56 bits.</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="o">&gt;&gt;</span> <span class="n">serialized_data</span> <span class="o">=</span> <span class="n">reshape</span><span class="p">((</span><span class="n">dec2bin</span><span class="p">(</span><span class="n">uint8</span><span class="p">(</span><span class="s1">&#39;meatball&#39;</span><span class="p">))</span><span class="s1">&#39;),[1,56])</span>
+
+<span class="n">serialized_data</span> <span class="o">=</span>
+
+    <span class="s1">&#39;11011011100101110000111101001100010110000111011001101100&#39;</span>
+
+</pre></div>
+</div>
+<p>In 2-PAM, we map a bit of ‘0’ to a pulse with an amplitude <span class="math notranslate nohighlight">\(-d\)</span> and a bit of one to a pulse with an amplitude of <span class="math notranslate nohighlight">\(+d\)</span>. A common pulse shape is the <a class="reference external" href="https://en.wikipedia.org/wiki/Raised-cosine_filter">raised cosine</a></p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">upsampled_data</span> <span class="o">=</span> <span class="n">upsample</span><span class="p">(</span><span class="n">str2num</span><span class="p">(</span><span class="n">serialized_data</span><span class="s1">&#39;)*2-1,16);</span>
+<span class="n">pulse_shaping_filter</span> <span class="o">=</span> <span class="n">rcosdesign</span><span class="p">(</span><span class="mf">0.8</span><span class="p">,</span><span class="mi">4</span><span class="p">,</span><span class="mi">16</span><span class="p">,</span><span class="s1">&#39;normal&#39;</span><span class="p">);</span>
+<span class="n">sequence_of_pulses</span> <span class="o">=</span> <span class="n">conv</span><span class="p">(</span><span class="n">upsampled_data</span><span class="p">,</span><span class="n">pulse_shaping_filter</span><span class="p">,</span><span class="s1">&#39;same&#39;</span><span class="p">)</span>
+<span class="n">figure</span><span class="p">;</span> <span class="n">plot</span><span class="p">(</span><span class="n">sequence_of_pulses</span><span class="p">);</span> <span class="n">hold</span> <span class="n">on</span><span class="p">;</span> <span class="n">stem</span><span class="p">(</span><span class="n">upsampled_data</span><span class="o">.*</span><span class="nb">max</span><span class="p">(</span><span class="n">pulse_shaping_filter</span><span class="p">));</span>
+
+</pre></div>
+</div>
+<p><img alt="" src="../_images/pulses.svg" /></p>
+</div>
+<div class="section" id="modulation-and-demodulation">
+<h3>2. Modulation and demodulation<a class="headerlink" href="#modulation-and-demodulation" title="Permalink to this headline">¶</a></h3>
+<p>The signal above is what we call the <a class="reference external" href="https://en.wikipedia.org/wiki/Baseband">baseband</a> signal. Before transmitting, we want shift the spectrum to higher frequencies in a way that can be reversed at the transmitter. A simple method is with sinusoidal modulation and demodulation</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">f0</span> <span class="o">=</span> <span class="mi">12000</span><span class="p">;</span> <span class="n">fs</span> <span class="o">=</span> <span class="mi">48000</span><span class="p">;</span> <span class="n">w0</span> <span class="o">=</span> <span class="mi">2</span><span class="o">*</span><span class="n">pi</span><span class="o">*</span><span class="n">f0</span><span class="o">/</span><span class="n">fs</span><span class="p">;</span> <span class="n">n</span> <span class="o">=</span> <span class="mi">1</span><span class="p">:</span><span class="n">length</span><span class="p">(</span><span class="n">sequence_of_pulses</span><span class="p">);</span>
+<span class="n">modulated</span> <span class="o">=</span> <span class="n">sequence_of_pulses</span><span class="o">.</span><span class="s1">&#39; .* cos(w0*n);</span>
+<span class="n">figure</span><span class="p">;</span> <span class="n">plot</span><span class="p">(</span><span class="n">sequence_of_pulses</span><span class="p">);</span> <span class="n">hold</span> <span class="n">on</span><span class="p">;</span> <span class="n">plot</span><span class="p">(</span><span class="n">modulated</span><span class="p">);</span>
+</pre></div>
+</div>
+<p><img alt="" src="../_images/modulated.svg" /></p>
+<p>Demodulation can be achieved by once again multiplying by the carrier. The second multiplication by cosine introduces frequency components at <span class="math notranslate nohighlight">\(\pm f_c\)</span>, which can be removed by a low pass filter.</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">demodulated</span> <span class="o">=</span> <span class="n">modulated</span> <span class="o">.*</span> <span class="n">cos</span><span class="p">(</span><span class="n">w0</span><span class="o">*</span><span class="n">n</span><span class="p">);</span>
+<span class="n">recovered_pulses</span> <span class="o">=</span> <span class="n">conv</span><span class="p">(</span><span class="n">demodulated</span><span class="p">,</span><span class="n">pulse_shaping_filter</span><span class="p">,</span><span class="s1">&#39;same&#39;</span><span class="p">);</span>
+<span class="n">figure</span><span class="p">;</span> <span class="n">plot</span><span class="p">(</span><span class="n">sequence_of_pulses</span><span class="p">);</span> <span class="n">hold</span> <span class="n">on</span><span class="p">;</span> <span class="n">plot</span><span class="p">(</span><span class="n">recovered_pulses</span><span class="p">);</span>
+</pre></div>
+</div>
+<p><img alt="" src="../_images/matched_filter.svg" /></p>
+</div>
+<div class="section" id="mapping-pulses-to-data">
+<h3>3. Mapping pulses to data<a class="headerlink" href="#mapping-pulses-to-data" title="Permalink to this headline">¶</a></h3>
+<p>We end up with a signal that can be downsampled and quantized to recover the original data</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="o">&gt;&gt;</span> <span class="n">recovered_data</span> <span class="o">=</span> <span class="n">downsample</span><span class="p">(</span><span class="n">recovered_pulses</span><span class="p">,</span><span class="mi">16</span><span class="p">)</span> <span class="o">&gt;</span> <span class="mi">0</span>
+
+<span class="n">recovered_data</span> <span class="o">=</span>
+
+    <span class="s1">&#39;11011011100101110000111101001100010110000111011001101100&#39;</span>
+</pre></div>
+</div>
+</div>
+</div>
+</div>
+
+
+           </div>
+           
+          </div>
+          <footer>
+    <div class="rst-footer-buttons" role="navigation" aria-label="footer navigation">
+        <a href="index.html" class="btn btn-neutral float-right" title="Lab 5. Digital Data Transmission by Baseband Pulse Amplitude Modulation (PAM)" accesskey="n" rel="next">Next <span class="fa fa-arrow-circle-right" aria-hidden="true"></span></a>
+        <a href="../lab4/index.html" class="btn btn-neutral float-left" title="Lab 4. Pseudo-Random Binary Sequences and Data Scramblers" accesskey="p" rel="prev"><span class="fa fa-arrow-circle-left" aria-hidden="true"></span> Previous</a>
+    </div>
+
+  <hr/>
+
+  <div role="contentinfo">
+    <p>
+        &#169; Copyright 2021.
+
+    </p>
+  </div>
+    
+    
+    
+    Built with <a href="https://www.sphinx-doc.org/">Sphinx</a> using a
+    
+    <a href="https://github.com/readthedocs/sphinx_rtd_theme">theme</a>
+    
+    provided by <a href="https://readthedocs.org">Read the Docs</a>. 
+
+</footer>
+        </div>
+      </div>
+
+    </section>
+
+  </div>
+  
+
+  <script type="text/javascript">
+      jQuery(function () {
+          SphinxRtdTheme.Navigation.enable(true);
+      });
+  </script>
+
+  
+  
+    
+   
+
+</body>
+</html>
