@@ -163,7 +163,7 @@ load not_scrambled;
 figure; spectrogram(not_scrambled,2^10,0,2^10,48000,'yaxis');
 ```
 
-4. Run the [receiver demo][] in MATLAB using the transmission that was not scrambled. Try to adjust the parameters to recover the tree image. **Include the recovered tree image in your lab report using the best parameters you find.**
+4. Run the [receiver demo][2] in MATLAB using the transmission that was not scrambled. Try to adjust the parameters to recover the tree image. **Include the recovered tree image in your lab report using the best parameters you find.**
 
 ## Lab 5 instructions: week 2
 
