@@ -105,7 +105,7 @@
 <li class="toctree-l2"><a class="reference internal" href="#reading-assignment">Reading assignment</a></li>
 <li class="toctree-l2"><a class="reference internal" href="#lab-5-instructions-week-1">Lab 5 instructions: week 1</a><ul>
 <li class="toctree-l3"><a class="reference internal" href="#setting-up-the-transmitter-on-the-stm32-board">Setting up the transmitter on the STM32 board</a></li>
-<li class="toctree-l3"><a class="reference internal" href="#setting-up-the-receiver-in-matlab">Setting up the receiver in MATLAB</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#examining-the-transmission-in-matlab">Examining the transmission in MATLAB</a></li>
 </ul>
 </li>
 <li class="toctree-l2"><a class="reference internal" href="#lab-5-instructions-week-2">Lab 5 instructions: week 2</a></li>
@@ -113,7 +113,10 @@
 <li class="toctree-l2"><a class="reference internal" href="#lab-report-contents">Lab report contents</a><ul>
 <li class="toctree-l3"><a class="reference internal" href="#i-introduction">I. Introduction</a></li>
 <li class="toctree-l3"><a class="reference internal" href="#ii-methods">II. Methods</a></li>
-<li class="toctree-l3"><a class="reference internal" href="#iii-results-from-lab-exercise">III. Results from lab exercise</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#iii-results-from-lab-exercise">III. Results from lab exercise</a><ul>
+<li class="toctree-l4"><a class="reference internal" href="#week-one">Week one</a></li>
+</ul>
+</li>
 <li class="toctree-l3"><a class="reference internal" href="#iv-discussion">IV. Discussion</a></li>
 </ul>
 </li>
@@ -315,19 +318,38 @@
 </li>
 </ol>
 </div>
-<div class="section" id="setting-up-the-receiver-in-matlab">
-<h3>Setting up the receiver in MATLAB<a class="headerlink" href="#setting-up-the-receiver-in-matlab" title="Permalink to this headline">¶</a></h3>
+<div class="section" id="examining-the-transmission-in-matlab">
+<h3>Examining the transmission in MATLAB<a class="headerlink" href="#examining-the-transmission-in-matlab" title="Permalink to this headline">¶</a></h3>
 <ol>
 <li><p>With the transmitter running, record 12 seconds of data using MATLAB and save it to a file.</p>
 <div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">fs</span> <span class="o">=</span> <span class="mi">48000</span><span class="p">;</span>
-<span class="n">rec</span> <span class="o">=</span> <span class="n">audiorecorder</span><span class="p">(</span><span class="n">fs</span><span class="p">,</span><span class="mi">16</span><span class="p">,</span><span class="mi">1</span><span class="p">);</span>
-<span class="n">recordblocking</span><span class="p">(</span><span class="n">rec</span><span class="p">,</span> <span class="mi">12</span><span class="p">);</span>
-<span class="n">RX</span> <span class="o">=</span> <span class="n">getaudiodata</span><span class="p">(</span><span class="n">rec</span><span class="p">)</span><span class="s1">&#39;;</span>
-<span class="n">save</span> <span class="n">RX</span> <span class="n">RX</span><span class="p">;</span>
+<span class="n">recorder</span> <span class="o">=</span> <span class="n">audiorecorder</span><span class="p">(</span><span class="n">fs</span><span class="p">,</span><span class="mi">16</span><span class="p">,</span><span class="mi">1</span><span class="p">);</span>
+<span class="n">recordblocking</span><span class="p">(</span><span class="n">recorder</span><span class="p">,</span> <span class="mi">12</span><span class="p">);</span>
+<span class="n">scrambled</span> <span class="o">=</span> <span class="n">getaudiodata</span><span class="p">(</span><span class="n">recorder</span><span class="p">)</span><span class="s1">&#39;;</span>
+<span class="n">save</span> <span class="n">scrambled</span> <span class="n">scrambled</span><span class="p">;</span>
 </pre></div>
 </div>
 </li>
-<li></li>
+<li><p>Remove the scrambler by replacing the line <code class="docutils literal notranslate"><span class="pre">data_stream[i_word+1]</span> <span class="pre">=</span> <span class="pre">tree[i_word]^PN[i_word];</span></code> with <code class="docutils literal notranslate"><span class="pre">data_stream[i_word+1]</span> <span class="pre">=</span> <span class="pre">tree[i_word]</span></code>. Repeat the recording, but ensure that you choose a new file name.</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">fs</span> <span class="o">=</span> <span class="mi">48000</span><span class="p">;</span>
+<span class="n">recorder</span> <span class="o">=</span> <span class="n">audiorecorder</span><span class="p">(</span><span class="n">fs</span><span class="p">,</span><span class="mi">16</span><span class="p">,</span><span class="mi">1</span><span class="p">);</span>
+<span class="n">recordblocking</span><span class="p">(</span><span class="n">recorder</span><span class="p">,</span> <span class="mi">12</span><span class="p">);</span>
+<span class="n">not_scrambled</span> <span class="o">=</span> <span class="n">getaudiodata</span><span class="p">(</span><span class="n">recorder</span><span class="p">)</span><span class="s1">&#39;;</span>
+<span class="n">save</span> <span class="n">not_scrambled</span> <span class="n">not_scrambled</span><span class="p">;</span>
+</pre></div>
+</div>
+</li>
+<li><p>Create a spectrogram for both recorded transmissions. <strong>Include both spectrograms in your lab report.</strong></p></li>
+</ol>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">load</span> <span class="n">scrambled</span><span class="p">;</span>
+<span class="n">figure</span><span class="p">;</span> <span class="n">spectrogram</span><span class="p">(</span><span class="n">scrambled</span><span class="p">,</span><span class="mi">2</span><span class="o">^</span><span class="mi">10</span><span class="p">,</span><span class="mi">0</span><span class="p">,</span><span class="mi">2</span><span class="o">^</span><span class="mi">10</span><span class="p">,</span><span class="mi">48000</span><span class="p">,</span><span class="s1">&#39;yaxis&#39;</span><span class="p">);</span>
+
+<span class="n">load</span> <span class="n">not_scrambled</span><span class="p">;</span>
+<span class="n">figure</span><span class="p">;</span> <span class="n">spectrogram</span><span class="p">(</span><span class="n">not_scrambled</span><span class="p">,</span><span class="mi">2</span><span class="o">^</span><span class="mi">10</span><span class="p">,</span><span class="mi">0</span><span class="p">,</span><span class="mi">2</span><span class="o">^</span><span class="mi">10</span><span class="p">,</span><span class="mi">48000</span><span class="p">,</span><span class="s1">&#39;yaxis&#39;</span><span class="p">);</span>
+</pre></div>
+</div>
+<ol class="simple">
+<li><p>Run the [receiver demo][] in MATLAB using the transmission that was not scrambled. Try to adjust the parameters to recover the tree image. <strong>Include the recovered tree image in your lab report using the best parameters you find.</strong></p></li>
 </ol>
 </div>
 </div>
@@ -351,6 +373,13 @@
 <div class="section" id="iii-results-from-lab-exercise">
 <h3>III. Results from lab exercise<a class="headerlink" href="#iii-results-from-lab-exercise" title="Permalink to this headline">¶</a></h3>
 <p>Present the results you obtain for each task on the assignment sheet. This section should include illustrative oscilloscope screenshots of the DSP algorithms in action. Also include any code that you wrote or modified. Please do not include all of the boilerplate code from the textbook.</p>
+<div class="section" id="week-one">
+<h4>Week one<a class="headerlink" href="#week-one" title="Permalink to this headline">¶</a></h4>
+<ul class="simple">
+<li><p>Spectrograms of PAM transmissions</p></li>
+<li><p>Recovered tree image</p></li>
+</ul>
+</div>
 </div>
 <div class="section" id="iv-discussion">
 <h3>IV. Discussion<a class="headerlink" href="#iv-discussion" title="Permalink to this headline">¶</a></h3>

@@ -131,19 +131,39 @@ In this exercise, we will transmit the scrambled tree image from the STM board t
     ```
 
 
-### Setting up the receiver in MATLAB
+### Examining the transmission in MATLAB
 
 1. With the transmitter running, record 12 seconds of data using MATLAB and save it to a file.
 
     ```
     fs = 48000;
-    rec = audiorecorder(fs,16,1);
-    recordblocking(rec, 12);
-    RX = getaudiodata(rec)';
-    save RX RX;
+    recorder = audiorecorder(fs,16,1);
+    recordblocking(recorder, 12);
+    scrambled = getaudiodata(recorder)';
+    save scrambled scrambled;
     ```
     
-2. 
+2. Remove the scrambler by replacing the line `data_stream[i_word+1] = tree[i_word]^PN[i_word];` with `data_stream[i_word+1] = tree[i_word]`. Repeat the recording, but ensure that you choose a new file name.
+
+    ```
+    fs = 48000;
+    recorder = audiorecorder(fs,16,1);
+    recordblocking(recorder, 12);
+    not_scrambled = getaudiodata(recorder)';
+    save not_scrambled not_scrambled;
+    ```
+    
+3. Create a spectrogram for both recorded transmissions. **Include both spectrograms in your lab report.**
+
+```
+load scrambled;
+figure; spectrogram(scrambled,2^10,0,2^10,48000,'yaxis');
+
+load not_scrambled;
+figure; spectrogram(not_scrambled,2^10,0,2^10,48000,'yaxis');
+```
+
+4. Run the [receiver demo][] in MATLAB using the transmission that was not scrambled. Try to adjust the parameters to recover the tree image. **Include the recovered tree image in your lab report using the best parameters you find.**
 
 ## Lab 5 instructions: week 2
 
@@ -164,6 +184,11 @@ Describe the steps you took to implement the algorithms in your own words.
 ### III. Results from lab exercise
 
 Present the results you obtain for each task on the assignment sheet. This section should include illustrative oscilloscope screenshots of the DSP algorithms in action. Also include any code that you wrote or modified. Please do not include all of the boilerplate code from the textbook.
+
+#### Week one
+
+* Spectrograms of PAM transmissions
+* Recovered tree image
     
 ### IV. Discussion
 
@@ -171,3 +196,5 @@ In this section, discuss the takeaway from each lab. You can mention any intuiti
 
 
 [1]:https://arm-software.github.io/CMSIS_5/DSP/html/group__FIR__Interpolate.html
+
+[2]:https://github.com/danjacobellis/EE445S-lab/raw/main/starter_code/receiver_demo.m
