@@ -405,6 +405,11 @@ By initializing two two LFSRs (one at the transmitter and one at the receiever) 
 </pre></div>
 </div>
 </li>
+<li><p>Clear the bit to prepare for assignment</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">x</span> <span class="o">&amp;=</span> <span class="o">~</span><span class="p">(</span><span class="mi">1</span><span class="o">&lt;&lt;</span><span class="mi">5</span><span class="p">);</span>
+</pre></div>
+</div>
+</li>
 <li><p>Assign the result back to <code class="docutils literal notranslate"><span class="pre">x</span></code></p>
 <div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">x</span> <span class="o">|=</span> <span class="p">(</span> <span class="p">(</span> <span class="p">(</span><span class="n">x</span> <span class="o">&gt;&gt;</span> <span class="mi">3</span><span class="p">)</span> <span class="o">^</span> <span class="p">(</span><span class="n">x</span> <span class="o">&gt;&gt;</span> <span class="mi">1</span><span class="p">)</span> <span class="p">)</span> <span class="o">&amp;</span> <span class="mi">1</span> <span class="p">)</span> <span class="o">&lt;&lt;</span> <span class="mi">5</span>
 </pre></div>
@@ -412,7 +417,8 @@ By initializing two two LFSRs (one at the transmitter and one at the receiever) 
 </li>
 </ol>
 <p>At this point, the code has become very difficult to read! Although whitespace does not change the behavior, it can make the code somewhat more readable.</p>
-<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">x</span> <span class="o">|=</span> <span class="p">(</span>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">x</span> <span class="o">&amp;=</span> <span class="o">~</span><span class="p">(</span><span class="mi">1</span><span class="o">&lt;&lt;</span><span class="mi">5</span><span class="p">);</span>
+<span class="n">x</span> <span class="o">|=</span> <span class="p">(</span>
        <span class="p">(</span> 
          <span class="p">(</span><span class="n">x</span> <span class="o">&gt;&gt;</span> <span class="mi">3</span><span class="p">)</span> <span class="o">^</span> <span class="p">(</span><span class="n">x</span> <span class="o">&gt;&gt;</span> <span class="mi">1</span><span class="p">)</span> 
        <span class="p">)</span> <span class="o">&amp;</span> <span class="mi">1</span>

@@ -184,7 +184,13 @@ Let's outline one approach:
     ( ( (x >> 3) ^ (x >> 1) ) & 1 ) << 5
     ```
 
-5. Assign the result back to `x`
+5. Clear the bit to prepare for assignment
+
+    ```
+    x &= ~(1<<5);
+    ```
+
+6. Assign the result back to `x`
 
     ```
     x |= ( ( (x >> 3) ^ (x >> 1) ) & 1 ) << 5
@@ -193,6 +199,7 @@ Let's outline one approach:
 At this point, the code has become very difficult to read! Although whitespace does not change the behavior, it can make the code somewhat more readable.
 
 ```
+x &= ~(1<<5);
 x |= (
        ( 
          (x >> 3) ^ (x >> 1) 
