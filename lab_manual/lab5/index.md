@@ -35,6 +35,21 @@ Before you start with the experiment, it is necessary that you have an understan
 
 In this exercise, we will transmit the scrambled tree image from the STM board to a PC running a receiver to recover the image.
 
+### Simulation in MATLAB
+
+The following code simulates the generation of the transmitted signal. Please download the file [pn_16384.txt][2] containing the PN sequence from lab four and ensure that it is accessible on the MATLAB path.
+
+```
+header = str2num(fliplr(dec2bin(2524737185))');
+pn16k = readmatrix('pn_16384.txt')'; pn16k = pn16k(:);
+pn16k = fliplr(dec2bin(pn16k))'; pn16k = str2num(pn16k(:));
+f0 = 12000; fs = 48000; sps = 16; fsym = fs/sps;
+h = rcosdesign(0.8,4,sps,'normal');
+N = 524864; n = (1:N)';
+carrier = @(n,theta) cos(2*pi*(f0/fs)*n + theta);
+
+```
+
 ### Setting up the transmitter on the STM32 board
 
 1. In lab.c, create an array containing the data stream to transmit. The data stream will have 32 bits of header followed by 16384 bits for the (scrambled) tree image. If we store it as an array of 32-bit words, then we will need an array of length 513.
@@ -200,5 +215,5 @@ In this section, discuss the takeaway from each lab. You can mention any intuiti
 
 
 [1]:https://arm-software.github.io/CMSIS_5/DSP/html/group__FIR__Interpolate.html
-
-[2]:https://github.com/danjacobellis/EE445S-lab/raw/main/starter_code/receiver_demo.m
+[2]:../_sources/lab5/pn_16384.md.txt
+[3]:https://github.com/danjacobellis/EE445S-lab/raw/main/starter_code/receiver_demo.m

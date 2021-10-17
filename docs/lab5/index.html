@@ -104,6 +104,7 @@
 <li class="toctree-l2"><a class="reference internal" href="#aim-of-the-experiment">Aim of the experiment</a></li>
 <li class="toctree-l2"><a class="reference internal" href="#reading-assignment">Reading assignment</a></li>
 <li class="toctree-l2"><a class="reference internal" href="#lab-5-instructions-week-1">Lab 5 instructions: week 1</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="#simulation-in-matlab">Simulation in MATLAB</a></li>
 <li class="toctree-l3"><a class="reference internal" href="#setting-up-the-transmitter-on-the-stm32-board">Setting up the transmitter on the STM32 board</a></li>
 <li class="toctree-l3"><a class="reference internal" href="#examining-the-transmission-in-matlab">Examining the transmission in MATLAB</a></li>
 </ul>
@@ -239,6 +240,20 @@
 <div class="section" id="lab-5-instructions-week-1">
 <h2>Lab 5 instructions: week 1<a class="headerlink" href="#lab-5-instructions-week-1" title="Permalink to this headline">¶</a></h2>
 <p>In this exercise, we will transmit the scrambled tree image from the STM board to a PC running a receiver to recover the image.</p>
+<div class="section" id="simulation-in-matlab">
+<h3>Simulation in MATLAB<a class="headerlink" href="#simulation-in-matlab" title="Permalink to this headline">¶</a></h3>
+<p>The following code simulates the generation of the transmitted signal. Please download the file <span class="xref myst">pn_16384.txt</span> containing the PN sequence from lab four and ensure that it is accessible on the MATLAB path.</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">header</span> <span class="o">=</span> <span class="n">str2num</span><span class="p">(</span><span class="n">fliplr</span><span class="p">(</span><span class="n">dec2bin</span><span class="p">(</span><span class="mi">2524737185</span><span class="p">))</span><span class="s1">&#39;);</span>
+<span class="n">pn16k</span> <span class="o">=</span> <span class="n">readmatrix</span><span class="p">(</span><span class="s1">&#39;pn_16384.txt&#39;</span><span class="p">)</span><span class="s1">&#39;; pn16k = pn16k(:);</span>
+<span class="n">pn16k</span> <span class="o">=</span> <span class="n">fliplr</span><span class="p">(</span><span class="n">dec2bin</span><span class="p">(</span><span class="n">pn16k</span><span class="p">))</span><span class="s1">&#39;; pn16k = str2num(pn16k(:));</span>
+<span class="n">f0</span> <span class="o">=</span> <span class="mi">12000</span><span class="p">;</span> <span class="n">fs</span> <span class="o">=</span> <span class="mi">48000</span><span class="p">;</span> <span class="n">sps</span> <span class="o">=</span> <span class="mi">16</span><span class="p">;</span> <span class="n">fsym</span> <span class="o">=</span> <span class="n">fs</span><span class="o">/</span><span class="n">sps</span><span class="p">;</span>
+<span class="n">h</span> <span class="o">=</span> <span class="n">rcosdesign</span><span class="p">(</span><span class="mf">0.8</span><span class="p">,</span><span class="mi">4</span><span class="p">,</span><span class="n">sps</span><span class="p">,</span><span class="s1">&#39;normal&#39;</span><span class="p">);</span>
+<span class="n">N</span> <span class="o">=</span> <span class="mi">524864</span><span class="p">;</span> <span class="n">n</span> <span class="o">=</span> <span class="p">(</span><span class="mi">1</span><span class="p">:</span><span class="n">N</span><span class="p">)</span><span class="s1">&#39;;</span>
+<span class="n">carrier</span> <span class="o">=</span> <span class="o">@</span><span class="p">(</span><span class="n">n</span><span class="p">,</span><span class="n">theta</span><span class="p">)</span> <span class="n">cos</span><span class="p">(</span><span class="mi">2</span><span class="o">*</span><span class="n">pi</span><span class="o">*</span><span class="p">(</span><span class="n">f0</span><span class="o">/</span><span class="n">fs</span><span class="p">)</span><span class="o">*</span><span class="n">n</span> <span class="o">+</span> <span class="n">theta</span><span class="p">);</span>
+
+</pre></div>
+</div>
+</div>
 <div class="section" id="setting-up-the-transmitter-on-the-stm32-board">
 <h3>Setting up the transmitter on the STM32 board<a class="headerlink" href="#setting-up-the-transmitter-on-the-stm32-board" title="Permalink to this headline">¶</a></h3>
 <ol>
@@ -358,7 +373,7 @@
 </pre></div>
 </div>
 </li>
-<li><p>Run the <a class="reference external" href="https://github.com/danjacobellis/EE445S-lab/raw/main/starter_code/receiver_demo.m">receiver demo</a> in MATLAB using the transmission that was not scrambled. Try to adjust the parameters to recover the tree image. <strong>Include the recovered tree image in your lab report using the best parameters you find.</strong></p></li>
+<li><p>Run the <span class="xref myst">receiver demo</span> in MATLAB using the transmission that was not scrambled. Try to adjust the parameters to recover the tree image. <strong>Include the recovered tree image in your lab report using the best parameters you find.</strong></p></li>
 </ol>
 </div>
 </div>
