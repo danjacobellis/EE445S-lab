@@ -65,6 +65,40 @@ recovered_data =
     '11011011100101110000111101001100010110000111011001101100'
 ```
 
+## What could go wrong?
+
+The example above demonstrates the most important techniques used in PAM. However, it leaves out many important steps.
+
+### Transmitter
+
+In the 2-PAM system described above, every bit of data required 16 samples to represent. If we want to transmit data at a respectable [bit rate][4], we need to ensure that each step is very efficient.
+
+#### Polyphase filter bank for pulse shaping
+
+Recall that we upsampled the data by a factor of $L$ before applying the pulse shaping filter. Using the standard FIR filter structure, this would mean that a large fraction, $\frac{L-1}{L}$, of the multiply-accumulate operations used in the filter are wasted on zeros! There are a variety of [techniques to increase the efficiency] by eliminating unnecessary multiply-by-zero operations. The most ubiquitous is the polyphase filter bank.
+
+![](../img/polyphase_filter_bank.svg)
+
+### Receiver
+
+The receiver is where most of complexities occur. In the simulation above, we assumed that the receiver's carrier exactly matches the transmitter (both in frequency and phase). We assumed that the signal traveled from transmitter to receiver with no distortion or time delay. We also assumed that the transmitter and receiver have exactly the same sampling rates so that every symbol was separated by exactly 16 samples. Though these assumptions are rarely true in practice, each type of error can be addressed by adding an appropriate subsystem.
+
+#### Costas loop for carrier recovery
+
+The [Costas loop][5] is one way to track the phase $\theta$ using an iterative algorithm. When processing the $k$th sample at the receiver, the Costas loop produces the next phase estimate $\theta[k+1]$ based on the following rule:
+
+$$ \theta[k+1] =  \theta[k] - \mu \text{LPF} \left\{ r[k] \cos(\omega_0 k + \theta[k])  \right\} \times \text{LPF} \left\{ r[k] \sin(\omega_0 k + \theta[k])  \right\}$$
+
+where $r[k]$ is the received signal and $w_0$ is the carrier frequency.
+
+For an in-depth discussion of the Costas loop, see *Software Receiver Design* by C. Richard Johnson, Jr., William A. Sethares and Andrew Klein, section 10.4.
+
+#### Power maximization for timing recovery
+
+For an in-depth discussion of timing recovery via output power maximization, see *Software Receiver Design* by C. Richard Johnson, Jr., William A. Sethares and Andrew Klein, section 12.4.
+
 [1]:https://en.wikipedia.org/wiki/Serialization
 [2]:https://en.wikipedia.org/wiki/Raised-cosine_filter
 [3]:https://en.wikipedia.org/wiki/Baseband
+[4]:https://en.wikipedia.org/wiki/Bit_rate
+[5]:https://en.wikipedia.org/wiki/Costas_loop

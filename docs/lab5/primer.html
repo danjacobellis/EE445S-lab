@@ -107,6 +107,18 @@
 <li class="toctree-l3"><a class="reference internal" href="#mapping-pulses-to-data">3. Mapping pulses to data</a></li>
 </ul>
 </li>
+<li class="toctree-l2"><a class="reference internal" href="#what-could-go-wrong">What could go wrong?</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="#transmitter">Transmitter</a><ul>
+<li class="toctree-l4"><a class="reference internal" href="#polyphase-filter-bank-for-pulse-shaping">Polyphase filter bank for pulse shaping</a></li>
+</ul>
+</li>
+<li class="toctree-l3"><a class="reference internal" href="#receiver">Receiver</a><ul>
+<li class="toctree-l4"><a class="reference internal" href="#costas-loop-for-carrier-recovery">Costas loop for carrier recovery</a></li>
+<li class="toctree-l4"><a class="reference internal" href="#power-maximization-for-timing-recovery">Power maximization for timing recovery</a></li>
+</ul>
+</li>
+</ul>
+</li>
 </ul>
 </li>
 <li class="toctree-l1"><a class="reference internal" href="index.html">Lab 5. Digital Data Transmission by Baseband Pulse Amplitude Modulation (PAM)</a></li>
@@ -230,6 +242,35 @@
 
     <span class="s1">&#39;11011011100101110000111101001100010110000111011001101100&#39;</span>
 </pre></div>
+</div>
+</div>
+</div>
+<div class="section" id="what-could-go-wrong">
+<h2>What could go wrong?<a class="headerlink" href="#what-could-go-wrong" title="Permalink to this headline">¶</a></h2>
+<p>The example above demonstrates the most important techniques used in PAM. However, it leaves out many important steps.</p>
+<div class="section" id="transmitter">
+<h3>Transmitter<a class="headerlink" href="#transmitter" title="Permalink to this headline">¶</a></h3>
+<p>In the 2-PAM system described above, every bit of data required 16 samples to represent. If we want to transmit data at a respectable <a class="reference external" href="https://en.wikipedia.org/wiki/Bit_rate">bit rate</a>, we need to ensure that each step is very efficient.</p>
+<div class="section" id="polyphase-filter-bank-for-pulse-shaping">
+<h4>Polyphase filter bank for pulse shaping<a class="headerlink" href="#polyphase-filter-bank-for-pulse-shaping" title="Permalink to this headline">¶</a></h4>
+<p>Recall that we upsampled the data by a factor of <span class="math notranslate nohighlight">\(L\)</span> before applying the pulse shaping filter. Using the standard FIR filter structure, this would mean that a large fraction, <span class="math notranslate nohighlight">\(\frac{L-1}{L}\)</span>, of the multiply-accumulate operations used in the filter are wasted on zeros! There are a variety of [techniques to increase the efficiency] by eliminating unnecessary multiply-by-zero operations. The most ubiquitous is the polyphase filter bank.</p>
+<p><img alt="" src="../_images/polyphase_filter_bank.svg" /></p>
+</div>
+</div>
+<div class="section" id="receiver">
+<h3>Receiver<a class="headerlink" href="#receiver" title="Permalink to this headline">¶</a></h3>
+<p>The receiver is where most of complexities occur. In the simulation above, we assumed that the receiver’s carrier exactly matches the transmitter (both in frequency and phase). We assumed that the signal traveled from transmitter to receiver with no distortion or time delay. We also assumed that the transmitter and receiver have exactly the same sampling rates so that every symbol was separated by exactly 16 samples. Though these assumptions are rarely true in practice, each type of error can be addressed by adding an appropriate subsystem.</p>
+<div class="section" id="costas-loop-for-carrier-recovery">
+<h4>Costas loop for carrier recovery<a class="headerlink" href="#costas-loop-for-carrier-recovery" title="Permalink to this headline">¶</a></h4>
+<p>The <a class="reference external" href="https://en.wikipedia.org/wiki/Costas_loop">Costas loop</a> is one way to track the phase <span class="math notranslate nohighlight">\(\theta\)</span> using an iterative algorithm. When processing the <span class="math notranslate nohighlight">\(k\)</span>th sample at the receiver, the Costas loop produces the next phase estimate <span class="math notranslate nohighlight">\(\theta[k+1]\)</span> based on the following rule:</p>
+<div class="math notranslate nohighlight">
+\[ \theta[k+1] =  \theta[k] - \mu \text{LPF} \left\{ r[k] \cos(\omega_0 k + \theta[k])  \right\} \times \text{LPF} \left\{ r[k] \sin(\omega_0 k + \theta[k])  \right\}\]</div>
+<p>where <span class="math notranslate nohighlight">\(r[k]\)</span> is the received signal and <span class="math notranslate nohighlight">\(w_0\)</span> is the carrier frequency.</p>
+<p>For an in-depth discussion of the Costas loop, see <em>Software Receiver Design</em> by C. Richard Johnson, Jr., William A. Sethares and Andrew Klein, section 10.4.</p>
+</div>
+<div class="section" id="power-maximization-for-timing-recovery">
+<h4>Power maximization for timing recovery<a class="headerlink" href="#power-maximization-for-timing-recovery" title="Permalink to this headline">¶</a></h4>
+<p>For an in-depth discussion of timing recovery via output power maximization, see <em>Software Receiver Design</em> by C. Richard Johnson, Jr., William A. Sethares and Andrew Klein, section 12.4.</p>
 </div>
 </div>
 </div>

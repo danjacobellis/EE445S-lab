@@ -208,6 +208,11 @@
 <div class="section" id="reading-assignment">
 <h2>Reading assignment<a class="headerlink" href="#reading-assignment" title="Permalink to this headline">¶</a></h2>
 <ul class="simple">
+<li><p>Digital Signal Processing using Arm Cortex-M based Microcontrollers by Cem Ünsalan, M. Erkin Yücel, H. Deniz Gürhan.</p>
+<ul>
+<li><p>Chapter 9, sections 1-6</p></li>
+</ul>
+</li>
 <li><p>Software Receiver Design by C. Richard Johnson, Jr., William A. Sethares and Andrew Klein</p>
 <ul>
 <li><p>Sections 2.6-2.16</p></li>
@@ -222,6 +227,11 @@
 <li><p>Lecture 13: Digital Pulse Amplitude Modulation (PAM transmitter)</p></li>
 <li><p>Lecture 12: Channel Impairments (communication channel)</p></li>
 <li><p>Lecture 14: Matched Filtering (PAM receiver)</p></li>
+</ul>
+</li>
+<li><p>Common Microcontroller Software Interface Standard (CMSIS) Reference</p>
+<ul>
+<li><p><a class="reference external" href="https://arm-software.github.io/CMSIS_5/DSP/html/group__FIR__Interpolate.html">FIR Interpolating Filter</a></p></li>
 </ul>
 </li>
 </ul>
@@ -257,7 +267,7 @@
 </ul>
 <p>In MATLAB, use the ‘rcosdesign’ function and copy the coefficients into lab.c</p>
 <div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">pulse_shaping_coeffs</span> <span class="o">=</span> <span class="n">rcosdesign</span><span class="p">(</span><span class="mf">0.8</span><span class="p">,</span> <span class="mi">4</span><span class="p">,</span> <span class="mi">16</span><span class="p">,</span> <span class="s1">&#39;normal&#39;</span><span class="p">);</span>
-<span class="n">sprintf</span><span class="p">(</span><span class="s1">&#39;</span><span class="si">%f</span><span class="s1">,&#39;</span><span class="p">,</span><span class="n">pulse_shaping_coeffs</span><span class="p">(</span><span class="mi">1</span><span class="p">:</span><span class="n">end</span><span class="o">-</span><span class="mi">1</span><span class="p">));</span>
+<span class="n">sprintf</span><span class="p">(</span><span class="s1">&#39;</span><span class="si">%f</span><span class="s1">,&#39;</span><span class="p">,</span><span class="n">pulse_shaping_coeffs</span><span class="p">(</span><span class="mi">1</span><span class="p">:</span><span class="n">end</span><span class="o">-</span><span class="mi">1</span><span class="p">))</span>
 </pre></div>
 </div>
 <div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">float32_t</span> <span class="n">pulse_shaping_coeffs</span><span class="p">[</span><span class="mi">64</span><span class="p">]</span> <span class="o">=</span> <span class="p">{</span><span class="o">&lt;</span><span class="n">coefficients</span><span class="o">&gt;</span><span class="p">};</span>
@@ -275,7 +285,7 @@
 <span class="n">uint32_t</span> <span class="n">i_lut</span> <span class="o">=</span> <span class="mi">0</span><span class="p">;</span>
 </pre></div>
 </div>
-<p>Also create variables to keep track of our current word and bit position in the data stream (just as you did in lab 4).</p>
+<p>Also create variables to keep track of our current word and bit position in the data stream (just as you did in lab 4). You can reuse the variables you used for the PN sequence as long as you reset them.</p>
 <div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">uint32_t</span> <span class="n">i_word</span> <span class="o">=</span> <span class="mi">0</span><span class="p">;</span>
 <span class="n">uint32_t</span> <span class="n">i_bit</span> <span class="o">=</span> <span class="mi">0</span><span class="p">;</span>
 </pre></div>
@@ -308,7 +318,7 @@
 
 <span class="k">for</span> <span class="p">(</span><span class="n">uint32_t</span> <span class="n">i_sample</span> <span class="o">=</span> <span class="mi">0</span><span class="p">;</span> <span class="n">i_sample</span> <span class="o">&lt;</span> <span class="n">FRAME_SIZE</span><span class="o">/</span><span class="mi">2</span><span class="p">;</span> <span class="n">i_sample</span><span class="o">+=</span><span class="mi">1</span><span class="p">)</span>
 <span class="p">{</span>
-     <span class="n">input_buffer</span><span class="p">[</span><span class="n">i_sample</span><span class="p">]</span> <span class="o">=</span> <span class="n">SCALING_FACTOR</span><span class="o">*</span><span class="n">filter_out</span><span class="p">[</span><span class="n">i_sample</span><span class="o">/</span><span class="mi">2</span><span class="p">]</span><span class="o">*</span><span class="n">cos_lut</span><span class="p">[</span><span class="n">i_lut</span><span class="p">];</span>
+     <span class="n">input_buffer</span><span class="p">[</span><span class="n">i_sample</span><span class="p">]</span> <span class="o">=</span> <span class="n">OUTPUT_SCALE_FACTOR</span><span class="o">*</span><span class="n">filter_out</span><span class="p">[</span><span class="n">i_sample</span><span class="o">/</span><span class="mi">2</span><span class="p">]</span><span class="o">*</span><span class="n">cos_lut</span><span class="p">[</span><span class="n">i_lut</span><span class="p">];</span>
      <span class="n">i_lut</span> <span class="o">=</span> <span class="p">(</span><span class="n">i_lut</span> <span class="o">+</span> <span class="mi">1</span><span class="p">)</span> <span class="o">%</span> <span class="mi">4</span><span class="p">;</span>
      <span class="n">i_sample</span><span class="o">+=</span><span class="mi">1</span><span class="p">;</span>
      <span class="n">input_buffer</span><span class="p">[</span><span class="n">i_sample</span><span class="p">]</span> <span class="o">=</span> <span class="mi">0</span><span class="p">;</span>
@@ -339,8 +349,7 @@
 </pre></div>
 </div>
 </li>
-<li><p>Create a spectrogram for both recorded transmissions. <strong>Include both spectrograms in your lab report.</strong></p></li>
-</ol>
+<li><p>Create a spectrogram for both recorded transmissions. <strong>Include both spectrograms in your lab report.</strong></p>
 <div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">load</span> <span class="n">scrambled</span><span class="p">;</span>
 <span class="n">figure</span><span class="p">;</span> <span class="n">spectrogram</span><span class="p">(</span><span class="n">scrambled</span><span class="p">,</span><span class="mi">2</span><span class="o">^</span><span class="mi">10</span><span class="p">,</span><span class="mi">0</span><span class="p">,</span><span class="mi">2</span><span class="o">^</span><span class="mi">10</span><span class="p">,</span><span class="mi">48000</span><span class="p">,</span><span class="s1">&#39;yaxis&#39;</span><span class="p">);</span>
 
@@ -348,7 +357,7 @@
 <span class="n">figure</span><span class="p">;</span> <span class="n">spectrogram</span><span class="p">(</span><span class="n">not_scrambled</span><span class="p">,</span><span class="mi">2</span><span class="o">^</span><span class="mi">10</span><span class="p">,</span><span class="mi">0</span><span class="p">,</span><span class="mi">2</span><span class="o">^</span><span class="mi">10</span><span class="p">,</span><span class="mi">48000</span><span class="p">,</span><span class="s1">&#39;yaxis&#39;</span><span class="p">);</span>
 </pre></div>
 </div>
-<ol class="simple">
+</li>
 <li><p>Run the <a class="reference external" href="https://github.com/danjacobellis/EE445S-lab/raw/main/starter_code/receiver_demo.m">receiver demo</a> in MATLAB using the transmission that was not scrambled. Try to adjust the parameters to recover the tree image. <strong>Include the recovered tree image in your lab report using the best parameters you find.</strong></p></li>
 </ol>
 </div>

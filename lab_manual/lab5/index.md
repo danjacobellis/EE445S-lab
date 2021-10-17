@@ -16,16 +16,20 @@ Before you start with the experiment, it is necessary that you have an understan
 
 ## Reading assignment
 
+* Digital Signal Processing using Arm Cortex-M based Microcontrollers by Cem Ünsalan, M. Erkin Yücel, H. Deniz Gürhan.
+    * Chapter 9, sections 1-6
 * Software Receiver Design by C. Richard Johnson, Jr., William A. Sethares and Andrew Klein
-  * Sections 2.6-2.16
-  * Sections 9.1-9.4
-  * Sections 10.1-10.4
-  * Sections 11.1-11.6
+    * Sections 2.6-2.16
+    * Sections 9.1-9.4
+    * Sections 10.1-10.4
+    * Sections 11.1-11.6
 * Course reader
-  * Lecture 7: Interpolation and Pulse Shaping
-  * Lecture 13: Digital Pulse Amplitude Modulation (PAM transmitter)
-  * Lecture 12: Channel Impairments (communication channel)
-  * Lecture 14: Matched Filtering (PAM receiver)
+    * Lecture 7: Interpolation and Pulse Shaping
+    * Lecture 13: Digital Pulse Amplitude Modulation (PAM transmitter)
+    * Lecture 12: Channel Impairments (communication channel)
+    * Lecture 14: Matched Filtering (PAM receiver)
+* Common Microcontroller Software Interface Standard (CMSIS) Reference
+    * [FIR Interpolating Filter][1]
     
 ## Lab 5 instructions: week 1
 
@@ -65,7 +69,7 @@ In this exercise, we will transmit the scrambled tree image from the STM board t
 
     ```
     pulse_shaping_coeffs = rcosdesign(0.8, 4, 16, 'normal');
-    sprintf('%f,',pulse_shaping_coeffs(1:end-1));
+    sprintf('%f,',pulse_shaping_coeffs(1:end-1))
     ```
 
     ```
@@ -85,7 +89,7 @@ In this exercise, we will transmit the scrambled tree image from the STM board t
     uint32_t i_lut = 0;
     ```
     
-    Also create variables to keep track of our current word and bit position in the data stream (just as you did in lab 4).
+    Also create variables to keep track of our current word and bit position in the data stream (just as you did in lab 4). You can reuse the variables you used for the PN sequence as long as you reset them.
     
     ```
     uint32_t i_word = 0;
@@ -123,7 +127,7 @@ In this exercise, we will transmit the scrambled tree image from the STM board t
     
     for (uint32_t i_sample = 0; i_sample < FRAME_SIZE/2; i_sample+=1)
     {
-         input_buffer[i_sample] = SCALING_FACTOR*filter_out[i_sample/2]*cos_lut[i_lut];
+         input_buffer[i_sample] = OUTPUT_SCALE_FACTOR*filter_out[i_sample/2]*cos_lut[i_lut];
          i_lut = (i_lut + 1) % 4;
          i_sample+=1;
          input_buffer[i_sample] = 0;
@@ -155,13 +159,13 @@ In this exercise, we will transmit the scrambled tree image from the STM board t
     
 3. Create a spectrogram for both recorded transmissions. **Include both spectrograms in your lab report.**
 
-```
-load scrambled;
-figure; spectrogram(scrambled,2^10,0,2^10,48000,'yaxis');
+    ```
+    load scrambled;
+    figure; spectrogram(scrambled,2^10,0,2^10,48000,'yaxis');
 
-load not_scrambled;
-figure; spectrogram(not_scrambled,2^10,0,2^10,48000,'yaxis');
-```
+    load not_scrambled;
+    figure; spectrogram(not_scrambled,2^10,0,2^10,48000,'yaxis');
+    ```
 
 4. Run the [receiver demo][2] in MATLAB using the transmission that was not scrambled. Try to adjust the parameters to recover the tree image. **Include the recovered tree image in your lab report using the best parameters you find.**
 
