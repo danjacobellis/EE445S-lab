@@ -215,5 +215,5 @@ In this section, discuss the takeaway from each lab. You can mention any intuiti
 
 
 [1]:https://arm-software.github.io/CMSIS_5/DSP/html/group__FIR__Interpolate.html
-[2]:../_sources/lab5/pn_16384.md.txt
+[2]:../../_sources/lab5/pn_16384.md.txt
 [3]:https://github.com/danjacobellis/EE445S-lab/raw/main/starter_code/receiver_demo.m
