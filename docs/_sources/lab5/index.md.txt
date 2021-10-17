@@ -37,17 +37,31 @@ In this exercise, we will transmit the scrambled tree image from the STM board t
 
 ### Simulation in MATLAB
 
-The following code simulates the generation of the transmitted signal. Please download the file [pn_16384.txt][2] containing the PN sequence from lab four and ensure that it is accessible on the MATLAB path.
+1. Run the following code which simulates the generation of the transmitted signal. Please download the [file containing the PN sequence from lab four][2], and the [tree image][3]. Ensure that both are accessible on the MATLAB path.
 
 ```
+f0 = 12000; fs = 48000; sps = 16; fsym = fs/sps;
+pulse_shaping_filter = rcosdesign(0.8,4,sps,'normal');
+carrier = @(n,theta) cos(2*pi*(f0/fs)*n + theta);
 header = str2num(fliplr(dec2bin(2524737185))');
+serialized_data = reshape(imread('tree.png'),[1,128^2])';
 pn16k = readmatrix('pn_16384.txt')'; pn16k = pn16k(:);
 pn16k = fliplr(dec2bin(pn16k))'; pn16k = str2num(pn16k(:));
-f0 = 12000; fs = 48000; sps = 16; fsym = fs/sps;
-h = rcosdesign(0.8,4,sps,'normal');
-N = 524864; n = (1:N)';
-carrier = @(n,theta) cos(2*pi*(f0/fs)*n + theta);
+scrambled = mod(serialized_data + pn16k,2);
+upsampled_data = upsample([header; scrambled]*2-1,16);
+sequence_of_pulses = conv(upsampled_data,pulse_shaping_filter,'same');
+n = 1:length(sequence_of_pulses);
+modulated = sequence_of_pulses' .* carrier(n,0);
+```
 
+2. Create an eye diagram using the first 1600 samples of the simulated signal. You can either use the 'eyediagram' function in the communications toolbox or reshape the samples into a matrix and use 'plot'. **Include the eye diagram in your lab report.**
+
+```
+eyediagram(sequence_of_pulses(1:1600),16);
+```
+
+```
+figure; plot(reshape(sequence_of_pulses(1:1600),[16,100]));
 ```
 
 ### Setting up the transmitter on the STM32 board
@@ -182,7 +196,7 @@ carrier = @(n,theta) cos(2*pi*(f0/fs)*n + theta);
     figure; spectrogram(not_scrambled,2^10,0,2^10,48000,'yaxis');
     ```
 
-4. Run the [receiver demo][2] in MATLAB using the transmission that was not scrambled. Try to adjust the parameters to recover the tree image. **Include the recovered tree image in your lab report using the best parameters you find.**
+4. Run the [receiver demo][4] in MATLAB using the transmission that was not scrambled. Try to adjust the parameters to recover the tree image. **Include the recovered tree image in your lab report using the best parameters you find.**
 
 ## Lab 5 instructions: week 2
 
@@ -206,6 +220,7 @@ Present the results you obtain for each task on the assignment sheet. This secti
 
 #### Week one
 
+* Eye diagram of simulated transmission
 * Spectrograms of PAM transmissions
 * Recovered tree image
     
@@ -216,4 +231,5 @@ In this section, discuss the takeaway from each lab. You can mention any intuiti
 
 [1]:https://arm-software.github.io/CMSIS_5/DSP/html/group__FIR__Interpolate.html
 [2]:https://danjacobellis.github.io/EE445S-lab/_sources/lab5/pn_16384.md.txt
-[3]:https://github.com/danjacobellis/EE445S-lab/raw/main/starter_code/receiver_demo.m
+[3]:https://danjacobellis.github.io/EE445S-lab/_images/tree.png
+[4]:https://github.com/danjacobellis/EE445S-lab/raw/main/starter_code/receiver_demo.m

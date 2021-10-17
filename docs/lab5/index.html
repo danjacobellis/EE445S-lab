@@ -242,15 +242,30 @@
 <p>In this exercise, we will transmit the scrambled tree image from the STM board to a PC running a receiver to recover the image.</p>
 <div class="section" id="simulation-in-matlab">
 <h3>Simulation in MATLAB<a class="headerlink" href="#simulation-in-matlab" title="Permalink to this headline">¶</a></h3>
-<p>The following code simulates the generation of the transmitted signal. Please download the file <a class="reference external" href="https://danjacobellis.github.io/EE445S-lab/_sources/lab5/pn_16384.md.txt">pn_16384.txt</a> containing the PN sequence from lab four and ensure that it is accessible on the MATLAB path.</p>
-<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">header</span> <span class="o">=</span> <span class="n">str2num</span><span class="p">(</span><span class="n">fliplr</span><span class="p">(</span><span class="n">dec2bin</span><span class="p">(</span><span class="mi">2524737185</span><span class="p">))</span><span class="s1">&#39;);</span>
+<ol class="simple">
+<li><p>Run the following code which simulates the generation of the transmitted signal. Please download the <a class="reference external" href="https://danjacobellis.github.io/EE445S-lab/_sources/lab5/pn_16384.md.txt">file containing the PN sequence from lab four</a>, and the <a class="reference external" href="https://danjacobellis.github.io/EE445S-lab/_images/tree.png">tree image</a>. Ensure that both are accessible on the MATLAB path.</p></li>
+</ol>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">f0</span> <span class="o">=</span> <span class="mi">12000</span><span class="p">;</span> <span class="n">fs</span> <span class="o">=</span> <span class="mi">48000</span><span class="p">;</span> <span class="n">sps</span> <span class="o">=</span> <span class="mi">16</span><span class="p">;</span> <span class="n">fsym</span> <span class="o">=</span> <span class="n">fs</span><span class="o">/</span><span class="n">sps</span><span class="p">;</span>
+<span class="n">pulse_shaping_filter</span> <span class="o">=</span> <span class="n">rcosdesign</span><span class="p">(</span><span class="mf">0.8</span><span class="p">,</span><span class="mi">4</span><span class="p">,</span><span class="n">sps</span><span class="p">,</span><span class="s1">&#39;normal&#39;</span><span class="p">);</span>
+<span class="n">carrier</span> <span class="o">=</span> <span class="o">@</span><span class="p">(</span><span class="n">n</span><span class="p">,</span><span class="n">theta</span><span class="p">)</span> <span class="n">cos</span><span class="p">(</span><span class="mi">2</span><span class="o">*</span><span class="n">pi</span><span class="o">*</span><span class="p">(</span><span class="n">f0</span><span class="o">/</span><span class="n">fs</span><span class="p">)</span><span class="o">*</span><span class="n">n</span> <span class="o">+</span> <span class="n">theta</span><span class="p">);</span>
+<span class="n">header</span> <span class="o">=</span> <span class="n">str2num</span><span class="p">(</span><span class="n">fliplr</span><span class="p">(</span><span class="n">dec2bin</span><span class="p">(</span><span class="mi">2524737185</span><span class="p">))</span><span class="s1">&#39;);</span>
+<span class="n">serialized_data</span> <span class="o">=</span> <span class="n">reshape</span><span class="p">(</span><span class="n">imread</span><span class="p">(</span><span class="s1">&#39;tree.png&#39;</span><span class="p">),[</span><span class="mi">1</span><span class="p">,</span><span class="mi">128</span><span class="o">^</span><span class="mi">2</span><span class="p">])</span><span class="s1">&#39;;</span>
 <span class="n">pn16k</span> <span class="o">=</span> <span class="n">readmatrix</span><span class="p">(</span><span class="s1">&#39;pn_16384.txt&#39;</span><span class="p">)</span><span class="s1">&#39;; pn16k = pn16k(:);</span>
 <span class="n">pn16k</span> <span class="o">=</span> <span class="n">fliplr</span><span class="p">(</span><span class="n">dec2bin</span><span class="p">(</span><span class="n">pn16k</span><span class="p">))</span><span class="s1">&#39;; pn16k = str2num(pn16k(:));</span>
-<span class="n">f0</span> <span class="o">=</span> <span class="mi">12000</span><span class="p">;</span> <span class="n">fs</span> <span class="o">=</span> <span class="mi">48000</span><span class="p">;</span> <span class="n">sps</span> <span class="o">=</span> <span class="mi">16</span><span class="p">;</span> <span class="n">fsym</span> <span class="o">=</span> <span class="n">fs</span><span class="o">/</span><span class="n">sps</span><span class="p">;</span>
-<span class="n">h</span> <span class="o">=</span> <span class="n">rcosdesign</span><span class="p">(</span><span class="mf">0.8</span><span class="p">,</span><span class="mi">4</span><span class="p">,</span><span class="n">sps</span><span class="p">,</span><span class="s1">&#39;normal&#39;</span><span class="p">);</span>
-<span class="n">N</span> <span class="o">=</span> <span class="mi">524864</span><span class="p">;</span> <span class="n">n</span> <span class="o">=</span> <span class="p">(</span><span class="mi">1</span><span class="p">:</span><span class="n">N</span><span class="p">)</span><span class="s1">&#39;;</span>
-<span class="n">carrier</span> <span class="o">=</span> <span class="o">@</span><span class="p">(</span><span class="n">n</span><span class="p">,</span><span class="n">theta</span><span class="p">)</span> <span class="n">cos</span><span class="p">(</span><span class="mi">2</span><span class="o">*</span><span class="n">pi</span><span class="o">*</span><span class="p">(</span><span class="n">f0</span><span class="o">/</span><span class="n">fs</span><span class="p">)</span><span class="o">*</span><span class="n">n</span> <span class="o">+</span> <span class="n">theta</span><span class="p">);</span>
-
+<span class="n">scrambled</span> <span class="o">=</span> <span class="n">mod</span><span class="p">(</span><span class="n">serialized_data</span> <span class="o">+</span> <span class="n">pn16k</span><span class="p">,</span><span class="mi">2</span><span class="p">);</span>
+<span class="n">upsampled_data</span> <span class="o">=</span> <span class="n">upsample</span><span class="p">([</span><span class="n">header</span><span class="p">;</span> <span class="n">scrambled</span><span class="p">]</span><span class="o">*</span><span class="mi">2</span><span class="o">-</span><span class="mi">1</span><span class="p">,</span><span class="mi">16</span><span class="p">);</span>
+<span class="n">sequence_of_pulses</span> <span class="o">=</span> <span class="n">conv</span><span class="p">(</span><span class="n">upsampled_data</span><span class="p">,</span><span class="n">pulse_shaping_filter</span><span class="p">,</span><span class="s1">&#39;same&#39;</span><span class="p">);</span>
+<span class="n">n</span> <span class="o">=</span> <span class="mi">1</span><span class="p">:</span><span class="n">length</span><span class="p">(</span><span class="n">sequence_of_pulses</span><span class="p">);</span>
+<span class="n">modulated</span> <span class="o">=</span> <span class="n">sequence_of_pulses</span><span class="s1">&#39; .* carrier(n,0);</span>
+</pre></div>
+</div>
+<ol class="simple">
+<li><p>Create an eye diagram using the first 1600 samples of the simulated signal. You can either use the ‘eyediagram’ function in the communications toolbox or reshape the samples into a matrix and use ‘plot’. <strong>Include the eye diagram in your lab report.</strong></p></li>
+</ol>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">eyediagram</span><span class="p">(</span><span class="n">sequence_of_pulses</span><span class="p">(</span><span class="mi">1</span><span class="p">:</span><span class="mi">1600</span><span class="p">),</span><span class="mi">16</span><span class="p">);</span>
+</pre></div>
+</div>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">figure</span><span class="p">;</span> <span class="n">plot</span><span class="p">(</span><span class="n">reshape</span><span class="p">(</span><span class="n">sequence_of_pulses</span><span class="p">(</span><span class="mi">1</span><span class="p">:</span><span class="mi">1600</span><span class="p">),[</span><span class="mi">16</span><span class="p">,</span><span class="mi">100</span><span class="p">]));</span>
 </pre></div>
 </div>
 </div>
@@ -373,7 +388,7 @@
 </pre></div>
 </div>
 </li>
-<li><p>Run the <a class="reference external" href="https://danjacobellis.github.io/EE445S-lab/_sources/lab5/pn_16384.md.txt">receiver demo</a> in MATLAB using the transmission that was not scrambled. Try to adjust the parameters to recover the tree image. <strong>Include the recovered tree image in your lab report using the best parameters you find.</strong></p></li>
+<li><p>Run the <a class="reference external" href="https://github.com/danjacobellis/EE445S-lab/raw/main/starter_code/receiver_demo.m">receiver demo</a> in MATLAB using the transmission that was not scrambled. Try to adjust the parameters to recover the tree image. <strong>Include the recovered tree image in your lab report using the best parameters you find.</strong></p></li>
 </ol>
 </div>
 </div>
@@ -400,6 +415,7 @@
 <div class="section" id="week-one">
 <h4>Week one<a class="headerlink" href="#week-one" title="Permalink to this headline">¶</a></h4>
 <ul class="simple">
+<li><p>Eye diagram of simulated transmission</p></li>
 <li><p>Spectrograms of PAM transmissions</p></li>
 <li><p>Recovered tree image</p></li>
 </ul>
