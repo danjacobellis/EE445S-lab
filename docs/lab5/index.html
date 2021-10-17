@@ -242,7 +242,7 @@
 <p>In this exercise, we will transmit the scrambled tree image from the STM board to a PC running a receiver to recover the image.</p>
 <div class="section" id="simulation-in-matlab">
 <h3>Simulation in MATLAB<a class="headerlink" href="#simulation-in-matlab" title="Permalink to this headline">¶</a></h3>
-<p>The following code simulates the generation of the transmitted signal. Please download the file <span class="xref myst">pn_16384.txt</span> containing the PN sequence from lab four and ensure that it is accessible on the MATLAB path.</p>
+<p>The following code simulates the generation of the transmitted signal. Please download the file <a class="reference external" href="https://danjacobellis.github.io/EE445S-lab/_sources/lab5/pn_16384.md.txt">pn_16384.txt</a> containing the PN sequence from lab four and ensure that it is accessible on the MATLAB path.</p>
 <div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">header</span> <span class="o">=</span> <span class="n">str2num</span><span class="p">(</span><span class="n">fliplr</span><span class="p">(</span><span class="n">dec2bin</span><span class="p">(</span><span class="mi">2524737185</span><span class="p">))</span><span class="s1">&#39;);</span>
 <span class="n">pn16k</span> <span class="o">=</span> <span class="n">readmatrix</span><span class="p">(</span><span class="s1">&#39;pn_16384.txt&#39;</span><span class="p">)</span><span class="s1">&#39;; pn16k = pn16k(:);</span>
 <span class="n">pn16k</span> <span class="o">=</span> <span class="n">fliplr</span><span class="p">(</span><span class="n">dec2bin</span><span class="p">(</span><span class="n">pn16k</span><span class="p">))</span><span class="s1">&#39;; pn16k = str2num(pn16k(:));</span>
@@ -373,7 +373,7 @@
 </pre></div>
 </div>
 </li>
-<li><p>Run the <span class="xref myst">receiver demo</span> in MATLAB using the transmission that was not scrambled. Try to adjust the parameters to recover the tree image. <strong>Include the recovered tree image in your lab report using the best parameters you find.</strong></p></li>
+<li><p>Run the <a class="reference external" href="https://danjacobellis.github.io/EE445S-lab/_sources/lab5/pn_16384.md.txt">receiver demo</a> in MATLAB using the transmission that was not scrambled. Try to adjust the parameters to recover the tree image. <strong>Include the recovered tree image in your lab report using the best parameters you find.</strong></p></li>
 </ol>
 </div>
 </div>

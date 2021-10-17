@@ -37,7 +37,7 @@ In this exercise, we will transmit the scrambled tree image from the STM board t
 
 ### Simulation in MATLAB
 
-The following code simulates the generation of the transmitted signal. Please download the file [pn_16384.txt][2] containing the PN sequence from lab four and ensure that it is accessible on the MATLAB path.
+The following code simulates the generation of the transmitted signal. Please download the [file containing the PN sequence from lab four][2] and ensure that it is accessible on the MATLAB path.
 
 ```
 header = str2num(fliplr(dec2bin(2524737185))');
@@ -182,7 +182,7 @@ carrier = @(n,theta) cos(2*pi*(f0/fs)*n + theta);
     figure; spectrogram(not_scrambled,2^10,0,2^10,48000,'yaxis');
     ```
 
-4. Run the [receiver demo][2] in MATLAB using the transmission that was not scrambled. Try to adjust the parameters to recover the tree image. **Include the recovered tree image in your lab report using the best parameters you find.**
+4. Run the [receiver demo][3] in MATLAB using the transmission that was not scrambled. Try to adjust the parameters to recover the tree image. **Include the recovered tree image in your lab report using the best parameters you find.**
 
 ## Lab 5 instructions: week 2
 
