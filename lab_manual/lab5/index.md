@@ -200,7 +200,7 @@ In this exercise, we will transmit the scrambled tree image from the STM board t
 
 ## Lab 5 instructions: week 2
 
-In this exercise we will implement two receiver subsystems: carrier recovery and symbol clock recovery.
+In this exercise we will transmit the tree image (either from MATLAB or your lab partner's board) and receive it on the STM board.
 
 ### Costas loop for carrier recovery
 
@@ -252,113 +252,74 @@ In this exercise we will implement two receiver subsystems: carrier recovery and
     theta += wc - mu*Uy*Ly;
     if (theta > 6.283185){theta -= 6.283185;}
     ```
-4. Connect the input jack on the board to a transmitting source (either the matlab simulation via soundsc or a second board running the previous week's lab. Send the output of the costas loop (`Uy`) to the DAC and display the output on the oscilloscope. The pulse shaping filter applies a gain of about 3.005, so you may want to use a smaller scale factor.
+4. Connect the input jack on the board to a transmitting source (either the matlab simulation via soundsc or a second board running the previous week's lab. Send the output of the costas loop (`Uy`) to the DAC. The pulse shaping filter applies a gain of about 3.005, so you may want to use a smaller scale factor.
 
     ```
     return OUTPUT_SCALE_FACTOR*Uy*0.3;
     ```
+    
+5.  Display the output on the oscilloscope and verify its behavior. For the scrambled signal, the output of the Costas loop should closely resemble the baseband signal before modulation. **Include an oscilloscope screenshot in your lab report.**
 
-#### Symbol recovery
+#### Symbol recovery by downsampling and quantization
+
+1. Create a variable $k$ that acts as a counter for the downsampler. Since every 16th sample corresponds to a new symbol, let $k$ count up to 15 before saving the next value and resetting the counter.
 
     ```
     int32_t k = 0;
-    uint32_t data[512] = {0}; 
     ```
-    
+
     ```
     if (k == 15)
     {
         k = 0;
-        if (Uy>0)
-        {
-            data[i_word] |= (1<<i_bit);
-        }
-
-        i_bit += 1;
-        if (i_bit == 32)
-        {
-            i_word += 1;
-            i_bit = 0;
-        }
-
-        if (i_word>512)
-        {
-            display_image(data,128,128);
-            display_image(data,128,128);
-        }
+        .
+        .
+        .
+        // save the current value
+        .
+        .
+        .
     }
-    else {k +=1;}
+    else
+    {
+        k +=1;
+    }
+    ```
+    
+2. Create an array to store 16384 bits (128 by 128 binary image) which can be displayed on the screen. Also create variables (or reset existing variables) to keep track of the current word and current bit. Quantize the output of the downsampler by comparing its value to zero, then store it in the array.
+
+    ```
+    uint32_t data[512] = {0};
+    uint32_t i_word = 0;
+    uint32_t i_bit = 0;
+    ```
+
+    ```
+    if (Uy>0)
+    {
+        data[i_word] |= (1<<i_bit);
+    }
+
+    i_bit += 1;
+    if (i_bit == 32)
+    {
+        i_word += 1;
+        i_bit = 0;
+    }
+
+    ```
+    
+3. Create an if statement to detect if the array is full. When it is, display it as an image.
+
+    ```
+    if (i_word>512){
+        display_image(data,128,128);
+    }
+    ```
+    
+4. Setup the transmitter as the input (either with your lab partner running the week 1 code or the provided MATLAB simulation) *without* scrambling the data. Run the receiver with a breakpoint immediately after image is displayed. You should see a noisy and possibly inverted tree image. Since no symbol timing recovery algorithm is in place, the quality of the recovered image could change when you repeat the experiment. **Include the recovered image in your lab report.** (You can either use a photo or [export the array][5] and plot it in MATLAB using the `image` function).
 
 ## Lab 5 instructions: week 3
-
-#### Timing Recovery
-
-1. In lab.c, create variables necessary to perform symbol clock recovery via output power maximization.
-
-    ```
-    int32_t k = 0;
-    uint32_t data[512];
-    i_word = 0;
-    i_bit = 0;
-    float32_t costas_output[3] = {0};
-    uint32_t i_opt = 0;
-    int32_t offset = 0;
-    float32_t output_power = 0;
-    float32_t max_output_power = 0;
-    
-    
-    ```
-
-
-    ```
-    
-    if (k>14)
-    {
-        i_opt = k-15;
-        costas_output[i_opt] = Uy;
-        
-        output_power = 0;
-        int32_t i_circ;
-        for (uint32_t i_avg = 0; i_avg < 21; i_avg += 1) 
-        {
-            i_circ = i_baseband - 16*i_avg;
-            if (i_circ<0) {i_circ += FRAME_SIZE/4;}
-            output_power += baseband[i_circ] * baseband[i_circ];
-        }
-        
-        if (output_power > max_output_power)
-        {
-            max_output_power = output_power;
-            offset = i_opt - 1;
-        }
-    }
-        
-    if (k==17)
-    {
-        if (costas_output[1+offset]>0)
-        {
-            data[i_word] |= (1<<i_bit);
-        }
-        
-        i_bit += 1;
-        if (i_bit == 32)
-        {
-            i_word += 1;
-            i_bit = 0;
-        }
-        
-        if (i_word>512){
-            display_image(data,128,128);
-            display_image(data,128,128);
-        }
-        
-        offset = -1;
-        max_output_power = 0;
-        k = offset;
-    }
-    else {k += 1;}
-
-    ```
 
 ## Lab report contents
 
@@ -391,3 +352,4 @@ In this section, discuss the takeaway from each lab. You can mention any intuiti
 [2]:https://danjacobellis.github.io/EE445S-lab/_sources/lab5/pn_16384.md.txt
 [3]:https://danjacobellis.github.io/EE445S-lab/_images/tree.png
 [4]:https://github.com/danjacobellis/EE445S-lab/raw/main/starter_code/receiver_demo.m
+[5]:../data.md
