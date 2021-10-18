@@ -127,6 +127,16 @@ In this exercise, we will use the generated PN sequence to scramble and descramb
     }
     display_image(tree, 128, 128);
     ```
+    
+**Include your scrambler/descrambler code in the lab report** 
+    
+### Autocorrelation
+
+This exercise will help you understand the properties of PN sequences by calculating their auto correlation in MATLAB.
+
+1. Load the PN sequence generated earlier into MATLAB. You can either [export it to a file][2], or load the [precomputed sequence from a file][3].
+
+2. Generate an autocorrelation graph for the PN sequence. Make the extent of the autocorrelation plot large enough to show two periods.
 
 ## Lab report contents
 
@@ -143,6 +153,9 @@ Describe the steps you took to implement the algorithms in your own words.
 ### III. Results from lab exercise
 
 Present the results you obtain for each task on the assignment sheet. This section should include illustrative oscilloscope screenshots of the DSP algorithms in action. Also include any code that you wrote or modified. Please do not include all of the boilerplate code from the textbook.
+
+* Code for data scrambler and descrambler
+* Autocorrelation graph
     
 ### IV. Discussion
 
@@ -150,3 +163,4 @@ In this section, discuss the takeaway from each lab. You can mention any intuiti
 
 [1]:primer.md
 [2]:../data.md
+[3]:https://danjacobellis.github.io/EE445S-lab/_sources/lab5/pn_16384.md.txt
