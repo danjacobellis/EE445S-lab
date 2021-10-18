@@ -39,30 +39,30 @@ In this exercise, we will transmit the scrambled tree image from the STM board t
 
 1. Run the following code which simulates the generation of the transmitted signal. Please download the [file containing the PN sequence from lab four][2], and the [tree image][3]. Ensure that both are accessible on the MATLAB path.
 
-```
-f0 = 12000; fs = 48000; sps = 16; fsym = fs/sps;
-pulse_shaping_filter = rcosdesign(0.8,4,sps,'normal');
-carrier = @(n,theta) cos(2*pi*(f0/fs)*n + theta);
-header = str2num(fliplr(dec2bin(2524737185))');
-serialized_data = reshape(imread('tree.png'),[1,128^2])';
-pn16k = readmatrix('pn_16384.txt')'; pn16k = pn16k(:);
-pn16k = fliplr(dec2bin(pn16k))'; pn16k = str2num(pn16k(:));
-scrambled = mod(serialized_data + pn16k,2);
-upsampled_data = upsample([header; scrambled]*2-1,16);
-sequence_of_pulses = conv(upsampled_data,pulse_shaping_filter,'same');
-n = 1:length(sequence_of_pulses);
-modulated = sequence_of_pulses' .* carrier(n,0);
-```
+    ```
+    f0 = 12000; fs = 48000; sps = 16; fsym = fs/sps;
+    pulse_shaping_filter = rcosdesign(0.8,4,sps,'normal');
+    carrier = @(n,theta) cos(2*pi*(f0/fs)*n + theta);
+    header = str2num(fliplr(dec2bin(2524737185))');
+    serialized_data = reshape(imread('tree.png'),[1,128^2])';
+    pn16k = readmatrix('pn_16384.txt')'; pn16k = pn16k(:);
+    pn16k = fliplr(dec2bin(pn16k))'; pn16k = str2num(pn16k(:));
+    scrambled = mod(serialized_data + pn16k,2);
+    upsampled_data = upsample([header; scrambled]*2-1,16);
+    sequence_of_pulses = conv(upsampled_data,pulse_shaping_filter,'same');
+    n = 1:length(sequence_of_pulses);
+    modulated = sequence_of_pulses' .* carrier(n,0);
+    ```
 
 2. Create an eye diagram using the first 1600 samples of the simulated signal. You can either use the 'eyediagram' function in the communications toolbox or reshape the samples into a matrix and use 'plot'. **Include the eye diagram in your lab report.**
 
-```
-eyediagram(sequence_of_pulses(1:1600),16);
-```
+    ```
+    eyediagram(sequence_of_pulses(1:1600),16);
+    ```
 
-```
-figure; plot(reshape(sequence_of_pulses(1:1600),[16,100]));
-```
+    ```
+    figure; plot(reshape(sequence_of_pulses(1:1600),[16,100]));
+    ```
 
 ### Setting up the transmitter on the STM32 board
 
@@ -200,7 +200,165 @@ figure; plot(reshape(sequence_of_pulses(1:1600),[16,100]));
 
 ## Lab 5 instructions: week 2
 
+In this exercise we will implement two receiver subsystems: carrier recovery and symbol clock recovery.
+
+### Costas loop for carrier recovery
+
+1. In lab.c, create variables necessary for the costas loop. Assume that the lowpass filter in the costas loop is the same pulse shaping filter as before with 64 coefficients.
+
+    ```
+    float32_t Ux[64] = {0};
+    float32_t Lx[64] = {0};
+    float32_t Uy = 0;
+    float32_t Ly = 0;
+    float32_t wc = 1.5707963267949;
+    float32_t theta = 0;
+    float32_t mu = 0.01;
+    float32_t baseband[FRAME_SIZE/4] = {0};
+    uint32_t i_baseband = 0;
+    ```
+
+2. Add code to process_left_sample which computes the newest values for the upper and lower branches.
+
+    ```
+    float32_t r = input_sample*INPUT_SCALE_FACTOR;
+    
+    Ux[0] = r*arm_cos_f32(theta);
+    Lx[0] = r*arm_sin_f32(theta);
+    
+    Uy = 0;
+    Ly = 0;
+    
+    for (uint32_t i_sample = 0; i_sample < 64; i_sample +=1)
+    {
+        Uy += Ux[i_sample]*pulse_shaping_coeffs[i_sample];
+        Ly += Lx[i_sample]*pulse_shaping_coeffs[i_sample];
+    }
+    
+    baseband[i_baseband] = Uy;
+    i_baseband += 1;
+    if (i_baseband > FRAME_SIZE/4){i_baseband = 0;}
+    
+    for (i_sample = 63; i_sample > 0; i_sample -=1)
+    {
+        Ux[i_sample] = Ux[i_sample-1];
+        Lx[i_sample] = Lx[i_sample-1];
+    }
+    ```
+    
+3. Update the estimate of $\theta$.
+
+    ```
+    theta += wc - mu*Uy*Ly;
+    if (theta > 6.283185){theta -= 6.283185;}
+    ```
+4. Connect the input jack on the board to a transmitting source (either the matlab simulation via soundsc or a second board running the previous week's lab. Send the output of the costas loop (`Uy`) to the DAC and display the output on the oscilloscope. The pulse shaping filter applies a gain of about 3.005, so you may want to use a smaller scale factor.
+
+    ```
+    return OUTPUT_SCALE_FACTOR*Uy*0.3;
+    ```
+
+#### Symbol recovery
+
+    ```
+    int32_t k = 0;
+    uint32_t data[512] = {0}; 
+    ```
+    
+    ```
+    if (k == 15)
+    {
+        k = 0;
+        if (Uy>0)
+        {
+            data[i_word] |= (1<<i_bit);
+        }
+
+        i_bit += 1;
+        if (i_bit == 32)
+        {
+            i_word += 1;
+            i_bit = 0;
+        }
+
+        if (i_word>512)
+        {
+            display_image(data,128,128);
+            display_image(data,128,128);
+        }
+    }
+    else {k +=1;}
+
 ## Lab 5 instructions: week 3
+
+#### Timing Recovery
+
+1. In lab.c, create variables necessary to perform symbol clock recovery via output power maximization.
+
+    ```
+    int32_t k = 0;
+    uint32_t data[512];
+    i_word = 0;
+    i_bit = 0;
+    float32_t costas_output[3] = {0};
+    uint32_t i_opt = 0;
+    int32_t offset = 0;
+    float32_t output_power = 0;
+    float32_t max_output_power = 0;
+    
+    
+    ```
+
+
+    ```
+    
+    if (k>14)
+    {
+        i_opt = k-15;
+        costas_output[i_opt] = Uy;
+        
+        output_power = 0;
+        int32_t i_circ;
+        for (uint32_t i_avg = 0; i_avg < 21; i_avg += 1) 
+        {
+            i_circ = i_baseband - 16*i_avg;
+            if (i_circ<0) {i_circ += FRAME_SIZE/4;}
+            output_power += baseband[i_circ] * baseband[i_circ];
+        }
+        
+        if (output_power > max_output_power)
+        {
+            max_output_power = output_power;
+            offset = i_opt - 1;
+        }
+    }
+        
+    if (k==17)
+    {
+        if (costas_output[1+offset]>0)
+        {
+            data[i_word] |= (1<<i_bit);
+        }
+        
+        i_bit += 1;
+        if (i_bit == 32)
+        {
+            i_word += 1;
+            i_bit = 0;
+        }
+        
+        if (i_word>512){
+            display_image(data,128,128);
+            display_image(data,128,128);
+        }
+        
+        offset = -1;
+        max_output_power = 0;
+        k = offset;
+    }
+    else {k += 1;}
+
+    ```
 
 ## Lab report contents
 

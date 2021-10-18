@@ -109,8 +109,17 @@
 <li class="toctree-l3"><a class="reference internal" href="#examining-the-transmission-in-matlab">Examining the transmission in MATLAB</a></li>
 </ul>
 </li>
-<li class="toctree-l2"><a class="reference internal" href="#lab-5-instructions-week-2">Lab 5 instructions: week 2</a></li>
-<li class="toctree-l2"><a class="reference internal" href="#lab-5-instructions-week-3">Lab 5 instructions: week 3</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#lab-5-instructions-week-2">Lab 5 instructions: week 2</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="#costas-loop-for-carrier-recovery">Costas loop for carrier recovery</a><ul>
+<li class="toctree-l4"><a class="reference internal" href="#symbol-recovery">Symbol recovery</a></li>
+</ul>
+</li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="#lab-5-instructions-week-3">Lab 5 instructions: week 3</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="#timing-recovery">Timing Recovery</a></li>
+</ul>
+</li>
 <li class="toctree-l2"><a class="reference internal" href="#lab-report-contents">Lab report contents</a><ul>
 <li class="toctree-l3"><a class="reference internal" href="#i-introduction">I. Introduction</a></li>
 <li class="toctree-l3"><a class="reference internal" href="#ii-methods">II. Methods</a></li>
@@ -242,9 +251,8 @@
 <p>In this exercise, we will transmit the scrambled tree image from the STM board to a PC running a receiver to recover the image.</p>
 <div class="section" id="simulation-in-matlab">
 <h3>Simulation in MATLAB<a class="headerlink" href="#simulation-in-matlab" title="Permalink to this headline">¶</a></h3>
-<ol class="simple">
-<li><p>Run the following code which simulates the generation of the transmitted signal. Please download the <a class="reference external" href="https://danjacobellis.github.io/EE445S-lab/_sources/lab5/pn_16384.md.txt">file containing the PN sequence from lab four</a>, and the <a class="reference external" href="https://danjacobellis.github.io/EE445S-lab/_images/tree.png">tree image</a>. Ensure that both are accessible on the MATLAB path.</p></li>
-</ol>
+<ol>
+<li><p>Run the following code which simulates the generation of the transmitted signal. Please download the <a class="reference external" href="https://danjacobellis.github.io/EE445S-lab/_sources/lab5/pn_16384.md.txt">file containing the PN sequence from lab four</a>, and the <a class="reference external" href="https://danjacobellis.github.io/EE445S-lab/_images/tree.png">tree image</a>. Ensure that both are accessible on the MATLAB path.</p>
 <div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">f0</span> <span class="o">=</span> <span class="mi">12000</span><span class="p">;</span> <span class="n">fs</span> <span class="o">=</span> <span class="mi">48000</span><span class="p">;</span> <span class="n">sps</span> <span class="o">=</span> <span class="mi">16</span><span class="p">;</span> <span class="n">fsym</span> <span class="o">=</span> <span class="n">fs</span><span class="o">/</span><span class="n">sps</span><span class="p">;</span>
 <span class="n">pulse_shaping_filter</span> <span class="o">=</span> <span class="n">rcosdesign</span><span class="p">(</span><span class="mf">0.8</span><span class="p">,</span><span class="mi">4</span><span class="p">,</span><span class="n">sps</span><span class="p">,</span><span class="s1">&#39;normal&#39;</span><span class="p">);</span>
 <span class="n">carrier</span> <span class="o">=</span> <span class="o">@</span><span class="p">(</span><span class="n">n</span><span class="p">,</span><span class="n">theta</span><span class="p">)</span> <span class="n">cos</span><span class="p">(</span><span class="mi">2</span><span class="o">*</span><span class="n">pi</span><span class="o">*</span><span class="p">(</span><span class="n">f0</span><span class="o">/</span><span class="n">fs</span><span class="p">)</span><span class="o">*</span><span class="n">n</span> <span class="o">+</span> <span class="n">theta</span><span class="p">);</span>
@@ -259,15 +267,16 @@
 <span class="n">modulated</span> <span class="o">=</span> <span class="n">sequence_of_pulses</span><span class="s1">&#39; .* carrier(n,0);</span>
 </pre></div>
 </div>
-<ol class="simple">
-<li><p>Create an eye diagram using the first 1600 samples of the simulated signal. You can either use the ‘eyediagram’ function in the communications toolbox or reshape the samples into a matrix and use ‘plot’. <strong>Include the eye diagram in your lab report.</strong></p></li>
-</ol>
+</li>
+<li><p>Create an eye diagram using the first 1600 samples of the simulated signal. You can either use the ‘eyediagram’ function in the communications toolbox or reshape the samples into a matrix and use ‘plot’. <strong>Include the eye diagram in your lab report.</strong></p>
 <div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">eyediagram</span><span class="p">(</span><span class="n">sequence_of_pulses</span><span class="p">(</span><span class="mi">1</span><span class="p">:</span><span class="mi">1600</span><span class="p">),</span><span class="mi">16</span><span class="p">);</span>
 </pre></div>
 </div>
 <div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">figure</span><span class="p">;</span> <span class="n">plot</span><span class="p">(</span><span class="n">reshape</span><span class="p">(</span><span class="n">sequence_of_pulses</span><span class="p">(</span><span class="mi">1</span><span class="p">:</span><span class="mi">1600</span><span class="p">),[</span><span class="mi">16</span><span class="p">,</span><span class="mi">100</span><span class="p">]));</span>
 </pre></div>
 </div>
+</li>
+</ol>
 </div>
 <div class="section" id="setting-up-the-transmitter-on-the-stm32-board">
 <h3>Setting up the transmitter on the STM32 board<a class="headerlink" href="#setting-up-the-transmitter-on-the-stm32-board" title="Permalink to this headline">¶</a></h3>
@@ -394,9 +403,168 @@
 </div>
 <div class="section" id="lab-5-instructions-week-2">
 <h2>Lab 5 instructions: week 2<a class="headerlink" href="#lab-5-instructions-week-2" title="Permalink to this headline">¶</a></h2>
+<p>In this exercise we will implement two receiver subsystems: carrier recovery and symbol clock recovery.</p>
+<div class="section" id="costas-loop-for-carrier-recovery">
+<h3>Costas loop for carrier recovery<a class="headerlink" href="#costas-loop-for-carrier-recovery" title="Permalink to this headline">¶</a></h3>
+<ol>
+<li><p>In lab.c, create variables necessary for the costas loop. Assume that the lowpass filter in the costas loop is the same pulse shaping filter as before with 64 coefficients.</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">float32_t</span> <span class="n">Ux</span><span class="p">[</span><span class="mi">64</span><span class="p">]</span> <span class="o">=</span> <span class="p">{</span><span class="mi">0</span><span class="p">};</span>
+<span class="n">float32_t</span> <span class="n">Lx</span><span class="p">[</span><span class="mi">64</span><span class="p">]</span> <span class="o">=</span> <span class="p">{</span><span class="mi">0</span><span class="p">};</span>
+<span class="n">float32_t</span> <span class="n">Uy</span> <span class="o">=</span> <span class="mi">0</span><span class="p">;</span>
+<span class="n">float32_t</span> <span class="n">Ly</span> <span class="o">=</span> <span class="mi">0</span><span class="p">;</span>
+<span class="n">float32_t</span> <span class="n">wc</span> <span class="o">=</span> <span class="mf">1.5707963267949</span><span class="p">;</span>
+<span class="n">float32_t</span> <span class="n">theta</span> <span class="o">=</span> <span class="mi">0</span><span class="p">;</span>
+<span class="n">float32_t</span> <span class="n">mu</span> <span class="o">=</span> <span class="mf">0.01</span><span class="p">;</span>
+<span class="n">float32_t</span> <span class="n">baseband</span><span class="p">[</span><span class="n">FRAME_SIZE</span><span class="o">/</span><span class="mi">4</span><span class="p">]</span> <span class="o">=</span> <span class="p">{</span><span class="mi">0</span><span class="p">};</span>
+<span class="n">uint32_t</span> <span class="n">i_baseband</span> <span class="o">=</span> <span class="mi">0</span><span class="p">;</span>
+</pre></div>
+</div>
+</li>
+<li><p>Add code to process_left_sample which computes the newest values for the upper and lower branches.</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">float32_t</span> <span class="n">r</span> <span class="o">=</span> <span class="n">input_sample</span><span class="o">*</span><span class="n">INPUT_SCALE_FACTOR</span><span class="p">;</span>
+
+<span class="n">Ux</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span> <span class="o">=</span> <span class="n">r</span><span class="o">*</span><span class="n">arm_cos_f32</span><span class="p">(</span><span class="n">theta</span><span class="p">);</span>
+<span class="n">Lx</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span> <span class="o">=</span> <span class="n">r</span><span class="o">*</span><span class="n">arm_sin_f32</span><span class="p">(</span><span class="n">theta</span><span class="p">);</span>
+
+<span class="n">Uy</span> <span class="o">=</span> <span class="mi">0</span><span class="p">;</span>
+<span class="n">Ly</span> <span class="o">=</span> <span class="mi">0</span><span class="p">;</span>
+
+<span class="k">for</span> <span class="p">(</span><span class="n">uint32_t</span> <span class="n">i_sample</span> <span class="o">=</span> <span class="mi">0</span><span class="p">;</span> <span class="n">i_sample</span> <span class="o">&lt;</span> <span class="mi">64</span><span class="p">;</span> <span class="n">i_sample</span> <span class="o">+=</span><span class="mi">1</span><span class="p">)</span>
+<span class="p">{</span>
+    <span class="n">Uy</span> <span class="o">+=</span> <span class="n">Ux</span><span class="p">[</span><span class="n">i_sample</span><span class="p">]</span><span class="o">*</span><span class="n">pulse_shaping_coeffs</span><span class="p">[</span><span class="n">i_sample</span><span class="p">];</span>
+    <span class="n">Ly</span> <span class="o">+=</span> <span class="n">Lx</span><span class="p">[</span><span class="n">i_sample</span><span class="p">]</span><span class="o">*</span><span class="n">pulse_shaping_coeffs</span><span class="p">[</span><span class="n">i_sample</span><span class="p">];</span>
+<span class="p">}</span>
+
+<span class="n">baseband</span><span class="p">[</span><span class="n">i_baseband</span><span class="p">]</span> <span class="o">=</span> <span class="n">Uy</span><span class="p">;</span>
+<span class="n">i_baseband</span> <span class="o">+=</span> <span class="mi">1</span><span class="p">;</span>
+<span class="k">if</span> <span class="p">(</span><span class="n">i_baseband</span> <span class="o">&gt;</span> <span class="n">FRAME_SIZE</span><span class="o">/</span><span class="mi">4</span><span class="p">){</span><span class="n">i_baseband</span> <span class="o">=</span> <span class="mi">0</span><span class="p">;}</span>
+
+<span class="k">for</span> <span class="p">(</span><span class="n">i_sample</span> <span class="o">=</span> <span class="mi">63</span><span class="p">;</span> <span class="n">i_sample</span> <span class="o">&gt;</span> <span class="mi">0</span><span class="p">;</span> <span class="n">i_sample</span> <span class="o">-=</span><span class="mi">1</span><span class="p">)</span>
+<span class="p">{</span>
+    <span class="n">Ux</span><span class="p">[</span><span class="n">i_sample</span><span class="p">]</span> <span class="o">=</span> <span class="n">Ux</span><span class="p">[</span><span class="n">i_sample</span><span class="o">-</span><span class="mi">1</span><span class="p">];</span>
+    <span class="n">Lx</span><span class="p">[</span><span class="n">i_sample</span><span class="p">]</span> <span class="o">=</span> <span class="n">Lx</span><span class="p">[</span><span class="n">i_sample</span><span class="o">-</span><span class="mi">1</span><span class="p">];</span>
+<span class="p">}</span>
+</pre></div>
+</div>
+</li>
+<li><p>Update the estimate of <span class="math notranslate nohighlight">\(\theta\)</span>.</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">theta</span> <span class="o">+=</span> <span class="n">wc</span> <span class="o">-</span> <span class="n">mu</span><span class="o">*</span><span class="n">Uy</span><span class="o">*</span><span class="n">Ly</span><span class="p">;</span>
+<span class="k">if</span> <span class="p">(</span><span class="n">theta</span> <span class="o">&gt;</span> <span class="mf">6.283185</span><span class="p">){</span><span class="n">theta</span> <span class="o">-=</span> <span class="mf">6.283185</span><span class="p">;}</span>
+</pre></div>
+</div>
+</li>
+<li><p>Connect the input jack on the board to a transmitting source (either the matlab simulation via soundsc or a second board running the previous week’s lab. Send the output of the costas loop (<code class="docutils literal notranslate"><span class="pre">Uy</span></code>) to the DAC and display the output on the oscilloscope. The pulse shaping filter applies a gain of about 3.005, so you may want to use a smaller scale factor.</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="k">return</span> <span class="n">OUTPUT_SCALE_FACTOR</span><span class="o">*</span><span class="n">Uy</span><span class="o">*</span><span class="mf">0.3</span><span class="p">;</span>
+</pre></div>
+</div>
+</li>
+</ol>
+<div class="section" id="symbol-recovery">
+<h4>Symbol recovery<a class="headerlink" href="#symbol-recovery" title="Permalink to this headline">¶</a></h4>
+<div class="highlight-none notranslate"><div class="highlight"><pre><span></span>```
+int32_t k = 0;
+uint32_t data[512] = {0}; 
+```
+
+```
+if (k == 15)
+{
+    k = 0;
+    if (Uy&gt;0)
+    {
+        data[i_word] |= (1&lt;&lt;i_bit);
+    }
+
+    i_bit += 1;
+    if (i_bit == 32)
+    {
+        i_word += 1;
+        i_bit = 0;
+    }
+
+    if (i_word&gt;512)
+    {
+        display_image(data,128,128);
+        display_image(data,128,128);
+    }
+}
+else {k +=1;}
+</pre></div>
+</div>
+</div>
+</div>
 </div>
 <div class="section" id="lab-5-instructions-week-3">
 <h2>Lab 5 instructions: week 3<a class="headerlink" href="#lab-5-instructions-week-3" title="Permalink to this headline">¶</a></h2>
+<div class="section" id="timing-recovery">
+<h3>Timing Recovery<a class="headerlink" href="#timing-recovery" title="Permalink to this headline">¶</a></h3>
+<ol>
+<li><p>In lab.c, create variables necessary to perform symbol clock recovery via output power maximization.</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">int32_t</span> <span class="n">k</span> <span class="o">=</span> <span class="mi">0</span><span class="p">;</span>
+<span class="n">uint32_t</span> <span class="n">data</span><span class="p">[</span><span class="mi">512</span><span class="p">];</span>
+<span class="n">i_word</span> <span class="o">=</span> <span class="mi">0</span><span class="p">;</span>
+<span class="n">i_bit</span> <span class="o">=</span> <span class="mi">0</span><span class="p">;</span>
+<span class="n">float32_t</span> <span class="n">costas_output</span><span class="p">[</span><span class="mi">3</span><span class="p">]</span> <span class="o">=</span> <span class="p">{</span><span class="mi">0</span><span class="p">};</span>
+<span class="n">uint32_t</span> <span class="n">i_opt</span> <span class="o">=</span> <span class="mi">0</span><span class="p">;</span>
+<span class="n">int32_t</span> <span class="n">offset</span> <span class="o">=</span> <span class="mi">0</span><span class="p">;</span>
+<span class="n">float32_t</span> <span class="n">output_power</span> <span class="o">=</span> <span class="mi">0</span><span class="p">;</span>
+<span class="n">float32_t</span> <span class="n">max_output_power</span> <span class="o">=</span> <span class="mi">0</span><span class="p">;</span>
+
+
+</pre></div>
+</div>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span>
+<span class="k">if</span> <span class="p">(</span><span class="n">k</span><span class="o">&gt;</span><span class="mi">14</span><span class="p">)</span>
+<span class="p">{</span>
+    <span class="n">i_opt</span> <span class="o">=</span> <span class="n">k</span><span class="o">-</span><span class="mi">15</span><span class="p">;</span>
+    <span class="n">costas_output</span><span class="p">[</span><span class="n">i_opt</span><span class="p">]</span> <span class="o">=</span> <span class="n">Uy</span><span class="p">;</span>
+    
+    <span class="n">output_power</span> <span class="o">=</span> <span class="mi">0</span><span class="p">;</span>
+    <span class="n">int32_t</span> <span class="n">i_circ</span><span class="p">;</span>
+    <span class="k">for</span> <span class="p">(</span><span class="n">uint32_t</span> <span class="n">i_avg</span> <span class="o">=</span> <span class="mi">0</span><span class="p">;</span> <span class="n">i_avg</span> <span class="o">&lt;</span> <span class="mi">21</span><span class="p">;</span> <span class="n">i_avg</span> <span class="o">+=</span> <span class="mi">1</span><span class="p">)</span> 
+    <span class="p">{</span>
+        <span class="n">i_circ</span> <span class="o">=</span> <span class="n">i_baseband</span> <span class="o">-</span> <span class="mi">16</span><span class="o">*</span><span class="n">i_avg</span><span class="p">;</span>
+        <span class="k">if</span> <span class="p">(</span><span class="n">i_circ</span><span class="o">&lt;</span><span class="mi">0</span><span class="p">)</span> <span class="p">{</span><span class="n">i_circ</span> <span class="o">+=</span> <span class="n">FRAME_SIZE</span><span class="o">/</span><span class="mi">4</span><span class="p">;}</span>
+        <span class="n">output_power</span> <span class="o">+=</span> <span class="n">baseband</span><span class="p">[</span><span class="n">i_circ</span><span class="p">]</span> <span class="o">*</span> <span class="n">baseband</span><span class="p">[</span><span class="n">i_circ</span><span class="p">];</span>
+    <span class="p">}</span>
+    
+    <span class="k">if</span> <span class="p">(</span><span class="n">output_power</span> <span class="o">&gt;</span> <span class="n">max_output_power</span><span class="p">)</span>
+    <span class="p">{</span>
+        <span class="n">max_output_power</span> <span class="o">=</span> <span class="n">output_power</span><span class="p">;</span>
+        <span class="n">offset</span> <span class="o">=</span> <span class="n">i_opt</span> <span class="o">-</span> <span class="mi">1</span><span class="p">;</span>
+    <span class="p">}</span>
+<span class="p">}</span>
+    
+<span class="k">if</span> <span class="p">(</span><span class="n">k</span><span class="o">==</span><span class="mi">17</span><span class="p">)</span>
+<span class="p">{</span>
+    <span class="k">if</span> <span class="p">(</span><span class="n">costas_output</span><span class="p">[</span><span class="mi">1</span><span class="o">+</span><span class="n">offset</span><span class="p">]</span><span class="o">&gt;</span><span class="mi">0</span><span class="p">)</span>
+    <span class="p">{</span>
+        <span class="n">data</span><span class="p">[</span><span class="n">i_word</span><span class="p">]</span> <span class="o">|=</span> <span class="p">(</span><span class="mi">1</span><span class="o">&lt;&lt;</span><span class="n">i_bit</span><span class="p">);</span>
+    <span class="p">}</span>
+    
+    <span class="n">i_bit</span> <span class="o">+=</span> <span class="mi">1</span><span class="p">;</span>
+    <span class="k">if</span> <span class="p">(</span><span class="n">i_bit</span> <span class="o">==</span> <span class="mi">32</span><span class="p">)</span>
+    <span class="p">{</span>
+        <span class="n">i_word</span> <span class="o">+=</span> <span class="mi">1</span><span class="p">;</span>
+        <span class="n">i_bit</span> <span class="o">=</span> <span class="mi">0</span><span class="p">;</span>
+    <span class="p">}</span>
+    
+    <span class="k">if</span> <span class="p">(</span><span class="n">i_word</span><span class="o">&gt;</span><span class="mi">512</span><span class="p">){</span>
+        <span class="n">display_image</span><span class="p">(</span><span class="n">data</span><span class="p">,</span><span class="mi">128</span><span class="p">,</span><span class="mi">128</span><span class="p">);</span>
+        <span class="n">display_image</span><span class="p">(</span><span class="n">data</span><span class="p">,</span><span class="mi">128</span><span class="p">,</span><span class="mi">128</span><span class="p">);</span>
+    <span class="p">}</span>
+    
+    <span class="n">offset</span> <span class="o">=</span> <span class="o">-</span><span class="mi">1</span><span class="p">;</span>
+    <span class="n">max_output_power</span> <span class="o">=</span> <span class="mi">0</span><span class="p">;</span>
+    <span class="n">k</span> <span class="o">=</span> <span class="n">offset</span><span class="p">;</span>
+<span class="p">}</span>
+<span class="k">else</span> <span class="p">{</span><span class="n">k</span> <span class="o">+=</span> <span class="mi">1</span><span class="p">;}</span>
+
+</pre></div>
+</div>
+</li>
+</ol>
+</div>
 </div>
 <div class="section" id="lab-report-contents">
 <h2>Lab report contents<a class="headerlink" href="#lab-report-contents" title="Permalink to this headline">¶</a></h2>
