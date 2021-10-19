@@ -332,10 +332,10 @@ The first period of the this LFSR is listed below.</p>
 <h4>Auto-correlation<a class="headerlink" href="#auto-correlation" title="Permalink to this headline">¶</a></h4>
 <p>The auto-correlation <span class="math notranslate nohighlight">\(R_{xx}[k]\)</span> of a discrete-time signal <span class="math notranslate nohighlight">\(x[n]\)</span> is the cross-correlation with itself:</p>
 <div class="math notranslate nohighlight">
-\[R_{xx}[k] = x[n]\star x[n] = \sum_{k=-\infty}^{\infty}\overline{x[k]}x[n+k]\]</div>
+\[R_{xx}[n] = x[n]\star x[n] = \sum_{k=-\infty}^{\infty}\overline{x[k]}x[n+k]\]</div>
 <p>For periodic signals the summation can be simplified, and the result is often normalized by the period <span class="math notranslate nohighlight">\(N\)</span>.</p>
 <div class="math notranslate nohighlight">
-\[R_{xx}[k] \text{ for periodic signal} = \frac{1}{N}x[n]\star x[n] = \frac{1}{N}\sum_{k=1}^{N}\overline{x[k]}x[n+k]\]</div>
+\[R_{xx}[n] \text{ for periodic signal} = \frac{1}{N}x[n]\star x[n] = \frac{1}{N}\sum_{k=1}^{N}\overline{x[k]}x[n+k]\]</div>
 </div>
 <div class="section" id="auto-correlation-of-a-maximal-length-pn-sequence">
 <h4>Auto-correlation of a maximal length PN sequence<a class="headerlink" href="#auto-correlation-of-a-maximal-length-pn-sequence" title="Permalink to this headline">¶</a></h4>

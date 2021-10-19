@@ -310,10 +310,42 @@
 <div class="section" id="autocorrelation">
 <h3>Autocorrelation<a class="headerlink" href="#autocorrelation" title="Permalink to this headline">¶</a></h3>
 <p>This exercise will help you understand the properties of PN sequences by calculating their auto correlation in MATLAB.</p>
-<ol class="simple">
-<li><p>Load the PN sequence generated earlier into MATLAB. You can either <a class="reference internal" href="../data.html"><span class="doc std std-doc">export it to a file</span></a>, or load the <a class="reference external" href="https://danjacobellis.github.io/EE445S-lab/_sources/lab5/pn_16384.md.txt">precomputed sequence from a file</a>.</p></li>
-<li><p>Generate an autocorrelation graph for the PN sequence. Make the extent of the autocorrelation plot large enough to show two periods.</p></li>
+<ol>
+<li><p>Fill out the MATLAB code which implements the autocorrelation for a <em>periodic</em> signal represented by an array <code class="docutils literal notranslate"><span class="pre">x</span></code> containing one period.</p>
+<div class="math notranslate nohighlight">
+\[R_{xx}[n] \text{ for periodic signal} = \frac{1}{N}x[n]\star x[n] = \frac{1}{N}\sum_{k=1}^{N}\overline{x[k]}x[n+k]\]</div>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">function</span> <span class="n">autocorr</span> <span class="o">=</span> <span class="n">R</span><span class="p">(</span><span class="n">x</span><span class="p">,</span><span class="n">n</span><span class="p">)</span>
+    <span class="n">N</span> <span class="o">=</span> <span class="n">length</span><span class="p">(</span><span class="n">x</span><span class="p">);</span>
+    <span class="n">autocorr</span> <span class="o">=</span> <span class="mi">0</span><span class="p">;</span>
+    <span class="k">for</span> <span class="n">k</span> <span class="o">=</span> <span class="mi">1</span><span class="p">:</span><span class="n">N</span>
+        <span class="n">k1</span> <span class="o">=</span> <span class="n">k</span><span class="p">;</span>
+        <span class="n">k2</span> <span class="o">=</span> <span class="n">k</span> <span class="o">+</span> <span class="n">n</span><span class="p">;</span>
+        <span class="o">.</span>
+        <span class="o">.</span>
+        <span class="o">.</span>
+        <span class="n">autocorr</span> <span class="o">=</span> <span class="n">autocorr</span> <span class="o">+</span> <span class="n">x</span><span class="p">(</span><span class="n">k1</span><span class="p">)</span><span class="o">*</span><span class="n">x</span><span class="p">(</span><span class="n">k2</span><span class="p">);</span>
+    <span class="n">end</span>
+    <span class="n">autocorr</span> <span class="o">=</span> <span class="n">autocorr</span><span class="o">/</span><span class="n">N</span><span class="p">;</span>
+<span class="n">end</span>
+</pre></div>
+</div>
+</li>
+<li><p>Load the PN sequence generated earlier into MATLAB. You can either <a class="reference internal" href="../data.html"><span class="doc std std-doc">export it from the STM IDE</span></a>, or load the <a class="reference external" href="https://danjacobellis.github.io/EE445S-lab/_sources/lab5/pn_16384.md.txt">precomputed sequence from a text file</a>.</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">pn</span> <span class="o">=</span> <span class="n">readmatrix</span><span class="p">(</span><span class="s1">&#39;pn_16384.txt&#39;</span><span class="p">)</span><span class="s1">&#39;; pn = pn(:);</span>
+<span class="n">pn</span> <span class="o">=</span> <span class="n">fliplr</span><span class="p">(</span><span class="n">dec2bin</span><span class="p">(</span><span class="n">pn</span><span class="p">))</span><span class="s1">&#39;; pn = str2num(pn(:));</span>
+<span class="n">pn</span> <span class="o">=</span> <span class="n">pn</span><span class="o">*</span><span class="mi">2</span><span class="o">-</span><span class="mi">1</span><span class="p">;</span> <span class="n">pn</span><span class="p">(</span><span class="n">end</span><span class="p">)</span> <span class="o">=</span> <span class="p">[];</span>
+</pre></div>
+</div>
+</li>
+<li><p>Generate an autocorrelation graph for the PN sequence. Make the extent of the autocorrelation plot large enough to show two periods.</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">n</span> <span class="o">=</span> <span class="o">-</span><span class="mi">16384</span><span class="p">:</span><span class="mi">16384</span><span class="p">;</span>
+<span class="n">func</span> <span class="o">=</span> <span class="o">@</span><span class="p">(</span><span class="n">n</span><span class="p">)</span> <span class="n">R</span><span class="p">(</span><span class="n">pn</span><span class="p">,</span><span class="n">n</span><span class="p">);</span>
+<span class="n">figure</span><span class="p">;</span> <span class="n">stem</span><span class="p">(</span><span class="n">n</span><span class="p">,</span> <span class="n">arrayfun</span><span class="p">(</span><span class="n">func</span><span class="p">,</span><span class="n">n</span><span class="p">));</span>
+</pre></div>
+</div>
+</li>
 </ol>
+<p><strong>Include the autocorrelation plot in your lab report</strong></p>
 </div>
 </div>
 <div class="section" id="lab-report-contents">

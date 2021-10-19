@@ -95,11 +95,11 @@ $$x_1[n]\star x_2[n] = \sum_{k=-\infty}^{\infty}\overline{x_1[k]}x_2[n+k]$$
 
 The auto-correlation $R_{xx}[k]$ of a discrete-time signal $x[n]$ is the cross-correlation with itself:
 
-$$R_{xx}[k] = x[n]\star x[n] = \sum_{k=-\infty}^{\infty}\overline{x[k]}x[n+k]$$
+$$R_{xx}[n] = x[n]\star x[n] = \sum_{k=-\infty}^{\infty}\overline{x[k]}x[n+k]$$
 
 For periodic signals the summation can be simplified, and the result is often normalized by the period $N$.
 
-$$R_{xx}[k] \text{ for periodic signal} = \frac{1}{N}x[n]\star x[n] = \frac{1}{N}\sum_{k=1}^{N}\overline{x[k]}x[n+k]$$
+$$R_{xx}[n] \text{ for periodic signal} = \frac{1}{N}x[n]\star x[n] = \frac{1}{N}\sum_{k=1}^{N}\overline{x[k]}x[n+k]$$
 
 #### Auto-correlation of a maximal length PN sequence
 

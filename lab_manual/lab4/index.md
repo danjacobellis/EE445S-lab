@@ -134,9 +134,42 @@ In this exercise, we will use the generated PN sequence to scramble and descramb
 
 This exercise will help you understand the properties of PN sequences by calculating their auto correlation in MATLAB.
 
-1. Load the PN sequence generated earlier into MATLAB. You can either [export it to a file][2], or load the [precomputed sequence from a file][3].
+1. Fill out the MATLAB code which implements the autocorrelation for a *periodic* signal represented by an array `x` containing one period.
+    
+    $$R_{xx}[n] \text{ for periodic signal} = \frac{1}{N}x[n]\star x[n] = \frac{1}{N}\sum_{k=1}^{N}\overline{x[k]}x[n+k]$$
 
-2. Generate an autocorrelation graph for the PN sequence. Make the extent of the autocorrelation plot large enough to show two periods.
+    ```
+    function autocorr = R(x,n)
+        N = length(x);
+        autocorr = 0;
+        for k = 1:N
+            k1 = k;
+            k2 = k + n;
+            .
+            .
+            .
+            autocorr = autocorr + x(k1)*x(k2);
+        end
+        autocorr = autocorr/N;
+    end
+    ```
+2. Load the PN sequence generated earlier into MATLAB. You can either [export it from the STM IDE][2], or load the [precomputed sequence from a text file][3].
+
+    ```
+    pn = readmatrix('pn_16384.txt')'; pn = pn(:);
+    pn = fliplr(dec2bin(pn))'; pn = str2num(pn(:));
+    pn = pn*2-1; pn(end) = [];
+    ```
+
+3. Generate an autocorrelation graph for the PN sequence. Make the extent of the autocorrelation plot large enough to show two periods.
+
+    ```
+    n = -16384:16384;
+    func = @(n) R(pn,n);
+    figure; stem(n, arrayfun(func,n));
+    ```
+    
+**Include the autocorrelation plot in your lab report**
 
 ## Lab report contents
 
