@@ -117,7 +117,12 @@
 </li>
 </ul>
 </li>
-<li class="toctree-l2"><a class="reference internal" href="#lab-5-instructions-week-3">Lab 5 instructions: week 3</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#lab-5-instructions-week-3">Lab 5 instructions: week 3</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="#cross-correlation-for-header-detection">Cross-correlation for header detection</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#symbol-timing-recovery">Symbol timing recovery</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#symbol-error-probability">Symbol error probability</a></li>
+</ul>
+</li>
 <li class="toctree-l2"><a class="reference internal" href="#lab-report-contents">Lab report contents</a><ul>
 <li class="toctree-l3"><a class="reference internal" href="#i-introduction">I. Introduction</a></li>
 <li class="toctree-l3"><a class="reference internal" href="#ii-methods">II. Methods</a></li>
@@ -518,6 +523,100 @@
 </div>
 <div class="section" id="lab-5-instructions-week-3">
 <h2>Lab 5 instructions: week 3<a class="headerlink" href="#lab-5-instructions-week-3" title="Permalink to this headline">¶</a></h2>
+<p>In this exercise we will add a symbol clock recovery subsystem and implement the cross-correlation to match the PN header.</p>
+<div class="section" id="cross-correlation-for-header-detection">
+<h3>Cross-correlation for header detection<a class="headerlink" href="#cross-correlation-for-header-detection" title="Permalink to this headline">¶</a></h3>
+<ol>
+<li><p>Create the variables necessary to implement the header detection as an FIR filter including a semaphore variable to track when the header has been detected.</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">int8_t</span> <span class="n">xcorr</span><span class="p">[</span><span class="mi">32</span><span class="p">]</span> <span class="o">=</span> <span class="p">{</span><span class="mi">0</span><span class="p">};</span>
+<span class="n">int8_t</span> <span class="n">header</span><span class="p">[</span><span class="mi">32</span><span class="p">]</span> <span class="o">=</span> <span class="p">{</span><span class="mi">1</span><span class="p">,</span><span class="o">-</span><span class="mi">1</span><span class="p">,</span><span class="o">-</span><span class="mi">1</span><span class="p">,</span><span class="mi">1</span><span class="p">,</span><span class="o">-</span><span class="mi">1</span><span class="p">,</span><span class="mi">1</span><span class="p">,</span><span class="mi">1</span><span class="p">,</span><span class="o">-</span><span class="mi">1</span><span class="p">,</span><span class="o">-</span><span class="mi">1</span><span class="p">,</span><span class="mi">1</span><span class="p">,</span><span class="mi">1</span><span class="p">,</span><span class="mi">1</span><span class="p">,</span><span class="mi">1</span><span class="p">,</span><span class="mi">1</span><span class="p">,</span><span class="o">-</span><span class="mi">1</span><span class="p">,</span><span class="o">-</span><span class="mi">1</span><span class="p">,</span><span class="o">-</span><span class="mi">1</span><span class="p">,</span><span class="mi">1</span><span class="p">,</span><span class="mi">1</span><span class="p">,</span><span class="o">-</span><span class="mi">1</span><span class="p">,</span><span class="mi">1</span><span class="p">,</span><span class="mi">1</span><span class="p">,</span><span class="mi">1</span><span class="p">,</span><span class="o">-</span><span class="mi">1</span><span class="p">,</span><span class="mi">1</span><span class="p">,</span><span class="o">-</span><span class="mi">1</span><span class="p">,</span><span class="mi">1</span><span class="p">,</span><span class="o">-</span><span class="mi">1</span><span class="p">,</span><span class="o">-</span><span class="mi">1</span><span class="p">,</span><span class="o">-</span><span class="mi">1</span><span class="p">,</span><span class="o">-</span><span class="mi">1</span><span class="p">,</span><span class="mi">1</span><span class="p">};</span>
+<span class="n">int8_t</span> <span class="n">r</span> <span class="o">=</span> <span class="mi">0</span><span class="p">;</span>
+<span class="n">int8_t</span> <span class="n">header_matched</span> <span class="o">=</span> <span class="mi">0</span><span class="p">;</span>
+</pre></div>
+</div>
+</li>
+<li><p>Each time a new symbol is processed (i.e. inside the <code class="docutils literal notranslate"><span class="pre">if</span> <span class="pre">(k==15)</span></code> block), map the symbol to either +1 or -1, and store it in the ‘xcorr’ array.</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="k">if</span> <span class="p">(</span><span class="n">Uy</span> <span class="o">&gt;</span> <span class="mi">0</span><span class="p">){</span><span class="n">xcorr</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span> <span class="o">=</span> <span class="mi">1</span><span class="p">;}</span>
+<span class="k">else</span><span class="p">{</span><span class="n">xcorr</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span> <span class="o">=</span> <span class="o">-</span><span class="mi">1</span><span class="p">;}</span>
+</pre></div>
+</div>
+</li>
+<li><p>Perform the correlation as an FIR filter (the header variable as defined above has already been flipped).</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">r</span> <span class="o">=</span> <span class="mi">0</span><span class="p">;</span>
+<span class="k">for</span> <span class="p">(</span><span class="n">uint32_t</span> <span class="n">i_hdr</span> <span class="o">=</span> <span class="mi">0</span><span class="p">;</span> <span class="n">i_hdr</span> <span class="o">&lt;</span> <span class="mi">32</span><span class="p">;</span> <span class="n">i_hdr</span> <span class="o">+=</span><span class="mi">1</span><span class="p">)</span>
+<span class="p">{</span>
+    <span class="n">r</span> <span class="o">+=</span> <span class="n">xcorr</span><span class="p">[</span><span class="n">i_hdr</span><span class="p">]</span><span class="o">*</span><span class="n">header</span><span class="p">[</span><span class="n">i_hdr</span><span class="p">];</span>
+<span class="p">}</span>
+<span class="k">for</span> <span class="p">(</span><span class="n">uint32_t</span> <span class="n">i_hdr</span> <span class="o">=</span> <span class="mi">31</span><span class="p">;</span> <span class="n">i_hdr</span> <span class="o">&gt;</span> <span class="mi">0</span><span class="p">;</span> <span class="n">i_hdr</span> <span class="o">-=</span><span class="mi">1</span><span class="p">)</span>
+<span class="p">{</span>
+    <span class="n">xcorr</span><span class="p">[</span><span class="n">i_hdr</span><span class="p">]</span> <span class="o">=</span> <span class="n">xcorr</span><span class="p">[</span><span class="n">i_hdr</span> <span class="o">-</span> <span class="mi">1</span><span class="p">];</span>
+<span class="p">}</span>
+</pre></div>
+</div>
+</li>
+<li><p>If the cross correlation reaches the maximum possible value, update the semaphore.</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="k">if</span> <span class="p">(</span><span class="n">r</span> <span class="o">&gt;</span> <span class="mi">30</span><span class="p">)</span> <span class="p">{</span><span class="n">header_matched</span> <span class="o">=</span> <span class="mi">1</span><span class="p">;}</span>
+</pre></div>
+</div>
+</li>
+<li><p>Move the data collection code block into an if statement so that it only occurs after the header is detected</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="k">if</span> <span class="p">(</span><span class="n">header_matched</span><span class="p">)</span>
+<span class="p">{</span>
+    <span class="k">if</span> <span class="p">(</span><span class="n">Uy</span><span class="o">&gt;</span><span class="mi">0</span><span class="p">){</span> <span class="n">data</span><span class="p">[</span><span class="n">i_word</span><span class="p">]</span> <span class="o">|=</span> <span class="p">(</span><span class="mi">1</span><span class="o">&lt;&lt;</span><span class="n">i_bit</span><span class="p">);</span> <span class="p">}</span>
+    <span class="o">.</span>
+    <span class="o">.</span>
+    <span class="o">.</span>
+<span class="p">}</span>
+
+</pre></div>
+</div>
+</li>
+<li><p>Repeat the transmission and put a breakpoint after the image is displayed. The image should appear with proper alignment.</p></li>
+</ol>
+</div>
+<div class="section" id="symbol-timing-recovery">
+<h3>Symbol timing recovery<a class="headerlink" href="#symbol-timing-recovery" title="Permalink to this headline">¶</a></h3>
+<ol>
+<li><p>Design two second order IIR bandpass filters in the MATLAB filter designer with the following parameters</p>
+<p><strong>BPF 1</strong></p>
+<ul class="simple">
+<li><p>Design method: Elliptic</p></li>
+<li><p>Filter order <span class="math notranslate nohighlight">\(N=2\)</span></p></li>
+<li><p>Sampling Frequency <span class="math notranslate nohighlight">\(F_s= 48 \text{ kHz}\)</span></p></li>
+<li><p><span class="math notranslate nohighlight">\(F_{\text{pass1}}=1.4\text{ kHz}\)</span></p></li>
+<li><p><span class="math notranslate nohighlight">\(F_{\text{pass2}}=1.5\text{ kHz}\)</span></p></li>
+<li><p><span class="math notranslate nohighlight">\(A_{\text{stop}}=80 \text{dB}\)</span></p></li>
+<li><p><span class="math notranslate nohighlight">\(A_{\text{pass}}=1 \text{dB}\)</span></p></li>
+</ul>
+<p><strong>BPF 2</strong></p>
+<ul class="simple">
+<li><p>Design method: Elliptic</p></li>
+<li><p>Filter order <span class="math notranslate nohighlight">\(N=2\)</span></p></li>
+<li><p>Sampling Frequency <span class="math notranslate nohighlight">\(F_s= 48 \text{ kHz}\)</span></p></li>
+<li><p><span class="math notranslate nohighlight">\(F_{\text{pass1}}=3.8\text{ kHz}\)</span></p></li>
+<li><p><span class="math notranslate nohighlight">\(F_{\text{pass2}}=4.2\text{ kHz}\)</span></p></li>
+<li><p><span class="math notranslate nohighlight">\(A_{\text{stop}}=80 \text{dB}\)</span></p></li>
+<li><p><span class="math notranslate nohighlight">\(A_{\text{pass}}=1 \text{dB}\)</span></p></li>
+</ul>
+</li>
+<li><p>Apply the first bandpass filter to the output of the Costas loop <code class="docutils literal notranslate"><span class="pre">Uy</span></code>.</p></li>
+<li><p>Square the output of the first bandpass filter.</p></li>
+<li><p>Apply the second bandpass filter after the squaring block.</p></li>
+<li><p>Send the output to the DAC and display it on the oscilloscope. The peaks of this clock signal indicate when to sample each symbol.</p></li>
+</ol>
+</div>
+<div class="section" id="symbol-error-probability">
+<h3>Symbol error probability<a class="headerlink" href="#symbol-error-probability" title="Permalink to this headline">¶</a></h3>
+<ol>
+<li><p>In MATLAB, plot the theoretical symbol error probability as a function of signal to noise ratio for <span class="math notranslate nohighlight">\(M = 2, 4, 8.\)</span> Put the x-axis SNR variable in dB.</p>
+<div class="math notranslate nohighlight">
+\[ P_e = \frac{2(M-1)}{M}\times Q\left( \sqrt{\text{SNR}\times \frac{3}{M^2 -1}} \right)\]</div>
+<p>The <a class="reference external" href="https://en.wikipedia.org/wiki/Q-function"><span class="math notranslate nohighlight">\(Q-\)</span>function</a> is related the the <a class="reference external" href="https://en.wikipedia.org/wiki/Normal_distribution#Cumulative_distribution_function">Gaussian cumulative distribution function <span class="math notranslate nohighlight">\(\Phi(x)\)</span></a> by <span class="math notranslate nohighlight">\(Q(x) = 1-\Phi(x)\)</span>. If you have the communications toolbox installed, you can simply use ‘qfunc’ in MATLAB. Otherwise, you can use the closely related <a class="reference external" href="https://en.wikipedia.org/wiki/Error_function">error function</a> ‘erf’.</p>
+<div class="math notranslate nohighlight">
+\[ \Phi(x) = \frac{1}{2} \left[ 1 + \text{erf}\left( \frac{x}{\sqrt 2} \right) \right] \]</div>
+</li>
+</ol>
+</div>
 </div>
 <div class="section" id="lab-report-contents">
 <h2>Lab report contents<a class="headerlink" href="#lab-report-contents" title="Permalink to this headline">¶</a></h2>

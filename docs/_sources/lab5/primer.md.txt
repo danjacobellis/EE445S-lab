@@ -75,9 +75,11 @@ In the 2-PAM system described above, every bit of data required 16 samples to re
 
 #### Polyphase filter bank for pulse shaping
 
-Recall that we upsampled the data by a factor of $L$ before applying the pulse shaping filter. Using the standard FIR filter structure, this would mean that a large fraction, $\frac{L-1}{L}$, of the multiply-accumulate operations used in the filter are wasted on zeros! There are a variety of [techniques to increase the efficiency] by eliminating unnecessary multiply-by-zero operations. The most ubiquitous is the polyphase filter bank.
+Recall that we upsampled the data by a factor of $L$ before applying the pulse shaping filter. Using the standard FIR filter structure, this would mean that a large fraction, $\frac{L-1}{L}$, of the multiply-accumulate operations used in the filter are wasted on zeros! The polyphase filterbank structure solves this problem.
 
 ![](../img/polyphase_filter_bank.svg)
+
+The diagram above depicts the polyphase structure to implement an 8-tap FIR filter with impulse response $g[n]$ after upsampling by a factor of $L=4$. The filter coefficients $g[n]$ are divided into $L$ smaller filters of length $\frac{8}{L}=2$. Even though the upsampling operation quadrupled the sampling rate of the output, these smaller filters are allowed to run at the original rate, reducing the computational cost by a factor of roughly $L=4$. By allowing the commutator the cycle through these four smaller filters, we produce the same output signal as if we had upsampled first, then applied an FIR filter at a higher rate.
 
 ### Receiver
 

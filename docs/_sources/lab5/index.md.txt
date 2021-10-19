@@ -321,6 +321,99 @@ In this exercise we will transmit the tree image (either from MATLAB or your lab
 
 ## Lab 5 instructions: week 3
 
+In this exercise we will add a symbol clock recovery subsystem and implement the cross-correlation to match the PN header.
+
+### Cross-correlation for header detection
+
+1. Create the variables necessary to implement the header detection as an FIR filter including a semaphore variable to track when the header has been detected.
+
+    ```
+    int8_t xcorr[32] = {0};
+    int8_t header[32] = {1,-1,-1,1,-1,1,1,-1,-1,1,1,1,1,1,-1,-1,-1,1,1,-1,1,1,1,-1,1,-1,1,-1,-1,-1,-1,1};
+    int8_t r = 0;
+    int8_t header_matched = 0;
+    ```
+
+2. Each time a new symbol is processed (i.e. inside the `if (k==15)` block), map the symbol to either +1 or -1, and store it in the 'xcorr' array.
+
+    ```
+    if (Uy > 0){xcorr[0] = 1;}
+    else{xcorr[0] = -1;}
+    ```
+
+3. Perform the correlation as an FIR filter (the header variable as defined above has already been flipped).
+
+    ```
+    r = 0;
+    for (uint32_t i_hdr = 0; i_hdr < 32; i_hdr +=1)
+    {
+        r += xcorr[i_hdr]*header[i_hdr];
+    }
+    for (uint32_t i_hdr = 31; i_hdr > 0; i_hdr -=1)
+    {
+        xcorr[i_hdr] = xcorr[i_hdr - 1];
+    }
+    ```
+
+4. If the cross correlation reaches the maximum possible value, update the semaphore.
+
+    ```
+    if (r > 30) {header_matched = 1;}
+    ```
+
+5. Move the data collection code block into an if statement so that it only occurs after the header is detected
+
+    ```
+    if (header_matched)
+    {
+        if (Uy>0){ data[i_word] |= (1<<i_bit); }
+        .
+        .
+        .
+    }
+
+6. Repeat the transmission and put a breakpoint after the image is displayed. The image should appear with proper alignment.
+
+### Symbol timing recovery
+
+1. Design two second order IIR bandpass filters in the MATLAB filter designer with the following parameters
+
+    **BPF 1**
+    * Design method: Elliptic
+    * Filter order $N=2$
+    * Sampling Frequency $F_s= 48 \text{ kHz}$
+    * $F_{\text{pass1}}=1.4\text{ kHz}$
+    * $F_{\text{pass2}}=1.5\text{ kHz}$
+    * $A_{\text{stop}}=80 \text{dB}$
+    * $A_{\text{pass}}=1 \text{dB}$
+
+    **BPF 2**
+    * Design method: Elliptic
+    * Filter order $N=2$
+    * Sampling Frequency $F_s= 48 \text{ kHz}$
+    * $F_{\text{pass1}}=3.8\text{ kHz}$
+    * $F_{\text{pass2}}=4.2\text{ kHz}$
+    * $A_{\text{stop}}=80 \text{dB}$
+    * $A_{\text{pass}}=1 \text{dB}$
+
+2. Apply the first bandpass filter to the output of the Costas loop `Uy`.
+
+3. Square the output of the first bandpass filter.
+
+4. Apply the second bandpass filter after the squaring block.
+
+5. Send the output to the DAC and display it on the oscilloscope. The peaks of this clock signal indicate when to sample each symbol.
+
+### Symbol error probability
+
+1. In MATLAB, plot the theoretical symbol error probability as a function of signal to noise ratio for $M = 2, 4, 8.$ Put the x-axis SNR variable in dB. 
+
+    $$ P_e = \frac{2(M-1)}{M}\times Q\left( \sqrt{\text{SNR}\times \frac{3}{M^2 -1}} \right)$$
+    
+    The [$Q-$function][6] is related the the [Gaussian cumulative distribution function $\Phi(x)$][7] by $Q(x) = 1-\Phi(x)$. If you have the communications toolbox installed, you can simply use 'qfunc' in MATLAB. Otherwise, you can use the closely related [error function][8] 'erf'.
+    
+    $$ \Phi(x) = \frac{1}{2} \left[ 1 + \text{erf}\left( \frac{x}{\sqrt 2} \right) \right] $$
+
 ## Lab report contents
 
 Be sure to include everything listed in this section when you submit your lab report. The goal of the report is to help cement what you learned in memory. For sections I, II, and IV, imagine your audience is a student who is your peer but who has not yet completed the lab.
@@ -353,3 +446,6 @@ In this section, discuss the takeaway from each lab. You can mention any intuiti
 [3]:https://danjacobellis.github.io/EE445S-lab/_images/tree.png
 [4]:https://github.com/danjacobellis/EE445S-lab/raw/main/starter_code/receiver_demo.m
 [5]:../data.md
+[6]:https://en.wikipedia.org/wiki/Q-function
+[7]:https://en.wikipedia.org/wiki/Normal_distribution#Cumulative_distribution_function
+[8]:https://en.wikipedia.org/wiki/Error_function
