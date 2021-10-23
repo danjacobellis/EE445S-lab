@@ -7,7 +7,7 @@
   
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   
-  <title>Lab 5. Digital Data Transmission by Baseband Pulse Amplitude Modulation (PAM) &mdash; 445S Lab Manual  documentation</title>
+  <title>Lab 5. Quadrature Amplitude Modulation (QAM) &mdash; 445S Lab Manual  documentation</title>
   
 
   
@@ -43,8 +43,7 @@
     
     <link rel="index" title="Index" href="../genindex.html" />
     <link rel="search" title="Search" href="../search.html" />
-    <link rel="next" title="Lab 6 Primer" href="../lab6/primer.html" />
-    <link rel="prev" title="Lab 5 Primer" href="primer.html" /> 
+    <link rel="prev" title="Lab 6 Primer" href="primer.html" /> 
 </head>
 
 <body class="wy-body-for-nav">
@@ -101,11 +100,13 @@
 <li class="toctree-l1"><a class="reference internal" href="../lab3/index.html">Lab 3. Digital Filters</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../lab4/primer.html">Lab 4 Primer</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../lab4/index.html">Lab 4. Pseudo-Random Binary Sequences and Data Scramblers</a></li>
-<li class="toctree-l1"><a class="reference internal" href="primer.html">Lab 5 Primer</a></li>
-<li class="toctree-l1 current"><a class="current reference internal" href="#">Lab 5. Digital Data Transmission by Baseband Pulse Amplitude Modulation (PAM)</a><ul>
+<li class="toctree-l1"><a class="reference internal" href="../lab5/primer.html">Lab 5 Primer</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../lab5/index.html">Lab 5. Digital Data Transmission by Baseband Pulse Amplitude Modulation (PAM)</a></li>
+<li class="toctree-l1"><a class="reference internal" href="primer.html">Lab 6 Primer</a></li>
+<li class="toctree-l1 current"><a class="current reference internal" href="#">Lab 5. Quadrature Amplitude Modulation (QAM)</a><ul>
 <li class="toctree-l2"><a class="reference internal" href="#aim-of-the-experiment">Aim of the experiment</a></li>
 <li class="toctree-l2"><a class="reference internal" href="#reading-assignment">Reading assignment</a></li>
-<li class="toctree-l2"><a class="reference internal" href="#lab-5-instructions-week-1">Lab 5 instructions: week 1</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="#lab-6-instructions">Lab 6 instructions</a><ul>
 <li class="toctree-l3"><a class="reference internal" href="#simulation-in-matlab">Simulation in MATLAB</a></li>
 <li class="toctree-l3"><a class="reference internal" href="#setting-up-the-transmitter-on-the-stm32-board">Setting up the transmitter on the STM32 board</a></li>
 <li class="toctree-l3"><a class="reference internal" href="#examining-the-transmission-in-matlab">Examining the transmission in MATLAB</a></li>
@@ -136,8 +137,6 @@
 </li>
 </ul>
 </li>
-<li class="toctree-l1"><a class="reference internal" href="../lab6/primer.html">Lab 6 Primer</a></li>
-<li class="toctree-l1"><a class="reference internal" href="../lab6/index.html">Lab 5. Quadrature Amplitude Modulation (QAM)</a></li>
 </ul>
 
             
@@ -186,13 +185,13 @@
     
       <li><a href="../index.html" class="icon icon-home"></a> &raquo;</li>
         
-      <li>Lab 5. Digital Data Transmission by Baseband Pulse Amplitude Modulation (PAM)</li>
+      <li>Lab 5. Quadrature Amplitude Modulation (QAM)</li>
     
     
       <li class="wy-breadcrumbs-aside">
         
           
-            <a href="../_sources/lab5/index.md.txt" rel="nofollow"> View page source</a>
+            <a href="../_sources/lab6/index.md.txt" rel="nofollow"> View page source</a>
           
         
       </li>
@@ -205,56 +204,49 @@
           <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
            <div itemprop="articleBody">
             
-  <div class="tex2jax_ignore mathjax_ignore section" id="lab-5-digital-data-transmission-by-baseband-pulse-amplitude-modulation-pam">
-<h1>Lab 5. Digital Data Transmission by Baseband Pulse Amplitude Modulation (PAM)<a class="headerlink" href="#lab-5-digital-data-transmission-by-baseband-pulse-amplitude-modulation-pam" title="Permalink to this headline">¶</a></h1>
+  <div class="tex2jax_ignore mathjax_ignore section" id="lab-5-quadrature-amplitude-modulation-qam">
+<h1>Lab 5. Quadrature Amplitude Modulation (QAM)<a class="headerlink" href="#lab-5-quadrature-amplitude-modulation-qam" title="Permalink to this headline">¶</a></h1>
 <div class="section" id="aim-of-the-experiment">
 <h2>Aim of the experiment<a class="headerlink" href="#aim-of-the-experiment" title="Permalink to this headline">¶</a></h2>
-<p>In this experiment, you will learn the basics concepts of digital communications like pulse shaping filters, Nyquist criterion, eye diagram, inter-symbol interference and clock recovery. You will learn digital data transmission using baseband pulse amplitude modulation.</p>
-<p>Before you start with the experiment, it is necessary that you have an understanding (at some level) of the following concepts:</p>
+<p>This experiment primarily concerns the design and implementation of a Quadrature Amplitude Modulation (QAM) transmitter. QAM is a widely used method of transmitting digital data over bandpass channels. QAM is a popular choice because of its bandwidth efficiency and its ability to compensate for linear channel distortion.</p>
+<p>Before you start with the experiment, it is necessary that you have an understanding at some level of the following concepts:</p>
 <ul class="simple">
-<li><p>Baseband PAM</p></li>
-<li><p>Nyquist criterion</p></li>
-<li><p>Inter-symbol Interference (ISI)</p></li>
-<li><p>Pulse shaping (raised cosine baseband filtering)</p></li>
-<li><p>Eye diagrams</p></li>
-<li><p>Interpolation filter bank</p></li>
-<li><p>Symbol clock recovery</p></li>
+<li><p>Transmitter design</p>
+<ul>
+<li><p>Conversion of a bit stream to a discrete-time baseband signal</p></li>
+<li><p>Conversion of a discrete-time basedband signal to a continuous-time signal for transmission</p></li>
+</ul>
+</li>
+<li><p>Receiver design</p>
+<ul>
+<li><p>Conversion of a continuous-time received signal to a discrete-time basedband signal</p></li>
+<li><p>Conversion of a discrete-time baseband signal to a bit stream</p></li>
+</ul>
+</li>
 </ul>
 </div>
 <div class="section" id="reading-assignment">
 <h2>Reading assignment<a class="headerlink" href="#reading-assignment" title="Permalink to this headline">¶</a></h2>
 <ul class="simple">
-<li><p>Digital Signal Processing using Arm Cortex-M based Microcontrollers by Cem Ünsalan, M. Erkin Yücel, H. Deniz Gürhan.</p>
-<ul>
-<li><p>Chapter 9, sections 1-6</p></li>
-</ul>
-</li>
 <li><p>Software Receiver Design by C. Richard Johnson, Jr., William A. Sethares and Andrew Klein</p>
 <ul>
-<li><p>Sections 2.6-2.16</p></li>
-<li><p>Sections 9.1-9.4</p></li>
-<li><p>Sections 10.1-10.4</p></li>
-<li><p>Sections 11.1-11.6</p></li>
+<li><p>Sections 12.1-12.4</p></li>
+<li><p>Sections 13.1-13.3</p></li>
+<li><p>Chapter 16</p></li>
 </ul>
 </li>
-<li><p>Course reader</p>
-<ul>
-<li><p>Lecture 7: Interpolation and Pulse Shaping</p></li>
-<li><p>Lecture 13: Digital Pulse Amplitude Modulation (PAM transmitter)</p></li>
-<li><p>Lecture 12: Channel Impairments (communication channel)</p></li>
-<li><p>Lecture 14: Matched Filtering (PAM receiver)</p></li>
-</ul>
-</li>
-<li><p>Common Microcontroller Software Interface Standard (CMSIS) Reference</p>
-<ul>
-<li><p><a class="reference external" href="https://arm-software.github.io/CMSIS_5/DSP/html/group__FIR__Interpolate.html">FIR Interpolating Filter</a></p></li>
-</ul>
-</li>
+<li><p>Course reader</p></li>
+<li><p>Lecture 15 slides on QAM Transmission</p></li>
+<li><p>Lecture 16 slides on QAM Reception</p></li>
+<li><p>Appendix H Modulation Example Handout</p></li>
+<li><p>Appendix I Modulation Summary Handout</p></li>
+<li><p>Appendix M Symbol Recovery Handout</p></li>
+<li><p>Appendix P Communication Performance of PAM vs. QAM Handout</p></li>
 </ul>
 </div>
-<div class="section" id="lab-5-instructions-week-1">
-<h2>Lab 5 instructions: week 1<a class="headerlink" href="#lab-5-instructions-week-1" title="Permalink to this headline">¶</a></h2>
-<p>In this exercise, we will transmit the scrambled tree image from the STM board to a PC running a receiver to recover the image.</p>
+<div class="section" id="lab-6-instructions">
+<h2>Lab 6 instructions<a class="headerlink" href="#lab-6-instructions" title="Permalink to this headline">¶</a></h2>
+<p>In this exercise, we will use QAM to transmit the tree image.</p>
 <div class="section" id="simulation-in-matlab">
 <h3>Simulation in MATLAB<a class="headerlink" href="#simulation-in-matlab" title="Permalink to this headline">¶</a></h3>
 <ol>
@@ -657,8 +649,7 @@
           </div>
           <footer>
     <div class="rst-footer-buttons" role="navigation" aria-label="footer navigation">
-        <a href="../lab6/primer.html" class="btn btn-neutral float-right" title="Lab 6 Primer" accesskey="n" rel="next">Next <span class="fa fa-arrow-circle-right" aria-hidden="true"></span></a>
-        <a href="primer.html" class="btn btn-neutral float-left" title="Lab 5 Primer" accesskey="p" rel="prev"><span class="fa fa-arrow-circle-left" aria-hidden="true"></span> Previous</a>
+        <a href="primer.html" class="btn btn-neutral float-left" title="Lab 6 Primer" accesskey="p" rel="prev"><span class="fa fa-arrow-circle-left" aria-hidden="true"></span> Previous</a>
     </div>
 
   <hr/>
