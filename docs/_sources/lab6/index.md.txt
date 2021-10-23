@@ -97,18 +97,18 @@ In this exercise, we will use QAM to transmit the tree image.
 4. Initialize the interpolating filters in the lab_init function:
 
     ```
-    arm_fir_interpolate_init_f32 (&filter_instance_I, upsampling_factor, num_taps, pulse_shaping_coeffs, state, FRAME_SIZE/4);
-        arm_fir_interpolate_init_f32 (&filter_instance_Q, upsampling_factor, num_taps, pulse_shaping_coeffs, state, FRAME_SIZE/4);
+    arm_fir_interpolate_init_f32 (&filter_instance[0], upsampling_factor, num_taps, pulse_shaping_coeffs, state[0], FRAME_SIZE/4);
+    arm_fir_interpolate_init_f32 (&filter_instance[1], upsampling_factor, num_taps, pulse_shaping_coeffs, state[1], FRAME_SIZE/4);
     ```
     
 5. In process_input_buffer, construct the buffer of symbols that we will send to the arm_fir_interpolate_f32 function. 
 
     ```
-    for (uint32_t i_sample = 0; i_sample<FRAME_SIZE/64; i_sample+=1)
+    for (uint32_t i_sample = 0; i_sample < FRAME_SIZE/64; i_sample+=1)
     {
         for (uint32_t i_comp = 0; i_comp < 2; i_comp +=1)
         {
-            filter_in[i_comp][i_sample] = ( data_stream[i_word] & (1<<i_bit) ) >> i_bit;
+            filter_in[i_comp][i_sample] = (data_stream[i_word] & (1<<i_bit)) >> i_bit;
             filter_in[i_comp][i_sample] = (filter_in[i_comp][i_sample]*2) - 1;
 
             i_bit += 1;
@@ -119,7 +119,6 @@ In this exercise, we will use QAM to transmit the tree image.
                 if (i_word > 512){i_word = 0;}
             }
         }
-
     }
     ```
 
@@ -154,20 +153,14 @@ In this exercise, we will use QAM to transmit the tree image.
 3. Create a spectrogram for the recorded transmission. **Compare this to your spectrogram from the PAM transmission. By how much did the bandwidth change?**
 
     ```
-    load scrambled;
+    load QAM;
     figure; spectrogram(QAM,2^10,0,2^10,48000,'yaxis');
 
-4. Run the [QAM receiver demo][4] in MATLAB using the transmission that your recorded. Try to adjust the parameters to recover the tree image. **Show your recovered tree image to the TA.**
+4. Run the [QAM receiver demo][2] in MATLAB using the transmission that your recorded. Try to adjust the parameters to recover the tree image. **Show your recovered tree image to the TA.**
 
 ## Lab report contents
 
-Enjoy Thanksgiving Break!
+Enjoy Thanksgiving break!
 
 [1]:https://arm-software.github.io/CMSIS_5/DSP/html/group__FIR__Interpolate.html
-[2]:https://danjacobellis.github.io/EE445S-lab/_sources/lab5/pn_16384.md.txt
-[3]:https://danjacobellis.github.io/EE445S-lab/_images/tree.png
-[4]:https://github.com/danjacobellis/EE445S-lab/raw/main/starter_code/receiver_demo.m
-[5]:../data.md
-[6]:https://en.wikipedia.org/wiki/Q-function
-[7]:https://en.wikipedia.org/wiki/Normal_distribution#Cumulative_distribution_function
-[8]:https://en.wikipedia.org/wiki/Error_function
+[2]:https://github.com/danjacobellis/EE445S-lab/raw/main/starter_code/QAM_receiver_demo.m
