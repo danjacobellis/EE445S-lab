@@ -7,7 +7,7 @@
   
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   
-  <title>Lab 5. Quadrature Amplitude Modulation (QAM) &mdash; 445S Lab Manual  documentation</title>
+  <title>Lab 6. Quadrature Amplitude Modulation (QAM) &mdash; 445S Lab Manual  documentation</title>
   
 
   
@@ -103,38 +103,15 @@
 <li class="toctree-l1"><a class="reference internal" href="../lab5/primer.html">Lab 5 Primer</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../lab5/index.html">Lab 5. Digital Data Transmission by Baseband Pulse Amplitude Modulation (PAM)</a></li>
 <li class="toctree-l1"><a class="reference internal" href="primer.html">Lab 6 Primer</a></li>
-<li class="toctree-l1 current"><a class="current reference internal" href="#">Lab 5. Quadrature Amplitude Modulation (QAM)</a><ul>
+<li class="toctree-l1 current"><a class="current reference internal" href="#">Lab 6. Quadrature Amplitude Modulation (QAM)</a><ul>
 <li class="toctree-l2"><a class="reference internal" href="#aim-of-the-experiment">Aim of the experiment</a></li>
 <li class="toctree-l2"><a class="reference internal" href="#reading-assignment">Reading assignment</a></li>
 <li class="toctree-l2"><a class="reference internal" href="#lab-6-instructions">Lab 6 instructions</a><ul>
-<li class="toctree-l3"><a class="reference internal" href="#simulation-in-matlab">Simulation in MATLAB</a></li>
 <li class="toctree-l3"><a class="reference internal" href="#setting-up-the-transmitter-on-the-stm32-board">Setting up the transmitter on the STM32 board</a></li>
 <li class="toctree-l3"><a class="reference internal" href="#examining-the-transmission-in-matlab">Examining the transmission in MATLAB</a></li>
 </ul>
 </li>
-<li class="toctree-l2"><a class="reference internal" href="#lab-5-instructions-week-2">Lab 5 instructions: week 2</a><ul>
-<li class="toctree-l3"><a class="reference internal" href="#costas-loop-for-carrier-recovery">Costas loop for carrier recovery</a><ul>
-<li class="toctree-l4"><a class="reference internal" href="#symbol-recovery-by-downsampling-and-quantization">Symbol recovery by downsampling and quantization</a></li>
-</ul>
-</li>
-</ul>
-</li>
-<li class="toctree-l2"><a class="reference internal" href="#lab-5-instructions-week-3">Lab 5 instructions: week 3</a><ul>
-<li class="toctree-l3"><a class="reference internal" href="#cross-correlation-for-header-detection">Cross-correlation for header detection</a></li>
-<li class="toctree-l3"><a class="reference internal" href="#symbol-timing-recovery">Symbol timing recovery</a></li>
-<li class="toctree-l3"><a class="reference internal" href="#symbol-error-probability">Symbol error probability</a></li>
-</ul>
-</li>
-<li class="toctree-l2"><a class="reference internal" href="#lab-report-contents">Lab report contents</a><ul>
-<li class="toctree-l3"><a class="reference internal" href="#i-introduction">I. Introduction</a></li>
-<li class="toctree-l3"><a class="reference internal" href="#ii-methods">II. Methods</a></li>
-<li class="toctree-l3"><a class="reference internal" href="#iii-results-from-lab-exercise">III. Results from lab exercise</a><ul>
-<li class="toctree-l4"><a class="reference internal" href="#week-one">Week one</a></li>
-</ul>
-</li>
-<li class="toctree-l3"><a class="reference internal" href="#iv-discussion">IV. Discussion</a></li>
-</ul>
-</li>
+<li class="toctree-l2"><a class="reference internal" href="#lab-report-contents">Lab report contents</a></li>
 </ul>
 </li>
 </ul>
@@ -185,7 +162,7 @@
     
       <li><a href="../index.html" class="icon icon-home"></a> &raquo;</li>
         
-      <li>Lab 5. Quadrature Amplitude Modulation (QAM)</li>
+      <li>Lab 6. Quadrature Amplitude Modulation (QAM)</li>
     
     
       <li class="wy-breadcrumbs-aside">
@@ -204,8 +181,8 @@
           <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
            <div itemprop="articleBody">
             
-  <div class="tex2jax_ignore mathjax_ignore section" id="lab-5-quadrature-amplitude-modulation-qam">
-<h1>Lab 5. Quadrature Amplitude Modulation (QAM)<a class="headerlink" href="#lab-5-quadrature-amplitude-modulation-qam" title="Permalink to this headline">¶</a></h1>
+  <div class="tex2jax_ignore mathjax_ignore section" id="lab-6-quadrature-amplitude-modulation-qam">
+<h1>Lab 6. Quadrature Amplitude Modulation (QAM)<a class="headerlink" href="#lab-6-quadrature-amplitude-modulation-qam" title="Permalink to this headline">¶</a></h1>
 <div class="section" id="aim-of-the-experiment">
 <h2>Aim of the experiment<a class="headerlink" href="#aim-of-the-experiment" title="Permalink to this headline">¶</a></h2>
 <p>This experiment primarily concerns the design and implementation of a Quadrature Amplitude Modulation (QAM) transmitter. QAM is a widely used method of transmitting digital data over bandpass channels. QAM is a popular choice because of its bandwidth efficiency and its ability to compensate for linear channel distortion.</p>
@@ -247,35 +224,6 @@
 <div class="section" id="lab-6-instructions">
 <h2>Lab 6 instructions<a class="headerlink" href="#lab-6-instructions" title="Permalink to this headline">¶</a></h2>
 <p>In this exercise, we will use QAM to transmit the tree image.</p>
-<div class="section" id="simulation-in-matlab">
-<h3>Simulation in MATLAB<a class="headerlink" href="#simulation-in-matlab" title="Permalink to this headline">¶</a></h3>
-<ol>
-<li><p>Run the following code which simulates the generation of the transmitted signal. Please download the <a class="reference external" href="https://danjacobellis.github.io/EE445S-lab/_sources/lab5/pn_16384.md.txt">file containing the PN sequence from lab four</a>, and the <a class="reference external" href="https://danjacobellis.github.io/EE445S-lab/_images/tree.png">tree image</a>. Ensure that both are accessible on the MATLAB path.</p>
-<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">f0</span> <span class="o">=</span> <span class="mi">12000</span><span class="p">;</span> <span class="n">fs</span> <span class="o">=</span> <span class="mi">48000</span><span class="p">;</span> <span class="n">sps</span> <span class="o">=</span> <span class="mi">16</span><span class="p">;</span> <span class="n">fsym</span> <span class="o">=</span> <span class="n">fs</span><span class="o">/</span><span class="n">sps</span><span class="p">;</span>
-<span class="n">pulse_shaping_filter</span> <span class="o">=</span> <span class="n">rcosdesign</span><span class="p">(</span><span class="mf">0.8</span><span class="p">,</span><span class="mi">4</span><span class="p">,</span><span class="n">sps</span><span class="p">,</span><span class="s1">&#39;normal&#39;</span><span class="p">);</span>
-<span class="n">carrier</span> <span class="o">=</span> <span class="o">@</span><span class="p">(</span><span class="n">n</span><span class="p">,</span><span class="n">theta</span><span class="p">)</span> <span class="n">cos</span><span class="p">(</span><span class="mi">2</span><span class="o">*</span><span class="n">pi</span><span class="o">*</span><span class="p">(</span><span class="n">f0</span><span class="o">/</span><span class="n">fs</span><span class="p">)</span><span class="o">*</span><span class="n">n</span> <span class="o">+</span> <span class="n">theta</span><span class="p">);</span>
-<span class="n">header</span> <span class="o">=</span> <span class="n">str2num</span><span class="p">(</span><span class="n">fliplr</span><span class="p">(</span><span class="n">dec2bin</span><span class="p">(</span><span class="mi">2524737185</span><span class="p">))</span><span class="s1">&#39;);</span>
-<span class="n">serialized_data</span> <span class="o">=</span> <span class="n">reshape</span><span class="p">(</span><span class="n">imread</span><span class="p">(</span><span class="s1">&#39;tree.png&#39;</span><span class="p">),[</span><span class="mi">1</span><span class="p">,</span><span class="mi">128</span><span class="o">^</span><span class="mi">2</span><span class="p">])</span><span class="s1">&#39;;</span>
-<span class="n">pn16k</span> <span class="o">=</span> <span class="n">readmatrix</span><span class="p">(</span><span class="s1">&#39;pn_16384.txt&#39;</span><span class="p">)</span><span class="s1">&#39;; pn16k = pn16k(:);</span>
-<span class="n">pn16k</span> <span class="o">=</span> <span class="n">fliplr</span><span class="p">(</span><span class="n">dec2bin</span><span class="p">(</span><span class="n">pn16k</span><span class="p">))</span><span class="s1">&#39;; pn16k = str2num(pn16k(:));</span>
-<span class="n">scrambled</span> <span class="o">=</span> <span class="n">mod</span><span class="p">(</span><span class="n">serialized_data</span> <span class="o">+</span> <span class="n">pn16k</span><span class="p">,</span><span class="mi">2</span><span class="p">);</span>
-<span class="n">upsampled_data</span> <span class="o">=</span> <span class="n">upsample</span><span class="p">([</span><span class="n">header</span><span class="p">;</span> <span class="n">scrambled</span><span class="p">]</span><span class="o">*</span><span class="mi">2</span><span class="o">-</span><span class="mi">1</span><span class="p">,</span><span class="mi">16</span><span class="p">);</span>
-<span class="n">sequence_of_pulses</span> <span class="o">=</span> <span class="n">conv</span><span class="p">(</span><span class="n">upsampled_data</span><span class="p">,</span><span class="n">pulse_shaping_filter</span><span class="p">,</span><span class="s1">&#39;same&#39;</span><span class="p">);</span>
-<span class="n">n</span> <span class="o">=</span> <span class="mi">1</span><span class="p">:</span><span class="n">length</span><span class="p">(</span><span class="n">sequence_of_pulses</span><span class="p">);</span>
-<span class="n">modulated</span> <span class="o">=</span> <span class="n">sequence_of_pulses</span><span class="s1">&#39; .* carrier(n,0);</span>
-</pre></div>
-</div>
-</li>
-<li><p>Create an eye diagram using the first 1600 samples of the simulated signal. You can either use the ‘eyediagram’ function in the communications toolbox or reshape the samples into a matrix and use ‘plot’. <strong>Include the eye diagram in your lab report.</strong></p>
-<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">eyediagram</span><span class="p">(</span><span class="n">sequence_of_pulses</span><span class="p">(</span><span class="mi">1</span><span class="p">:</span><span class="mi">1600</span><span class="p">),</span><span class="mi">16</span><span class="p">);</span>
-</pre></div>
-</div>
-<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">figure</span><span class="p">;</span> <span class="n">plot</span><span class="p">(</span><span class="n">reshape</span><span class="p">(</span><span class="n">sequence_of_pulses</span><span class="p">(</span><span class="mi">1</span><span class="p">:</span><span class="mi">1600</span><span class="p">),[</span><span class="mi">16</span><span class="p">,</span><span class="mi">100</span><span class="p">]));</span>
-</pre></div>
-</div>
-</li>
-</ol>
-</div>
 <div class="section" id="setting-up-the-transmitter-on-the-stm32-board">
 <h3>Setting up the transmitter on the STM32 board<a class="headerlink" href="#setting-up-the-transmitter-on-the-stm32-board" title="Permalink to this headline">¶</a></h3>
 <ol>
@@ -287,10 +235,10 @@
 <div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">data_stream</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span> <span class="o">=</span> <span class="mh">0x967c6ea1</span><span class="p">;</span>
 </pre></div>
 </div>
-<p>The tree data and scrambler are the same as lab four. Populate the remainder of the <code class="docutils literal notranslate"><span class="pre">data_stream</span></code> array with the scrambled tree (<code class="docutils literal notranslate"><span class="pre">tree[i]^PN[i]</span></code>).</p>
+<p>The tree data is the same as labs four and five. Populate the remainder of the <code class="docutils literal notranslate"><span class="pre">data_stream</span></code> array with the tree.</p>
 <div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="k">for</span> <span class="p">(</span><span class="n">i_word</span> <span class="o">=</span> <span class="mi">0</span><span class="p">;</span> <span class="n">i_word</span> <span class="o">&lt;</span> <span class="mi">512</span><span class="p">;</span> <span class="n">i_word</span><span class="o">+=</span><span class="mi">1</span><span class="p">)</span>
 <span class="p">{</span>
-    <span class="n">data_stream</span><span class="p">[</span><span class="n">i_word</span><span class="o">+</span><span class="mi">1</span><span class="p">]</span> <span class="o">=</span> <span class="n">tree</span><span class="p">[</span><span class="n">i_word</span><span class="p">]</span><span class="o">^</span><span class="n">PN</span><span class="p">[</span><span class="n">i_word</span><span class="p">];</span>
+    <span class="n">data_stream</span><span class="p">[</span><span class="n">i_word</span><span class="o">+</span><span class="mi">1</span><span class="p">]</span> <span class="o">=</span> <span class="n">tree</span><span class="p">[</span><span class="n">i_word</span><span class="p">];</span>
 <span class="p">}</span>
 </pre></div>
 </div>
@@ -311,14 +259,15 @@
 </pre></div>
 </div>
 </li>
-<li><p>In lab.c prepare the variables necessary to use the CMSIS library function for the interpolating filter. Take a moment to read the <a class="reference external" href="https://arm-software.github.io/CMSIS_5/DSP/html/group__FIR__Interpolate.html">description of the FIR interpolator function.</a></p>
-<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">arm_fir_interpolate_instance_f32</span> <span class="n">filter_instance</span><span class="p">;</span> 
+<li><p>In lab.c prepare the variables necessary to use the CMSIS library function for the interpolating filters. Take a moment to read the <a class="reference external" href="https://arm-software.github.io/CMSIS_5/DSP/html/group__FIR__Interpolate.html">description of the FIR interpolator function.</a></p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">arm_fir_interpolate_instance_f32</span> <span class="n">filter_instance</span><span class="p">[</span><span class="mi">2</span><span class="p">];</span>
 <span class="n">uint8_t</span> <span class="n">upsampling_factor</span> <span class="o">=</span> <span class="mi">16</span><span class="p">;</span>
 <span class="n">uint16_t</span> <span class="n">num_taps</span> <span class="o">=</span> <span class="mi">64</span><span class="p">;</span>
-<span class="n">float32_t</span> <span class="n">state</span><span class="p">[(</span><span class="n">FRAME_SIZE</span><span class="o">/</span><span class="mi">4</span><span class="p">)</span> <span class="o">+</span> <span class="mi">4</span> <span class="o">-</span> <span class="mi">1</span><span class="p">]</span> <span class="o">=</span> <span class="p">{</span><span class="mi">0</span><span class="p">};</span>
-<span class="n">float32_t</span> <span class="n">filter_in</span><span class="p">[</span><span class="n">FRAME_SIZE</span><span class="o">/</span><span class="mi">64</span><span class="p">]</span> <span class="o">=</span> <span class="p">{</span><span class="mi">0</span><span class="p">};</span>
-<span class="n">float32_t</span> <span class="n">filter_out</span><span class="p">[</span><span class="n">FRAME_SIZE</span><span class="o">/</span><span class="mi">4</span><span class="p">]</span> <span class="o">=</span> <span class="p">{</span><span class="mi">0</span><span class="p">};</span>
+<span class="n">float32_t</span> <span class="n">state</span><span class="p">[</span><span class="mi">2</span><span class="p">][(</span><span class="n">FRAME_SIZE</span><span class="o">/</span><span class="mi">4</span><span class="p">)</span> <span class="o">+</span> <span class="mi">4</span> <span class="o">-</span> <span class="mi">1</span><span class="p">]</span> <span class="o">=</span> <span class="p">{</span><span class="mi">0</span><span class="p">};</span>
+<span class="n">float32_t</span> <span class="n">filter_in</span><span class="p">[</span><span class="mi">2</span><span class="p">][</span><span class="n">FRAME_SIZE</span><span class="o">/</span><span class="mi">64</span><span class="p">]</span> <span class="o">=</span> <span class="p">{</span><span class="mi">0</span><span class="p">};</span>
+<span class="n">float32_t</span> <span class="n">filter_out</span><span class="p">[</span><span class="mi">2</span><span class="p">][</span><span class="n">FRAME_SIZE</span><span class="o">/</span><span class="mi">4</span><span class="p">]</span> <span class="o">=</span> <span class="p">{</span><span class="mi">0</span><span class="p">};</span>
 <span class="n">float32_t</span> <span class="n">cos_lut</span><span class="p">[</span><span class="mi">4</span><span class="p">]</span> <span class="o">=</span> <span class="p">{</span><span class="mi">1</span><span class="p">,</span><span class="mi">0</span><span class="p">,</span><span class="o">-</span><span class="mi">1</span><span class="p">,</span><span class="mi">0</span><span class="p">};</span>
+<span class="n">float32_t</span> <span class="n">sin_lut</span><span class="p">[</span><span class="mi">4</span><span class="p">]</span> <span class="o">=</span> <span class="p">{</span><span class="mi">0</span><span class="p">,</span><span class="mi">1</span><span class="p">,</span><span class="mi">0</span><span class="p">,</span><span class="o">-</span><span class="mi">1</span><span class="p">};</span>
 <span class="n">uint32_t</span> <span class="n">i_lut</span> <span class="o">=</span> <span class="mi">0</span><span class="p">;</span>
 </pre></div>
 </div>
@@ -328,37 +277,44 @@
 </pre></div>
 </div>
 </li>
-<li><p>Initialize the interpolating filter in the lab_init function:</p>
-<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">arm_fir_interpolate_init_f32</span> <span class="p">(</span><span class="o">&amp;</span><span class="n">filter_instance</span><span class="p">,</span> <span class="n">upsampling_factor</span><span class="p">,</span> <span class="n">num_taps</span><span class="p">,</span> <span class="n">pulse_shaping_coeffs</span><span class="p">,</span> <span class="n">state</span><span class="p">,</span> <span class="n">FRAME_SIZE</span><span class="o">/</span><span class="mi">4</span><span class="p">);</span>
+<li><p>Initialize the interpolating filters in the lab_init function:</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">arm_fir_interpolate_init_f32</span> <span class="p">(</span><span class="o">&amp;</span><span class="n">filter_instance_I</span><span class="p">,</span> <span class="n">upsampling_factor</span><span class="p">,</span> <span class="n">num_taps</span><span class="p">,</span> <span class="n">pulse_shaping_coeffs</span><span class="p">,</span> <span class="n">state</span><span class="p">,</span> <span class="n">FRAME_SIZE</span><span class="o">/</span><span class="mi">4</span><span class="p">);</span>
+    <span class="n">arm_fir_interpolate_init_f32</span> <span class="p">(</span><span class="o">&amp;</span><span class="n">filter_instance_Q</span><span class="p">,</span> <span class="n">upsampling_factor</span><span class="p">,</span> <span class="n">num_taps</span><span class="p">,</span> <span class="n">pulse_shaping_coeffs</span><span class="p">,</span> <span class="n">state</span><span class="p">,</span> <span class="n">FRAME_SIZE</span><span class="o">/</span><span class="mi">4</span><span class="p">);</span>
 </pre></div>
 </div>
 </li>
 <li><p>In process_input_buffer, construct the buffer of symbols that we will send to the arm_fir_interpolate_f32 function.</p>
 <div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="k">for</span> <span class="p">(</span><span class="n">uint32_t</span> <span class="n">i_sample</span> <span class="o">=</span> <span class="mi">0</span><span class="p">;</span> <span class="n">i_sample</span><span class="o">&lt;</span><span class="n">FRAME_SIZE</span><span class="o">/</span><span class="mi">64</span><span class="p">;</span> <span class="n">i_sample</span><span class="o">+=</span><span class="mi">1</span><span class="p">)</span>
 <span class="p">{</span>
-    <span class="n">filter_in</span><span class="p">[</span><span class="n">i_sample</span><span class="p">]</span> <span class="o">=</span> <span class="p">(</span> <span class="n">data_stream</span><span class="p">[</span><span class="n">i_word</span><span class="p">]</span> <span class="o">&amp;</span> <span class="p">(</span><span class="mi">1</span><span class="o">&lt;&lt;</span><span class="n">i_bit</span><span class="p">)</span> <span class="p">)</span> <span class="o">&gt;&gt;</span> <span class="n">i_bit</span><span class="p">;</span>
-    <span class="n">filter_in</span><span class="p">[</span><span class="n">i_sample</span><span class="p">]</span> <span class="o">=</span> <span class="p">(</span><span class="n">filter_in</span><span class="p">[</span><span class="n">i_sample</span><span class="p">]</span><span class="o">*</span><span class="mi">2</span><span class="p">)</span> <span class="o">-</span> <span class="mi">1</span><span class="p">;</span>
-
-    <span class="n">i_bit</span> <span class="o">+=</span> <span class="mi">1</span><span class="p">;</span>
-    <span class="k">if</span> <span class="p">(</span><span class="n">i_bit</span> <span class="o">==</span> <span class="mi">32</span><span class="p">)</span>
+    <span class="k">for</span> <span class="p">(</span><span class="n">uint32_t</span> <span class="n">i_comp</span> <span class="o">=</span> <span class="mi">0</span><span class="p">;</span> <span class="n">i_comp</span> <span class="o">&lt;</span> <span class="mi">2</span><span class="p">;</span> <span class="n">i_comp</span> <span class="o">+=</span><span class="mi">1</span><span class="p">)</span>
     <span class="p">{</span>
-        <span class="n">i_word</span> <span class="o">+=</span> <span class="mi">1</span><span class="p">;</span>
-        <span class="n">i_bit</span> <span class="o">=</span> <span class="mi">0</span><span class="p">;</span>
-        <span class="k">if</span> <span class="p">(</span><span class="n">i_word</span> <span class="o">&gt;</span> <span class="mi">512</span><span class="p">){</span><span class="n">i_word</span> <span class="o">=</span> <span class="mi">0</span><span class="p">;}</span>
+        <span class="n">filter_in</span><span class="p">[</span><span class="n">i_comp</span><span class="p">][</span><span class="n">i_sample</span><span class="p">]</span> <span class="o">=</span> <span class="p">(</span> <span class="n">data_stream</span><span class="p">[</span><span class="n">i_word</span><span class="p">]</span> <span class="o">&amp;</span> <span class="p">(</span><span class="mi">1</span><span class="o">&lt;&lt;</span><span class="n">i_bit</span><span class="p">)</span> <span class="p">)</span> <span class="o">&gt;&gt;</span> <span class="n">i_bit</span><span class="p">;</span>
+        <span class="n">filter_in</span><span class="p">[</span><span class="n">i_comp</span><span class="p">][</span><span class="n">i_sample</span><span class="p">]</span> <span class="o">=</span> <span class="p">(</span><span class="n">filter_in</span><span class="p">[</span><span class="n">i_comp</span><span class="p">][</span><span class="n">i_sample</span><span class="p">]</span><span class="o">*</span><span class="mi">2</span><span class="p">)</span> <span class="o">-</span> <span class="mi">1</span><span class="p">;</span>
+
+        <span class="n">i_bit</span> <span class="o">+=</span> <span class="mi">1</span><span class="p">;</span>
+        <span class="k">if</span> <span class="p">(</span><span class="n">i_bit</span> <span class="o">==</span> <span class="mi">32</span><span class="p">)</span>
+        <span class="p">{</span>
+            <span class="n">i_word</span> <span class="o">+=</span> <span class="mi">1</span><span class="p">;</span>
+            <span class="n">i_bit</span> <span class="o">=</span> <span class="mi">0</span><span class="p">;</span>
+            <span class="k">if</span> <span class="p">(</span><span class="n">i_word</span> <span class="o">&gt;</span> <span class="mi">512</span><span class="p">){</span><span class="n">i_word</span> <span class="o">=</span> <span class="mi">0</span><span class="p">;}</span>
+        <span class="p">}</span>
     <span class="p">}</span>
+
 <span class="p">}</span>
 </pre></div>
 </div>
 </li>
 <li><p>Perform the filtering and copy the result to the output buffer</p>
-<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">arm_fir_interpolate_f32</span> <span class="p">(</span><span class="o">&amp;</span><span class="n">filter_instance</span><span class="p">,</span> <span class="n">filter_in</span><span class="p">,</span> <span class="n">filter_out</span><span class="p">,</span> <span class="n">FRAME_SIZE</span><span class="o">/</span><span class="mi">64</span><span class="p">);</span>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">arm_fir_interpolate_f32</span> <span class="p">(</span><span class="o">&amp;</span><span class="n">filter_instance</span><span class="p">[</span><span class="mi">0</span><span class="p">],</span> <span class="o">&amp;</span><span class="n">filter_in</span><span class="p">[</span><span class="mi">0</span><span class="p">],</span> <span class="o">&amp;</span><span class="n">filter_out</span><span class="p">[</span><span class="mi">0</span><span class="p">],</span> <span class="n">FRAME_SIZE</span><span class="o">/</span><span class="mi">64</span><span class="p">);</span>
+<span class="n">arm_fir_interpolate_f32</span> <span class="p">(</span><span class="o">&amp;</span><span class="n">filter_instance</span><span class="p">[</span><span class="mi">1</span><span class="p">],</span> <span class="o">&amp;</span><span class="n">filter_in</span><span class="p">[</span><span class="mi">1</span><span class="p">],</span> <span class="o">&amp;</span><span class="n">filter_out</span><span class="p">[</span><span class="mi">1</span><span class="p">],</span> <span class="n">FRAME_SIZE</span><span class="o">/</span><span class="mi">64</span><span class="p">);</span>
 
 <span class="k">for</span> <span class="p">(</span><span class="n">uint32_t</span> <span class="n">i_sample</span> <span class="o">=</span> <span class="mi">0</span><span class="p">;</span> <span class="n">i_sample</span> <span class="o">&lt;</span> <span class="n">FRAME_SIZE</span><span class="o">/</span><span class="mi">2</span><span class="p">;</span> <span class="n">i_sample</span><span class="o">+=</span><span class="mi">1</span><span class="p">)</span>
 <span class="p">{</span>
-     <span class="n">input_buffer</span><span class="p">[</span><span class="n">i_sample</span><span class="p">]</span> <span class="o">=</span> <span class="n">OUTPUT_SCALE_FACTOR</span><span class="o">*</span><span class="n">filter_out</span><span class="p">[</span><span class="n">i_sample</span><span class="o">/</span><span class="mi">2</span><span class="p">]</span><span class="o">*</span><span class="n">cos_lut</span><span class="p">[</span><span class="n">i_lut</span><span class="p">];</span>
-     <span class="n">i_lut</span> <span class="o">=</span> <span class="p">(</span><span class="n">i_lut</span> <span class="o">+</span> <span class="mi">1</span><span class="p">)</span> <span class="o">%</span> <span class="mi">4</span><span class="p">;</span>
-     <span class="n">i_sample</span><span class="o">+=</span><span class="mi">1</span><span class="p">;</span>
-     <span class="n">input_buffer</span><span class="p">[</span><span class="n">i_sample</span><span class="p">]</span> <span class="o">=</span> <span class="mi">0</span><span class="p">;</span>
+        <span class="n">input_buffer</span><span class="p">[</span><span class="n">i_sample</span><span class="p">]</span> <span class="o">=</span> <span class="n">OUTPUT_SCALE_FACTOR</span><span class="o">*</span><span class="n">filter_out</span><span class="p">[</span><span class="mi">0</span><span class="p">][</span><span class="n">i_sample</span><span class="o">/</span><span class="mi">2</span><span class="p">]</span><span class="o">*</span><span class="n">cos_lut</span><span class="p">[</span><span class="n">i_lut</span><span class="p">];</span>
+        <span class="n">input_buffer</span><span class="p">[</span><span class="n">i_sample</span><span class="p">]</span> <span class="o">+=</span> <span class="n">OUTPUT_SCALE_FACTOR</span><span class="o">*</span><span class="n">filter_out</span><span class="p">[</span><span class="mi">1</span><span class="p">][</span><span class="n">i_sample</span><span class="o">/</span><span class="mi">2</span><span class="p">]</span><span class="o">*</span><span class="n">sin_lut</span><span class="p">[</span><span class="n">i_lut</span><span class="p">];</span>
+        <span class="n">i_lut</span> <span class="o">=</span> <span class="p">(</span><span class="n">i_lut</span> <span class="o">+</span> <span class="mi">1</span><span class="p">)</span> <span class="o">%</span> <span class="mi">4</span><span class="p">;</span>
+        <span class="n">i_sample</span><span class="o">+=</span><span class="mi">1</span><span class="p">;</span>
+        <span class="n">input_buffer</span><span class="p">[</span><span class="n">i_sample</span><span class="p">]</span> <span class="o">=</span> <span class="mi">0</span><span class="p">;</span>
 <span class="p">}</span>
 </pre></div>
 </div>
@@ -372,274 +328,25 @@
 <div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">fs</span> <span class="o">=</span> <span class="mi">48000</span><span class="p">;</span>
 <span class="n">recorder</span> <span class="o">=</span> <span class="n">audiorecorder</span><span class="p">(</span><span class="n">fs</span><span class="p">,</span><span class="mi">16</span><span class="p">,</span><span class="mi">1</span><span class="p">);</span>
 <span class="n">recordblocking</span><span class="p">(</span><span class="n">recorder</span><span class="p">,</span> <span class="mi">12</span><span class="p">);</span>
-<span class="n">scrambled</span> <span class="o">=</span> <span class="n">getaudiodata</span><span class="p">(</span><span class="n">recorder</span><span class="p">)</span><span class="s1">&#39;;</span>
-<span class="n">save</span> <span class="n">scrambled</span> <span class="n">scrambled</span><span class="p">;</span>
+<span class="n">QAM</span> <span class="o">=</span> <span class="n">getaudiodata</span><span class="p">(</span><span class="n">recorder</span><span class="p">)</span><span class="s1">&#39;;</span>
+<span class="n">save</span> <span class="n">QAM</span> <span class="n">QAM</span><span class="p">;</span>
 </pre></div>
 </div>
 </li>
-<li><p>Remove the scrambler by replacing the line <code class="docutils literal notranslate"><span class="pre">data_stream[i_word+1]</span> <span class="pre">=</span> <span class="pre">tree[i_word]^PN[i_word];</span></code> with <code class="docutils literal notranslate"><span class="pre">data_stream[i_word+1]</span> <span class="pre">=</span> <span class="pre">tree[i_word]</span></code>. Repeat the recording, but ensure that you choose a new file name.</p>
-<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">fs</span> <span class="o">=</span> <span class="mi">48000</span><span class="p">;</span>
-<span class="n">recorder</span> <span class="o">=</span> <span class="n">audiorecorder</span><span class="p">(</span><span class="n">fs</span><span class="p">,</span><span class="mi">16</span><span class="p">,</span><span class="mi">1</span><span class="p">);</span>
-<span class="n">recordblocking</span><span class="p">(</span><span class="n">recorder</span><span class="p">,</span> <span class="mi">12</span><span class="p">);</span>
-<span class="n">not_scrambled</span> <span class="o">=</span> <span class="n">getaudiodata</span><span class="p">(</span><span class="n">recorder</span><span class="p">)</span><span class="s1">&#39;;</span>
-<span class="n">save</span> <span class="n">not_scrambled</span> <span class="n">not_scrambled</span><span class="p">;</span>
-</pre></div>
-</div>
-</li>
-<li><p>Create a spectrogram for both recorded transmissions. <strong>Include both spectrograms in your lab report.</strong></p>
+<li><p>Create a spectrogram for the recorded transmission. <strong>Compare this to your spectrogram from the PAM transmission. By how much did the bandwidth change?</strong></p>
 <div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">load</span> <span class="n">scrambled</span><span class="p">;</span>
-<span class="n">figure</span><span class="p">;</span> <span class="n">spectrogram</span><span class="p">(</span><span class="n">scrambled</span><span class="p">,</span><span class="mi">2</span><span class="o">^</span><span class="mi">10</span><span class="p">,</span><span class="mi">0</span><span class="p">,</span><span class="mi">2</span><span class="o">^</span><span class="mi">10</span><span class="p">,</span><span class="mi">48000</span><span class="p">,</span><span class="s1">&#39;yaxis&#39;</span><span class="p">);</span>
-
-<span class="n">load</span> <span class="n">not_scrambled</span><span class="p">;</span>
-<span class="n">figure</span><span class="p">;</span> <span class="n">spectrogram</span><span class="p">(</span><span class="n">not_scrambled</span><span class="p">,</span><span class="mi">2</span><span class="o">^</span><span class="mi">10</span><span class="p">,</span><span class="mi">0</span><span class="p">,</span><span class="mi">2</span><span class="o">^</span><span class="mi">10</span><span class="p">,</span><span class="mi">48000</span><span class="p">,</span><span class="s1">&#39;yaxis&#39;</span><span class="p">);</span>
-</pre></div>
-</div>
-</li>
-<li><p>Run the <a class="reference external" href="https://github.com/danjacobellis/EE445S-lab/raw/main/starter_code/receiver_demo.m">receiver demo</a> in MATLAB using the transmission that was not scrambled. Try to adjust the parameters to recover the tree image. <strong>Include the recovered tree image in your lab report using the best parameters you find.</strong></p></li>
-</ol>
-</div>
-</div>
-<div class="section" id="lab-5-instructions-week-2">
-<h2>Lab 5 instructions: week 2<a class="headerlink" href="#lab-5-instructions-week-2" title="Permalink to this headline">¶</a></h2>
-<p>In this exercise we will transmit the tree image (either from MATLAB or your lab partner’s board) and receive it on the STM board.</p>
-<div class="section" id="costas-loop-for-carrier-recovery">
-<h3>Costas loop for carrier recovery<a class="headerlink" href="#costas-loop-for-carrier-recovery" title="Permalink to this headline">¶</a></h3>
-<ol>
-<li><p>In lab.c, create variables necessary for the costas loop. Assume that the lowpass filter in the costas loop is the same pulse shaping filter as before with 64 coefficients.</p>
-<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">float32_t</span> <span class="n">Ux</span><span class="p">[</span><span class="mi">64</span><span class="p">]</span> <span class="o">=</span> <span class="p">{</span><span class="mi">0</span><span class="p">};</span>
-<span class="n">float32_t</span> <span class="n">Lx</span><span class="p">[</span><span class="mi">64</span><span class="p">]</span> <span class="o">=</span> <span class="p">{</span><span class="mi">0</span><span class="p">};</span>
-<span class="n">float32_t</span> <span class="n">Uy</span> <span class="o">=</span> <span class="mi">0</span><span class="p">;</span>
-<span class="n">float32_t</span> <span class="n">Ly</span> <span class="o">=</span> <span class="mi">0</span><span class="p">;</span>
-<span class="n">float32_t</span> <span class="n">wc</span> <span class="o">=</span> <span class="mf">1.5707963267949</span><span class="p">;</span>
-<span class="n">float32_t</span> <span class="n">theta</span> <span class="o">=</span> <span class="mi">0</span><span class="p">;</span>
-<span class="n">float32_t</span> <span class="n">mu</span> <span class="o">=</span> <span class="mf">0.01</span><span class="p">;</span>
-<span class="n">float32_t</span> <span class="n">baseband</span><span class="p">[</span><span class="n">FRAME_SIZE</span><span class="o">/</span><span class="mi">4</span><span class="p">]</span> <span class="o">=</span> <span class="p">{</span><span class="mi">0</span><span class="p">};</span>
-<span class="n">uint32_t</span> <span class="n">i_baseband</span> <span class="o">=</span> <span class="mi">0</span><span class="p">;</span>
-</pre></div>
-</div>
-</li>
-<li><p>Add code to process_left_sample which computes the newest values for the upper and lower branches.</p>
-<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">float32_t</span> <span class="n">r</span> <span class="o">=</span> <span class="n">input_sample</span><span class="o">*</span><span class="n">INPUT_SCALE_FACTOR</span><span class="p">;</span>
-
-<span class="n">Ux</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span> <span class="o">=</span> <span class="n">r</span><span class="o">*</span><span class="n">arm_cos_f32</span><span class="p">(</span><span class="n">theta</span><span class="p">);</span>
-<span class="n">Lx</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span> <span class="o">=</span> <span class="n">r</span><span class="o">*</span><span class="n">arm_sin_f32</span><span class="p">(</span><span class="n">theta</span><span class="p">);</span>
-
-<span class="n">Uy</span> <span class="o">=</span> <span class="mi">0</span><span class="p">;</span>
-<span class="n">Ly</span> <span class="o">=</span> <span class="mi">0</span><span class="p">;</span>
-
-<span class="k">for</span> <span class="p">(</span><span class="n">uint32_t</span> <span class="n">i_sample</span> <span class="o">=</span> <span class="mi">0</span><span class="p">;</span> <span class="n">i_sample</span> <span class="o">&lt;</span> <span class="mi">64</span><span class="p">;</span> <span class="n">i_sample</span> <span class="o">+=</span><span class="mi">1</span><span class="p">)</span>
-<span class="p">{</span>
-    <span class="n">Uy</span> <span class="o">+=</span> <span class="n">Ux</span><span class="p">[</span><span class="n">i_sample</span><span class="p">]</span><span class="o">*</span><span class="n">pulse_shaping_coeffs</span><span class="p">[</span><span class="n">i_sample</span><span class="p">];</span>
-    <span class="n">Ly</span> <span class="o">+=</span> <span class="n">Lx</span><span class="p">[</span><span class="n">i_sample</span><span class="p">]</span><span class="o">*</span><span class="n">pulse_shaping_coeffs</span><span class="p">[</span><span class="n">i_sample</span><span class="p">];</span>
-<span class="p">}</span>
-
-<span class="n">baseband</span><span class="p">[</span><span class="n">i_baseband</span><span class="p">]</span> <span class="o">=</span> <span class="n">Uy</span><span class="p">;</span>
-<span class="n">i_baseband</span> <span class="o">+=</span> <span class="mi">1</span><span class="p">;</span>
-<span class="k">if</span> <span class="p">(</span><span class="n">i_baseband</span> <span class="o">&gt;</span> <span class="n">FRAME_SIZE</span><span class="o">/</span><span class="mi">4</span><span class="p">){</span><span class="n">i_baseband</span> <span class="o">=</span> <span class="mi">0</span><span class="p">;}</span>
-
-<span class="k">for</span> <span class="p">(</span><span class="n">i_sample</span> <span class="o">=</span> <span class="mi">63</span><span class="p">;</span> <span class="n">i_sample</span> <span class="o">&gt;</span> <span class="mi">0</span><span class="p">;</span> <span class="n">i_sample</span> <span class="o">-=</span><span class="mi">1</span><span class="p">)</span>
-<span class="p">{</span>
-    <span class="n">Ux</span><span class="p">[</span><span class="n">i_sample</span><span class="p">]</span> <span class="o">=</span> <span class="n">Ux</span><span class="p">[</span><span class="n">i_sample</span><span class="o">-</span><span class="mi">1</span><span class="p">];</span>
-    <span class="n">Lx</span><span class="p">[</span><span class="n">i_sample</span><span class="p">]</span> <span class="o">=</span> <span class="n">Lx</span><span class="p">[</span><span class="n">i_sample</span><span class="o">-</span><span class="mi">1</span><span class="p">];</span>
-<span class="p">}</span>
-</pre></div>
-</div>
-</li>
-<li><p>Update the estimate of <span class="math notranslate nohighlight">\(\theta\)</span>.</p>
-<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">theta</span> <span class="o">+=</span> <span class="n">wc</span> <span class="o">-</span> <span class="n">mu</span><span class="o">*</span><span class="n">Uy</span><span class="o">*</span><span class="n">Ly</span><span class="p">;</span>
-<span class="k">if</span> <span class="p">(</span><span class="n">theta</span> <span class="o">&gt;</span> <span class="mf">6.283185</span><span class="p">){</span><span class="n">theta</span> <span class="o">-=</span> <span class="mf">6.283185</span><span class="p">;}</span>
-</pre></div>
-</div>
-</li>
-<li><p>Connect the input jack on the board to a transmitting source (either the matlab simulation via soundsc or a second board running the previous week’s lab. Send the output of the costas loop (<code class="docutils literal notranslate"><span class="pre">Uy</span></code>) to the DAC. The pulse shaping filter applies a gain of about 3.005, so you may want to use a smaller scale factor.</p>
-<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="k">return</span> <span class="n">OUTPUT_SCALE_FACTOR</span><span class="o">*</span><span class="n">Uy</span><span class="o">*</span><span class="mf">0.3</span><span class="p">;</span>
-</pre></div>
-</div>
-</li>
-<li><p>Display the output on the oscilloscope and verify its behavior. For the scrambled signal, the output of the Costas loop should closely resemble the baseband signal before modulation. <strong>Include an oscilloscope screenshot in your lab report.</strong></p></li>
-</ol>
-<div class="section" id="symbol-recovery-by-downsampling-and-quantization">
-<h4>Symbol recovery by downsampling and quantization<a class="headerlink" href="#symbol-recovery-by-downsampling-and-quantization" title="Permalink to this headline">¶</a></h4>
-<ol>
-<li><p>Create a variable <span class="math notranslate nohighlight">\(k\)</span> that acts as a counter for the downsampler. Since every 16th sample corresponds to a new symbol, let <span class="math notranslate nohighlight">\(k\)</span> count up to 15 before saving the next value and resetting the counter.</p>
-<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">int32_t</span> <span class="n">k</span> <span class="o">=</span> <span class="mi">0</span><span class="p">;</span>
-</pre></div>
-</div>
-<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="k">if</span> <span class="p">(</span><span class="n">k</span> <span class="o">==</span> <span class="mi">15</span><span class="p">)</span>
-<span class="p">{</span>
-    <span class="n">k</span> <span class="o">=</span> <span class="mi">0</span><span class="p">;</span>
-    <span class="o">.</span>
-    <span class="o">.</span>
-    <span class="o">.</span>
-    <span class="o">//</span> <span class="n">save</span> <span class="n">the</span> <span class="n">current</span> <span class="n">value</span>
-    <span class="o">.</span>
-    <span class="o">.</span>
-    <span class="o">.</span>
-<span class="p">}</span>
-<span class="k">else</span>
-<span class="p">{</span>
-    <span class="n">k</span> <span class="o">+=</span><span class="mi">1</span><span class="p">;</span>
-<span class="p">}</span>
-</pre></div>
-</div>
-</li>
-<li><p>Create an array to store 16384 bits (128 by 128 binary image) which can be displayed on the screen. Also create variables (or reset existing variables) to keep track of the current word and current bit. Quantize the output of the downsampler by comparing its value to zero, then store it in the array.</p>
-<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">uint32_t</span> <span class="n">data</span><span class="p">[</span><span class="mi">512</span><span class="p">]</span> <span class="o">=</span> <span class="p">{</span><span class="mi">0</span><span class="p">};</span>
-<span class="n">uint32_t</span> <span class="n">i_word</span> <span class="o">=</span> <span class="mi">0</span><span class="p">;</span>
-<span class="n">uint32_t</span> <span class="n">i_bit</span> <span class="o">=</span> <span class="mi">0</span><span class="p">;</span>
-</pre></div>
-</div>
-<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="k">if</span> <span class="p">(</span><span class="n">Uy</span><span class="o">&gt;</span><span class="mi">0</span><span class="p">)</span>
-<span class="p">{</span>
-    <span class="n">data</span><span class="p">[</span><span class="n">i_word</span><span class="p">]</span> <span class="o">|=</span> <span class="p">(</span><span class="mi">1</span><span class="o">&lt;&lt;</span><span class="n">i_bit</span><span class="p">);</span>
-<span class="p">}</span>
-
-<span class="n">i_bit</span> <span class="o">+=</span> <span class="mi">1</span><span class="p">;</span>
-<span class="k">if</span> <span class="p">(</span><span class="n">i_bit</span> <span class="o">==</span> <span class="mi">32</span><span class="p">)</span>
-<span class="p">{</span>
-    <span class="n">i_word</span> <span class="o">+=</span> <span class="mi">1</span><span class="p">;</span>
-    <span class="n">i_bit</span> <span class="o">=</span> <span class="mi">0</span><span class="p">;</span>
-<span class="p">}</span>
+<span class="n">figure</span><span class="p">;</span> <span class="n">spectrogram</span><span class="p">(</span><span class="n">QAM</span><span class="p">,</span><span class="mi">2</span><span class="o">^</span><span class="mi">10</span><span class="p">,</span><span class="mi">0</span><span class="p">,</span><span class="mi">2</span><span class="o">^</span><span class="mi">10</span><span class="p">,</span><span class="mi">48000</span><span class="p">,</span><span class="s1">&#39;yaxis&#39;</span><span class="p">);</span>
 
 </pre></div>
 </div>
 </li>
-<li><p>Create an if statement to detect if the array is full. When it is, display it as an image.</p>
-<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="k">if</span> <span class="p">(</span><span class="n">i_word</span><span class="o">&gt;</span><span class="mi">512</span><span class="p">){</span>
-    <span class="n">display_image</span><span class="p">(</span><span class="n">data</span><span class="p">,</span><span class="mi">128</span><span class="p">,</span><span class="mi">128</span><span class="p">);</span>
-<span class="p">}</span>
-</pre></div>
-</div>
-</li>
-<li><p>Setup the transmitter as the input (either with your lab partner running the week 1 code or the provided MATLAB simulation) <em>without</em> scrambling the data. Run the receiver with a breakpoint immediately after image is displayed. You should see a noisy and possibly inverted tree image. Since no symbol timing recovery algorithm is in place, the quality of the recovered image could change when you repeat the experiment. <strong>Include the recovered image in your lab report.</strong> (You can either use a photo or <a class="reference internal" href="../data.html"><span class="doc std std-doc">export the array</span></a> and plot it in MATLAB using the <code class="docutils literal notranslate"><span class="pre">image</span></code> function).</p></li>
-</ol>
-</div>
-</div>
-</div>
-<div class="section" id="lab-5-instructions-week-3">
-<h2>Lab 5 instructions: week 3<a class="headerlink" href="#lab-5-instructions-week-3" title="Permalink to this headline">¶</a></h2>
-<p>In this exercise we will add a symbol clock recovery subsystem and implement the cross-correlation to match the PN header.</p>
-<div class="section" id="cross-correlation-for-header-detection">
-<h3>Cross-correlation for header detection<a class="headerlink" href="#cross-correlation-for-header-detection" title="Permalink to this headline">¶</a></h3>
-<ol>
-<li><p>Create the variables necessary to implement the header detection as an FIR filter including a semaphore variable to track when the header has been detected.</p>
-<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">int8_t</span> <span class="n">xcorr</span><span class="p">[</span><span class="mi">32</span><span class="p">]</span> <span class="o">=</span> <span class="p">{</span><span class="mi">0</span><span class="p">};</span>
-<span class="n">int8_t</span> <span class="n">header</span><span class="p">[</span><span class="mi">32</span><span class="p">]</span> <span class="o">=</span> <span class="p">{</span><span class="mi">1</span><span class="p">,</span><span class="o">-</span><span class="mi">1</span><span class="p">,</span><span class="o">-</span><span class="mi">1</span><span class="p">,</span><span class="mi">1</span><span class="p">,</span><span class="o">-</span><span class="mi">1</span><span class="p">,</span><span class="mi">1</span><span class="p">,</span><span class="mi">1</span><span class="p">,</span><span class="o">-</span><span class="mi">1</span><span class="p">,</span><span class="o">-</span><span class="mi">1</span><span class="p">,</span><span class="mi">1</span><span class="p">,</span><span class="mi">1</span><span class="p">,</span><span class="mi">1</span><span class="p">,</span><span class="mi">1</span><span class="p">,</span><span class="mi">1</span><span class="p">,</span><span class="o">-</span><span class="mi">1</span><span class="p">,</span><span class="o">-</span><span class="mi">1</span><span class="p">,</span><span class="o">-</span><span class="mi">1</span><span class="p">,</span><span class="mi">1</span><span class="p">,</span><span class="mi">1</span><span class="p">,</span><span class="o">-</span><span class="mi">1</span><span class="p">,</span><span class="mi">1</span><span class="p">,</span><span class="mi">1</span><span class="p">,</span><span class="mi">1</span><span class="p">,</span><span class="o">-</span><span class="mi">1</span><span class="p">,</span><span class="mi">1</span><span class="p">,</span><span class="o">-</span><span class="mi">1</span><span class="p">,</span><span class="mi">1</span><span class="p">,</span><span class="o">-</span><span class="mi">1</span><span class="p">,</span><span class="o">-</span><span class="mi">1</span><span class="p">,</span><span class="o">-</span><span class="mi">1</span><span class="p">,</span><span class="o">-</span><span class="mi">1</span><span class="p">,</span><span class="mi">1</span><span class="p">};</span>
-<span class="n">int8_t</span> <span class="n">r</span> <span class="o">=</span> <span class="mi">0</span><span class="p">;</span>
-<span class="n">int8_t</span> <span class="n">header_matched</span> <span class="o">=</span> <span class="mi">0</span><span class="p">;</span>
-</pre></div>
-</div>
-</li>
-<li><p>Each time a new symbol is processed (i.e. inside the <code class="docutils literal notranslate"><span class="pre">if</span> <span class="pre">(k==15)</span></code> block), map the symbol to either +1 or -1, and store it in the ‘xcorr’ array.</p>
-<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="k">if</span> <span class="p">(</span><span class="n">Uy</span> <span class="o">&gt;</span> <span class="mi">0</span><span class="p">){</span><span class="n">xcorr</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span> <span class="o">=</span> <span class="mi">1</span><span class="p">;}</span>
-<span class="k">else</span><span class="p">{</span><span class="n">xcorr</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span> <span class="o">=</span> <span class="o">-</span><span class="mi">1</span><span class="p">;}</span>
-</pre></div>
-</div>
-</li>
-<li><p>Perform the correlation as an FIR filter (the header variable as defined above has already been flipped).</p>
-<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">r</span> <span class="o">=</span> <span class="mi">0</span><span class="p">;</span>
-<span class="k">for</span> <span class="p">(</span><span class="n">uint32_t</span> <span class="n">i_hdr</span> <span class="o">=</span> <span class="mi">0</span><span class="p">;</span> <span class="n">i_hdr</span> <span class="o">&lt;</span> <span class="mi">32</span><span class="p">;</span> <span class="n">i_hdr</span> <span class="o">+=</span><span class="mi">1</span><span class="p">)</span>
-<span class="p">{</span>
-    <span class="n">r</span> <span class="o">+=</span> <span class="n">xcorr</span><span class="p">[</span><span class="n">i_hdr</span><span class="p">]</span><span class="o">*</span><span class="n">header</span><span class="p">[</span><span class="n">i_hdr</span><span class="p">];</span>
-<span class="p">}</span>
-<span class="k">for</span> <span class="p">(</span><span class="n">uint32_t</span> <span class="n">i_hdr</span> <span class="o">=</span> <span class="mi">31</span><span class="p">;</span> <span class="n">i_hdr</span> <span class="o">&gt;</span> <span class="mi">0</span><span class="p">;</span> <span class="n">i_hdr</span> <span class="o">-=</span><span class="mi">1</span><span class="p">)</span>
-<span class="p">{</span>
-    <span class="n">xcorr</span><span class="p">[</span><span class="n">i_hdr</span><span class="p">]</span> <span class="o">=</span> <span class="n">xcorr</span><span class="p">[</span><span class="n">i_hdr</span> <span class="o">-</span> <span class="mi">1</span><span class="p">];</span>
-<span class="p">}</span>
-</pre></div>
-</div>
-</li>
-<li><p>If the cross correlation reaches the maximum possible value, update the semaphore.</p>
-<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="k">if</span> <span class="p">(</span><span class="n">r</span> <span class="o">&gt;</span> <span class="mi">30</span><span class="p">)</span> <span class="p">{</span><span class="n">header_matched</span> <span class="o">=</span> <span class="mi">1</span><span class="p">;}</span>
-</pre></div>
-</div>
-</li>
-<li><p>Move the data collection code block into an if statement so that it only occurs after the header is detected</p>
-<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="k">if</span> <span class="p">(</span><span class="n">header_matched</span><span class="p">)</span>
-<span class="p">{</span>
-    <span class="k">if</span> <span class="p">(</span><span class="n">Uy</span><span class="o">&gt;</span><span class="mi">0</span><span class="p">){</span> <span class="n">data</span><span class="p">[</span><span class="n">i_word</span><span class="p">]</span> <span class="o">|=</span> <span class="p">(</span><span class="mi">1</span><span class="o">&lt;&lt;</span><span class="n">i_bit</span><span class="p">);</span> <span class="p">}</span>
-    <span class="o">.</span>
-    <span class="o">.</span>
-    <span class="o">.</span>
-<span class="p">}</span>
-
-</pre></div>
-</div>
-</li>
-<li><p>Repeat the transmission and put a breakpoint after the image is displayed. The image should appear with proper alignment.</p></li>
-</ol>
-</div>
-<div class="section" id="symbol-timing-recovery">
-<h3>Symbol timing recovery<a class="headerlink" href="#symbol-timing-recovery" title="Permalink to this headline">¶</a></h3>
-<ol>
-<li><p>Design two second order IIR bandpass filters in the MATLAB filter designer with the following parameters</p>
-<p><strong>BPF 1</strong></p>
-<ul class="simple">
-<li><p>Design method: Elliptic</p></li>
-<li><p>Filter order <span class="math notranslate nohighlight">\(N=2\)</span></p></li>
-<li><p>Sampling Frequency <span class="math notranslate nohighlight">\(F_s= 48 \text{ kHz}\)</span></p></li>
-<li><p><span class="math notranslate nohighlight">\(F_{\text{pass1}}=1.4\text{ kHz}\)</span></p></li>
-<li><p><span class="math notranslate nohighlight">\(F_{\text{pass2}}=1.5\text{ kHz}\)</span></p></li>
-<li><p><span class="math notranslate nohighlight">\(A_{\text{stop}}=80 \text{dB}\)</span></p></li>
-<li><p><span class="math notranslate nohighlight">\(A_{\text{pass}}=1 \text{dB}\)</span></p></li>
-</ul>
-<p><strong>BPF 2</strong></p>
-<ul class="simple">
-<li><p>Design method: Elliptic</p></li>
-<li><p>Filter order <span class="math notranslate nohighlight">\(N=2\)</span></p></li>
-<li><p>Sampling Frequency <span class="math notranslate nohighlight">\(F_s= 48 \text{ kHz}\)</span></p></li>
-<li><p><span class="math notranslate nohighlight">\(F_{\text{pass1}}=3.8\text{ kHz}\)</span></p></li>
-<li><p><span class="math notranslate nohighlight">\(F_{\text{pass2}}=4.2\text{ kHz}\)</span></p></li>
-<li><p><span class="math notranslate nohighlight">\(A_{\text{stop}}=80 \text{dB}\)</span></p></li>
-<li><p><span class="math notranslate nohighlight">\(A_{\text{pass}}=1 \text{dB}\)</span></p></li>
-</ul>
-</li>
-<li><p>Apply the first bandpass filter to the output of the Costas loop <code class="docutils literal notranslate"><span class="pre">Uy</span></code>.</p></li>
-<li><p>Square the output of the first bandpass filter.</p></li>
-<li><p>Apply the second bandpass filter after the squaring block.</p></li>
-<li><p>Send the output to the DAC and display it on the oscilloscope. The peaks of this clock signal indicate when to sample each symbol.</p></li>
-</ol>
-</div>
-<div class="section" id="symbol-error-probability">
-<h3>Symbol error probability<a class="headerlink" href="#symbol-error-probability" title="Permalink to this headline">¶</a></h3>
-<ol>
-<li><p>In MATLAB, plot the theoretical symbol error probability as a function of signal to noise ratio for <span class="math notranslate nohighlight">\(M = 2, 4, 8.\)</span> Put the x-axis SNR variable in dB.</p>
-<div class="math notranslate nohighlight">
-\[ P_e = \frac{2(M-1)}{M}\times Q\left( \sqrt{\text{SNR}\times \frac{3}{M^2 -1}} \right)\]</div>
-<p>The <a class="reference external" href="https://en.wikipedia.org/wiki/Q-function"><span class="math notranslate nohighlight">\(Q-\)</span>function</a> is related the the <a class="reference external" href="https://en.wikipedia.org/wiki/Normal_distribution#Cumulative_distribution_function">Gaussian cumulative distribution function <span class="math notranslate nohighlight">\(\Phi(x)\)</span></a> by <span class="math notranslate nohighlight">\(Q(x) = 1-\Phi(x)\)</span>. If you have the communications toolbox installed, you can simply use ‘qfunc’ in MATLAB. Otherwise, you can use the closely related <a class="reference external" href="https://en.wikipedia.org/wiki/Error_function">error function</a> ‘erf’.</p>
-<div class="math notranslate nohighlight">
-\[ \Phi(x) = \frac{1}{2} \left[ 1 + \text{erf}\left( \frac{x}{\sqrt 2} \right) \right] \]</div>
-</li>
+<li><p>Run the <a class="reference external" href="https://github.com/danjacobellis/EE445S-lab/raw/main/starter_code/receiver_demo.m">QAM receiver demo</a> in MATLAB using the transmission that your recorded. Try to adjust the parameters to recover the tree image. <strong>Show your recovered tree image to the TA.</strong></p></li>
 </ol>
 </div>
 </div>
 <div class="section" id="lab-report-contents">
 <h2>Lab report contents<a class="headerlink" href="#lab-report-contents" title="Permalink to this headline">¶</a></h2>
-<p>Be sure to include everything listed in this section when you submit your lab report. The goal of the report is to help cement what you learned in memory. For sections I, II, and IV, imagine your audience is a student who is your peer but who has not yet completed the lab.</p>
-<div class="section" id="i-introduction">
-<h3>I. Introduction<a class="headerlink" href="#i-introduction" title="Permalink to this headline">¶</a></h3>
-<p>Briefly explain the theory and algorithms behind the programs that you wrote. The slides and reading material might help you in writing this section.</p>
-</div>
-<div class="section" id="ii-methods">
-<h3>II. Methods<a class="headerlink" href="#ii-methods" title="Permalink to this headline">¶</a></h3>
-<p>Describe the steps you took to implement the algorithms in your own words.</p>
-</div>
-<div class="section" id="iii-results-from-lab-exercise">
-<h3>III. Results from lab exercise<a class="headerlink" href="#iii-results-from-lab-exercise" title="Permalink to this headline">¶</a></h3>
-<p>Present the results you obtain for each task on the assignment sheet. This section should include illustrative oscilloscope screenshots of the DSP algorithms in action. Also include any code that you wrote or modified. Please do not include all of the boilerplate code from the textbook.</p>
-<div class="section" id="week-one">
-<h4>Week one<a class="headerlink" href="#week-one" title="Permalink to this headline">¶</a></h4>
-<ul class="simple">
-<li><p>Eye diagram of simulated transmission</p></li>
-<li><p>Spectrograms of PAM transmissions</p></li>
-<li><p>Recovered tree image</p></li>
-</ul>
-</div>
-</div>
-<div class="section" id="iv-discussion">
-<h3>IV. Discussion<a class="headerlink" href="#iv-discussion" title="Permalink to this headline">¶</a></h3>
-<p>In this section, discuss the takeaway from each lab. You can mention any intuition that you developed. Also mention any problems that you faced and how you rectified them.</p>
-</div>
+<p>Enjoy Thanksgiving Break!</p>
 </div>
 </div>
 

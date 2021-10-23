@@ -372,7 +372,7 @@ In this exercise we will add a symbol clock recovery subsystem and implement the
         .
     }
 
-6. Repeat the transmission and put a breakpoint after the image is displayed. The image should appear with proper alignment.
+6. Repeat the transmission and put a breakpoint after the image is displayed. The image should appear with proper alignment. **Include the recovered tree image in your lab report** You can either take a photo or perform a memory export and plot it in MATLAB.
 
 ### Symbol timing recovery
 
@@ -402,7 +402,7 @@ In this exercise we will add a symbol clock recovery subsystem and implement the
 
 4. Apply the second bandpass filter after the squaring block.
 
-5. Send the output to the DAC and display it on the oscilloscope. The peaks of this clock signal indicate when to sample each symbol.
+5. Send the output to the DAC and display it on the oscilloscope. The peaks of this clock signal indicate when to sample each symbol. **Include an oscilloscope screenshot of the recovered clock signal in your lab report**.
 
 ### Symbol error probability
 
@@ -413,6 +413,8 @@ In this exercise we will add a symbol clock recovery subsystem and implement the
     The [$Q-$function][6] is related the the [Gaussian cumulative distribution function $\Phi(x)$][7] by $Q(x) = 1-\Phi(x)$. If you have the communications toolbox installed, you can simply use 'qfunc' in MATLAB. Otherwise, you can use the closely related [error function][8] 'erf'.
     
     $$ \Phi(x) = \frac{1}{2} \left[ 1 + \text{erf}\left( \frac{x}{\sqrt 2} \right) \right] $$
+    
+    ** Include the error probability vs SNR plot in your lab report**
 
 ## Lab report contents
 
@@ -435,11 +437,17 @@ Present the results you obtain for each task on the assignment sheet. This secti
 * Eye diagram of simulated transmission
 * Spectrograms of PAM transmissions
 * Recovered tree image
+
+#### Week two
+* Recovered tree image
+
+#### Week three
+* Recovered tree image
+* Symbol error probability vs SNR plot
     
 ### IV. Discussion
 
 In this section, discuss the takeaway from each lab. You can mention any intuition that you developed. Also mention any problems that you faced and how you rectified them.
-
 
 [1]:https://arm-software.github.io/CMSIS_5/DSP/html/group__FIR__Interpolate.html
 [2]:https://danjacobellis.github.io/EE445S-lab/_sources/lab5/pn_16384.md.txt

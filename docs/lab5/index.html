@@ -129,6 +129,8 @@
 <li class="toctree-l3"><a class="reference internal" href="#ii-methods">II. Methods</a></li>
 <li class="toctree-l3"><a class="reference internal" href="#iii-results-from-lab-exercise">III. Results from lab exercise</a><ul>
 <li class="toctree-l4"><a class="reference internal" href="#week-one">Week one</a></li>
+<li class="toctree-l4"><a class="reference internal" href="#week-two">Week two</a></li>
+<li class="toctree-l4"><a class="reference internal" href="#week-three">Week three</a></li>
 </ul>
 </li>
 <li class="toctree-l3"><a class="reference internal" href="#iv-discussion">IV. Discussion</a></li>
@@ -137,7 +139,7 @@
 </ul>
 </li>
 <li class="toctree-l1"><a class="reference internal" href="../lab6/primer.html">Lab 6 Primer</a></li>
-<li class="toctree-l1"><a class="reference internal" href="../lab6/index.html">Lab 5. Quadrature Amplitude Modulation (QAM)</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../lab6/index.html">Lab 6. Quadrature Amplitude Modulation (QAM)</a></li>
 </ul>
 
             
@@ -574,7 +576,7 @@
 </pre></div>
 </div>
 </li>
-<li><p>Repeat the transmission and put a breakpoint after the image is displayed. The image should appear with proper alignment.</p></li>
+<li><p>Repeat the transmission and put a breakpoint after the image is displayed. The image should appear with proper alignment. <strong>Include the recovered tree image in your lab report</strong> You can either take a photo or perform a memory export and plot it in MATLAB.</p></li>
 </ol>
 </div>
 <div class="section" id="symbol-timing-recovery">
@@ -605,7 +607,7 @@
 <li><p>Apply the first bandpass filter to the output of the Costas loop <code class="docutils literal notranslate"><span class="pre">Uy</span></code>.</p></li>
 <li><p>Square the output of the first bandpass filter.</p></li>
 <li><p>Apply the second bandpass filter after the squaring block.</p></li>
-<li><p>Send the output to the DAC and display it on the oscilloscope. The peaks of this clock signal indicate when to sample each symbol.</p></li>
+<li><p>Send the output to the DAC and display it on the oscilloscope. The peaks of this clock signal indicate when to sample each symbol. <strong>Include an oscilloscope screenshot of the recovered clock signal in your lab report</strong>.</p></li>
 </ol>
 </div>
 <div class="section" id="symbol-error-probability">
@@ -617,6 +619,7 @@
 <p>The <a class="reference external" href="https://en.wikipedia.org/wiki/Q-function"><span class="math notranslate nohighlight">\(Q-\)</span>function</a> is related the the <a class="reference external" href="https://en.wikipedia.org/wiki/Normal_distribution#Cumulative_distribution_function">Gaussian cumulative distribution function <span class="math notranslate nohighlight">\(\Phi(x)\)</span></a> by <span class="math notranslate nohighlight">\(Q(x) = 1-\Phi(x)\)</span>. If you have the communications toolbox installed, you can simply use ‘qfunc’ in MATLAB. Otherwise, you can use the closely related <a class="reference external" href="https://en.wikipedia.org/wiki/Error_function">error function</a> ‘erf’.</p>
 <div class="math notranslate nohighlight">
 \[ \Phi(x) = \frac{1}{2} \left[ 1 + \text{erf}\left( \frac{x}{\sqrt 2} \right) \right] \]</div>
+<p>** Include the error probability vs SNR plot in your lab report**</p>
 </li>
 </ol>
 </div>
@@ -641,6 +644,19 @@
 <li><p>Eye diagram of simulated transmission</p></li>
 <li><p>Spectrograms of PAM transmissions</p></li>
 <li><p>Recovered tree image</p></li>
+</ul>
+</div>
+<div class="section" id="week-two">
+<h4>Week two<a class="headerlink" href="#week-two" title="Permalink to this headline">¶</a></h4>
+<ul class="simple">
+<li><p>Recovered tree image</p></li>
+</ul>
+</div>
+<div class="section" id="week-three">
+<h4>Week three<a class="headerlink" href="#week-three" title="Permalink to this headline">¶</a></h4>
+<ul class="simple">
+<li><p>Recovered tree image</p></li>
+<li><p>Symbol error probability vs SNR plot</p></li>
 </ul>
 </div>
 </div>
