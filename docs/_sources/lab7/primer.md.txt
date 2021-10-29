@@ -14,7 +14,7 @@ Speak(speech_synth,'Put your hands up. This is a filter bank robbery');
 
 ```{raw} html
 <audio controls="controls">
-     <source src="_static/example.wav" type="audio/wav">
+     <source src="../_static/example.wav" type="audio/wav">
 </audio>
 ```
 The source is typically modeled based on the pressure wave that occurs when the vocal folds repeatedly open and close. We can model this as a pulse which is modulated by an impulse train.
