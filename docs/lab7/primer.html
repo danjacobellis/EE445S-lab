@@ -35,6 +35,8 @@
         <script src="../_static/jquery.js"></script>
         <script src="../_static/underscore.js"></script>
         <script src="../_static/doctools.js"></script>
+        <script async="async" src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-mml-chtml.js"></script>
+        <script>window.MathJax = {"options": {"processHtmlClass": "tex2jax_process|mathjax_process|math|output_area"}}</script>
     
     <script type="text/javascript" src="../_static/js/theme.js"></script>
 
@@ -170,20 +172,31 @@
             
   <div class="tex2jax_ignore mathjax_ignore section" id="lab-7-primer">
 <h1>Lab 7 Primer<a class="headerlink" href="#lab-7-primer" title="Permalink to this headline">¶</a></h1>
-</div>
-<div class="tex2jax_ignore mathjax_ignore section" id="speech">
-<h1>Speech<a class="headerlink" href="#speech" title="Permalink to this headline">¶</a></h1>
-<p><a class="reference external" href="https://en.wikipedia.org/wiki/Source%E2%80%93filter_model">Source-filter model</a></p>
+<div class="section" id="modeling-speech">
+<h2>Modeling speech<a class="headerlink" href="#modeling-speech" title="Permalink to this headline">¶</a></h2>
+<p>The <a class="reference external" href="https://en.wikipedia.org/wiki/Source%E2%80%93filter_model">source-filter model</a> of speech is ubiquitous for speech synthesis.</p>
 <div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">NET</span><span class="o">.</span><span class="n">addAssembly</span><span class="p">(</span><span class="s1">&#39;System.Speech&#39;</span><span class="p">);</span>
 <span class="n">speech_synth</span> <span class="o">=</span> <span class="n">System</span><span class="o">.</span><span class="n">Speech</span><span class="o">.</span><span class="n">Synthesis</span><span class="o">.</span><span class="n">SpeechSynthesizer</span><span class="p">;</span>
-<span class="n">Speak</span><span class="p">(</span><span class="n">speech_synth</span><span class="p">,</span><span class="s1">&#39;meatball&#39;</span><span class="p">);</span>
+<span class="n">Speak</span><span class="p">(</span><span class="n">speech_synth</span><span class="p">,</span><span class="s1">&#39;Put your hands up. This is a filter bank robbery&#39;</span><span class="p">);</span>
 <span class="n">SetOutputToWaveFile</span><span class="p">(</span><span class="n">speech_synth</span><span class="p">,</span><span class="s1">&#39;example.wav&#39;</span><span class="p">);</span>
-<span class="n">Speak</span><span class="p">(</span><span class="n">speech_synth</span><span class="p">,</span><span class="s1">&#39;meatball&#39;</span><span class="p">);</span>
+<span class="n">Speak</span><span class="p">(</span><span class="n">speech_synth</span><span class="p">,</span><span class="s1">&#39;Put your hands up. This is a filter bank robbery&#39;</span><span class="p">);</span>
 </pre></div>
+</div>
+<audio controls="controls">
+     <source src="_static/example.wav" type="audio/wav">
+</audio><p>The source is typically modeled based on the pressure wave that occurs when the vocal folds repeatedly open and close. We can model this as a pulse which is modulated by an impulse train.</p>
+<p><img alt="" src="../_images/gauss_shah.svg" /></p>
+<p>The pressure wave can be modeled as the derivative of this signal.</p>
+<p><img alt="" src="../_images/ddt_gauss_shah.svg" /></p>
+<p>In the frequency domain, the result is concentration of energy at evenly spaced harmonics</p>
+<p><img alt="" src="../_images/gauss_shah_freq.svg" /></p>
+<p>The spacing of these harmonics is ‘pitch’, and their envelope contains the remaining phonetic information.</p>
+<p>A <a class="reference external" href="https://en.wikipedia.org/wiki/Vocoder">vocoder</a> attempts to to find the parameters to a speech model from a recording. Since the sophistication of speech models varies widely, so does the sophistication of vocoders. However, the main principles can be demonstrated with just a three subsystems: (1) a source model, (2) <a class="reference external" href="https://en.wikipedia.org/wiki/Pitch_detection_algorithm">pitch detection</a>, and (3) an <a class="reference external" href="https://en.wikipedia.org/wiki/Adaptive_filter">adaptive filter</a>.</p>
+<p>A common application of the vocoder is to rencode the speech with a new frequency <span class="math notranslate nohighlight">\(f_c\)</span>.</p>
+<p><img alt="" src="../_images/vocoder.svg" /></p>
 </div>
 <div class="section" id="fundamental-frequency-estimation">
 <h2>Fundamental frequency estimation<a class="headerlink" href="#fundamental-frequency-estimation" title="Permalink to this headline">¶</a></h2>
-<p><a class="reference external" href="https://en.wikipedia.org/wiki/Pitch_detection_algorithm">Pitch detection</a></p>
 <div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="p">[</span><span class="n">y</span><span class="p">,</span><span class="n">fs</span><span class="p">]</span> <span class="o">=</span> <span class="n">audioread</span><span class="p">(</span><span class="s1">&#39;example.wav&#39;</span><span class="p">);</span> <span class="n">y</span> <span class="o">=</span> <span class="n">resample</span><span class="p">(</span><span class="n">y</span><span class="p">,</span><span class="mi">320</span><span class="p">,</span><span class="mi">147</span><span class="p">);</span> <span class="n">fs</span> <span class="o">=</span> <span class="mf">48e3</span><span class="p">;</span>
 <span class="n">L</span> <span class="o">=</span> <span class="mi">2048</span><span class="p">;</span> <span class="n">N</span> <span class="o">=</span> <span class="n">floor</span><span class="p">(</span><span class="n">length</span><span class="p">(</span><span class="n">y</span><span class="p">)</span><span class="o">/</span><span class="n">L</span><span class="p">);</span> <span class="n">y</span><span class="p">(</span><span class="n">N</span><span class="o">*</span><span class="n">L</span><span class="o">+</span><span class="mi">1</span><span class="p">:</span><span class="n">end</span><span class="p">)</span> <span class="o">=</span> <span class="p">[];</span> <span class="n">y</span> <span class="o">=</span> <span class="n">reshape</span><span class="p">(</span><span class="n">y</span><span class="p">,</span><span class="n">L</span><span class="p">,</span><span class="n">N</span><span class="p">);</span>
 <span class="n">R</span> <span class="o">=</span> <span class="o">@</span><span class="p">(</span><span class="n">x</span><span class="p">,</span><span class="n">n</span><span class="p">)</span> <span class="nb">sum</span><span class="p">(</span><span class="n">x</span><span class="p">(</span><span class="n">n</span><span class="o">+</span><span class="mi">1</span><span class="p">:</span><span class="n">end</span><span class="p">)</span> <span class="o">.*</span> <span class="n">x</span><span class="p">(</span><span class="mi">1</span><span class="p">:</span><span class="n">end</span><span class="o">-</span><span class="n">n</span><span class="p">));</span>
@@ -204,34 +217,40 @@
 </div>
 <div class="section" id="simple-model-of-vocal-source">
 <h2>Simple model of vocal source<a class="headerlink" href="#simple-model-of-vocal-source" title="Permalink to this headline">¶</a></h2>
-<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">x</span> <span class="o">=</span> <span class="p">[];</span>
-<span class="n">period</span> <span class="o">=</span> <span class="mi">400</span><span class="p">;</span>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">x1</span> <span class="o">=</span> <span class="p">[];</span>
+<span class="n">period</span> <span class="o">=</span> <span class="mi">600</span><span class="p">;</span>
 <span class="k">for</span> <span class="n">i_frame</span> <span class="o">=</span> <span class="mi">1</span><span class="p">:</span><span class="n">N</span>
     <span class="k">if</span> <span class="n">Rn</span><span class="p">(</span><span class="n">i_frame</span><span class="p">)</span><span class="o">&gt;</span><span class="mi">2</span>
         <span class="n">period</span> <span class="o">=</span> <span class="n">N0</span><span class="p">(</span><span class="n">i_frame</span><span class="p">);</span>
     <span class="n">end</span>
-    <span class="n">waveform</span> <span class="o">=</span> <span class="n">diff</span><span class="p">(</span><span class="n">gausswin</span><span class="p">(</span><span class="n">period</span><span class="p">,</span><span class="mi">16</span><span class="p">));</span>
+    <span class="n">waveform1</span> <span class="o">=</span> <span class="n">diff</span><span class="p">(</span><span class="n">gausswin</span><span class="p">(</span><span class="n">period</span><span class="p">,</span><span class="mi">30</span><span class="p">));</span>
     <span class="k">for</span> <span class="n">i_sample</span> <span class="o">=</span> <span class="mi">1</span><span class="p">:</span><span class="n">L</span>
         <span class="n">i_x</span> <span class="o">=</span> <span class="n">L</span><span class="o">*</span><span class="p">(</span><span class="n">i_frame</span><span class="o">-</span><span class="mi">1</span><span class="p">)</span> <span class="o">+</span> <span class="n">i_sample</span><span class="p">;</span>
-        <span class="n">i_w</span> <span class="o">=</span> <span class="n">mod</span><span class="p">(</span><span class="n">i_sample</span><span class="p">,</span><span class="n">length</span><span class="p">(</span><span class="n">waveform</span><span class="p">));</span>
+        <span class="n">i_w</span> <span class="o">=</span> <span class="n">mod</span><span class="p">(</span><span class="n">i_sample</span><span class="p">,</span><span class="n">length</span><span class="p">(</span><span class="n">waveform1</span><span class="p">));</span>
         <span class="n">i_w</span> <span class="o">=</span> <span class="n">i_w</span> <span class="o">+</span> <span class="p">(</span><span class="n">i_w</span> <span class="o">==</span> <span class="mi">0</span><span class="p">);</span>
-        <span class="n">x</span><span class="p">(</span><span class="n">i_x</span><span class="p">)</span> <span class="o">=</span> <span class="n">waveform</span><span class="p">(</span><span class="n">i_w</span><span class="p">);</span>
+        <span class="n">x1</span><span class="p">(</span><span class="n">i_x</span><span class="p">)</span> <span class="o">=</span> <span class="p">(</span><span class="n">waveform1</span><span class="p">(</span><span class="n">i_w</span><span class="p">))</span> <span class="o">*</span> <span class="nb">abs</span><span class="p">(</span><span class="n">Rn</span><span class="p">(</span><span class="n">i_frame</span><span class="p">));</span>
         <span class="k">if</span> <span class="n">i_sample</span> <span class="o">&gt;</span> <span class="n">L</span> <span class="o">-</span> <span class="n">period</span>
-            <span class="n">x</span><span class="p">(</span><span class="n">i_x</span><span class="p">)</span> <span class="o">=</span> <span class="n">x</span><span class="p">(</span><span class="n">i_x</span><span class="p">)</span> <span class="o">*</span> <span class="p">((</span><span class="n">L</span> <span class="o">-</span> <span class="n">i_sample</span><span class="p">)</span><span class="o">/</span><span class="n">period</span><span class="p">);</span>
+            <span class="n">x1</span><span class="p">(</span><span class="n">i_x</span><span class="p">)</span> <span class="o">=</span> <span class="n">x1</span><span class="p">(</span><span class="n">i_x</span><span class="p">)</span> <span class="o">*</span> <span class="p">((</span><span class="n">L</span> <span class="o">-</span> <span class="n">i_sample</span><span class="p">)</span><span class="o">/</span><span class="n">period</span><span class="p">);</span>
         <span class="n">end</span>
     <span class="n">end</span>
 <span class="n">end</span>
-<span class="n">x</span> <span class="o">=</span> <span class="n">x</span> <span class="o">+</span> <span class="mf">0.001</span><span class="o">*</span><span class="n">randn</span><span class="p">(</span><span class="n">size</span><span class="p">(</span><span class="n">x</span><span class="p">));</span>
 </pre></div>
 </div>
 </div>
 <div class="section" id="modeling-the-vocal-tract">
 <h2>Modeling the vocal tract<a class="headerlink" href="#modeling-the-vocal-tract" title="Permalink to this headline">¶</a></h2>
-<p><a class="reference external" href="https://en.wikipedia.org/wiki/Least_mean_squares_filter">Least mean squares filter</a></p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">y</span> <span class="o">=</span> <span class="n">y</span><span class="p">(</span><span class="mi">1</span><span class="p">:</span><span class="n">length</span><span class="p">(</span><span class="n">x1</span><span class="p">));</span>
+<span class="n">n</span><span class="o">=</span><span class="mi">513</span><span class="p">;</span> <span class="n">h</span><span class="o">=</span><span class="n">zeros</span><span class="p">(</span><span class="n">n</span><span class="p">,</span><span class="mi">1</span><span class="p">);</span>
+<span class="n">mu</span><span class="o">=</span><span class="mf">.0005</span><span class="p">;</span> <span class="n">delta</span><span class="o">=</span><span class="mi">256</span><span class="p">;</span>
+<span class="n">p1</span> <span class="o">=</span> <span class="p">[];</span> <span class="n">p2</span> <span class="o">=</span> <span class="p">[];</span>
+<span class="k">for</span> <span class="n">i_sample</span><span class="o">=</span><span class="n">n</span><span class="o">+</span><span class="mi">1</span><span class="p">:</span><span class="n">length</span><span class="p">(</span><span class="n">y</span><span class="p">)</span>
+    <span class="n">t1</span> <span class="o">=</span> <span class="n">x1</span><span class="p">(</span><span class="n">i_sample</span> <span class="p">:</span> <span class="o">-</span><span class="mi">1</span> <span class="p">:</span> <span class="n">i_sample</span><span class="o">-</span><span class="n">n</span><span class="o">+</span><span class="mi">1</span><span class="p">)</span><span class="s1">&#39;;</span>
+    <span class="n">p1</span><span class="p">(</span><span class="n">end</span><span class="o">+</span><span class="mi">1</span><span class="p">)</span> <span class="o">=</span> <span class="n">dot</span><span class="p">(</span><span class="n">t1</span><span class="p">,</span><span class="n">h</span><span class="p">);</span>
+    <span class="n">e</span> <span class="o">=</span> <span class="n">y</span><span class="p">(</span><span class="n">i_sample</span><span class="o">-</span><span class="n">delta</span><span class="p">)</span> <span class="o">-</span> <span class="n">p1</span><span class="p">(</span><span class="n">end</span><span class="p">);</span>
+    <span class="n">h</span> <span class="o">=</span> <span class="n">h</span> <span class="o">+</span> <span class="n">mu</span><span class="o">*</span><span class="n">e</span><span class="o">*</span><span class="n">t1</span><span class="p">;</span>
+<span class="n">end</span>
+</pre></div>
 </div>
-<div class="section" id="vocoder">
-<h2>Vocoder<a class="headerlink" href="#vocoder" title="Permalink to this headline">¶</a></h2>
-<p><img alt="" src="../_images/vocoder.svg" /></p>
 </div>
 </div>
 
