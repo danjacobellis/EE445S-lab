@@ -31,26 +31,39 @@ In the frequency domain, the result is concentration of energy at evenly spaced 
 
 The spacing of these harmonics is 'pitch', and their envelope contains the remaining phonetic information.
 
-A [vocoder][2] attempts to to find the parameters to a speech model from a recording. Since the sophistication of speech models varies widely, so does the sophistication of vocoders. However, the main principles can be demonstrated with just a three subsystems: (1) a source model, (2) [pitch detection][3], and (3) an [adaptive filter][4].
+A [vocoder][2] attempts to to find the time-varying parameters to a speech model from a recording. Since the sophistication of speech models varies widely, so does the sophistication of vocoders. However, the main principles can be demonstrated with just a three subsystems: (1) a source model (above), (2) [pitch detection][3], and (3) an [adaptive filter][4].
 
 A common application of the vocoder is to rencode the speech with a new frequency $f_c$.
 
 ![](../img/vocoder.svg)
 
-## Fundamental frequency estimation
+## Autocorrelation for pitch detection
+
+Suppose that we want to estimate the time-varying fundamental frequency $f_0$ of a speech recording with an update rate of about 25 Hz. We can divide the input signal into frames which are roughly $\frac{1}{25 \text{ Hz}} = 40 \text{ ms}$ long. For a sampling rate of 48 kHz, this would mean that we want to produce an estimate every $\frac{48 \text{ kHz}}{25 \text{ Hz}} = 1920$ samples, though for convenience we will round this to to a power of two (2048).
 
 ```
 [y,fs] = audioread('example.wav'); y = resample(y,320,147); fs = 48e3;
 L = 2048; N = floor(length(y)/L); y(N*L+1:end) = []; y = reshape(y,L,N);
+```
+
+The fundamental period of the signal is $T_0 = 1/f_0$. Therefore, the autocorrelation should have a peak at this offset. This fact leads to a simple pitch detection algorithm.
+
+1. Find the offset $N_0$ (in samples) where the peak autocorrelation occurs (subject to a constraint).
+
+2. Estimate that the signal in the frame is periodic with fundamental frequency $\omega_0 = \frac{1}{N_0} \frac{\text{radians}}{\text{sample}}$.
+
+The constraint in step one is that the estimated frequency should be in the normal vocal range of about 50 to 250 Hz. Or equivalently, the offset should be between $\frac{48 \text{kHz}}{250 \text{Hz}} \approx 200$ samples and $\frac{48 \text{kHz}}{50 \text{Hz}} \approx 1000$ samples.
+
+```
 R = @(x,n) sum(x(n+1:end) .* x(1:end-n));
 Rn = []; N0 = [];
 for i_frame = 1:N
 R_max = 0; n_max = 0;
-    for n = 200:1000
-        Rn(i_frame) = R( y(:,i_frame), n);
-        if Rn(i_frame) > R_max
-            R_max = Rn(i_frame); n_max = n;
-        end
+for n = 200:1000
+    Rn(i_frame) = R( y(:,i_frame), n);
+    if Rn(i_frame) > R_max
+        R_max = Rn(i_frame); n_max = n;
+    end
     N0(i_frame) = n_max;
     Rn(i_frame) = R_max;
     end
@@ -58,6 +71,10 @@ end
 ```
 
 ## Simple model of vocal source
+
+Any waveform that matches the desired fundamental frequency and has energy widely distributed among harmonics is suitable to simulate the vocal source. For this example, we will use the (derivative of) a gaussian pulse which has been modulated by an impulse train of the desired period. We will use the magnitude of the autocorrelation to control the volume and avoid changing frequencies when no voiced speech is present.
+
+![](../img/ddt_gauss_shah.svg)
 
 ```
 x1 = [];
@@ -81,10 +98,12 @@ end
 
 ## Modeling the vocal tract
 
+Now that we have a model of the source, we can attempt to learn (for each new sample) an LTI approximation of the articulatory filter (lips, tounge, pharynx, etc). Many adaptive filtering techniques exist for this task, but for simplicity we will use the [Least mean square filter][5].
+
 ```
 y = y(1:length(x1));
 n=513; h=zeros(n,1);
-mu=.0005; delta=256;
+mu=.001; delta=256;
 p1 = []; p2 = [];
 for i_sample=n+1:length(y)
     t1 = x1(i_sample : -1 : i_sample-n+1)';
@@ -92,9 +111,27 @@ for i_sample=n+1:length(y)
     e = y(i_sample-delta) - p1(end);
     h = h + mu*e*t1;
 end
+soundsc(p1,fs)
 ```
+
+```{raw} html
+<audio controls="controls">
+     <source src="../_static/example2.wav" type="audio/wav">
+</audio>
+```
+
+## Applications
+
+The examples above encode the speech into a time-varying frequeny $f_0$ and a time-varying filter $h$. With this description of the signal, many applications are possible:
+
+* Replace the source with a musical instrument with energetic harmonics, (like a guitar, violin, or synthesizer), but use the learned time-varying filter to make the instrument 'speak'.
+
+* Exploit the fact that the parameterized representation contains fewer bits for speech compression.
+
+* Modify the parameters based on other information about the signal to perform denoising or source separation.
 
 [1]:https://en.wikipedia.org/wiki/Source–filter_model
 [2]:https://en.wikipedia.org/wiki/Vocoder
 [3]:https://en.wikipedia.org/wiki/Pitch_detection_algorithm
 [4]:https://en.wikipedia.org/wiki/Adaptive_filter
+[5]:https://en.wikipedia.org/wiki/Least_mean_squares_filter
