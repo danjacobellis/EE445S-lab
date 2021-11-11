@@ -535,7 +535,7 @@
 <li><p>Create the variables necessary to implement the header detection as an FIR filter including a semaphore variable to track when the header has been detected.</p>
 <div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">int8_t</span> <span class="n">xcorr</span><span class="p">[</span><span class="mi">32</span><span class="p">]</span> <span class="o">=</span> <span class="p">{</span><span class="mi">0</span><span class="p">};</span>
 <span class="n">int8_t</span> <span class="n">header</span><span class="p">[</span><span class="mi">32</span><span class="p">]</span> <span class="o">=</span> <span class="p">{</span><span class="mi">1</span><span class="p">,</span><span class="o">-</span><span class="mi">1</span><span class="p">,</span><span class="o">-</span><span class="mi">1</span><span class="p">,</span><span class="mi">1</span><span class="p">,</span><span class="o">-</span><span class="mi">1</span><span class="p">,</span><span class="mi">1</span><span class="p">,</span><span class="mi">1</span><span class="p">,</span><span class="o">-</span><span class="mi">1</span><span class="p">,</span><span class="o">-</span><span class="mi">1</span><span class="p">,</span><span class="mi">1</span><span class="p">,</span><span class="mi">1</span><span class="p">,</span><span class="mi">1</span><span class="p">,</span><span class="mi">1</span><span class="p">,</span><span class="mi">1</span><span class="p">,</span><span class="o">-</span><span class="mi">1</span><span class="p">,</span><span class="o">-</span><span class="mi">1</span><span class="p">,</span><span class="o">-</span><span class="mi">1</span><span class="p">,</span><span class="mi">1</span><span class="p">,</span><span class="mi">1</span><span class="p">,</span><span class="o">-</span><span class="mi">1</span><span class="p">,</span><span class="mi">1</span><span class="p">,</span><span class="mi">1</span><span class="p">,</span><span class="mi">1</span><span class="p">,</span><span class="o">-</span><span class="mi">1</span><span class="p">,</span><span class="mi">1</span><span class="p">,</span><span class="o">-</span><span class="mi">1</span><span class="p">,</span><span class="mi">1</span><span class="p">,</span><span class="o">-</span><span class="mi">1</span><span class="p">,</span><span class="o">-</span><span class="mi">1</span><span class="p">,</span><span class="o">-</span><span class="mi">1</span><span class="p">,</span><span class="o">-</span><span class="mi">1</span><span class="p">,</span><span class="mi">1</span><span class="p">};</span>
-<span class="n">int8_t</span> <span class="n">r</span> <span class="o">=</span> <span class="mi">0</span><span class="p">;</span>
+<span class="n">int8_t</span> <span class="n">R</span> <span class="o">=</span> <span class="mi">0</span><span class="p">;</span>
 <span class="n">int8_t</span> <span class="n">header_matched</span> <span class="o">=</span> <span class="mi">0</span><span class="p">;</span>
 </pre></div>
 </div>
@@ -547,10 +547,10 @@
 </div>
 </li>
 <li><p>Perform the correlation as an FIR filter (the header variable as defined above has already been flipped).</p>
-<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">r</span> <span class="o">=</span> <span class="mi">0</span><span class="p">;</span>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">R</span> <span class="o">=</span> <span class="mi">0</span><span class="p">;</span>
 <span class="k">for</span> <span class="p">(</span><span class="n">uint32_t</span> <span class="n">i_hdr</span> <span class="o">=</span> <span class="mi">0</span><span class="p">;</span> <span class="n">i_hdr</span> <span class="o">&lt;</span> <span class="mi">32</span><span class="p">;</span> <span class="n">i_hdr</span> <span class="o">+=</span><span class="mi">1</span><span class="p">)</span>
 <span class="p">{</span>
-    <span class="n">r</span> <span class="o">+=</span> <span class="n">xcorr</span><span class="p">[</span><span class="n">i_hdr</span><span class="p">]</span><span class="o">*</span><span class="n">header</span><span class="p">[</span><span class="n">i_hdr</span><span class="p">];</span>
+    <span class="n">R</span> <span class="o">+=</span> <span class="n">xcorr</span><span class="p">[</span><span class="n">i_hdr</span><span class="p">]</span><span class="o">*</span><span class="n">header</span><span class="p">[</span><span class="n">i_hdr</span><span class="p">];</span>
 <span class="p">}</span>
 <span class="k">for</span> <span class="p">(</span><span class="n">uint32_t</span> <span class="n">i_hdr</span> <span class="o">=</span> <span class="mi">31</span><span class="p">;</span> <span class="n">i_hdr</span> <span class="o">&gt;</span> <span class="mi">0</span><span class="p">;</span> <span class="n">i_hdr</span> <span class="o">-=</span><span class="mi">1</span><span class="p">)</span>
 <span class="p">{</span>
@@ -560,7 +560,7 @@
 </div>
 </li>
 <li><p>If the cross correlation reaches the maximum possible value, update the semaphore.</p>
-<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="k">if</span> <span class="p">(</span><span class="n">r</span> <span class="o">&gt;</span> <span class="mi">30</span><span class="p">)</span> <span class="p">{</span><span class="n">header_matched</span> <span class="o">=</span> <span class="mi">1</span><span class="p">;}</span>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="k">if</span> <span class="p">(</span><span class="n">R</span> <span class="o">&gt;</span> <span class="mi">30</span><span class="p">)</span> <span class="p">{</span><span class="n">header_matched</span> <span class="o">=</span> <span class="mi">1</span><span class="p">;}</span>
 </pre></div>
 </div>
 </li>
@@ -588,8 +588,8 @@
 <li><p>Design method: Elliptic</p></li>
 <li><p>Filter order <span class="math notranslate nohighlight">\(N=2\)</span></p></li>
 <li><p>Sampling Frequency <span class="math notranslate nohighlight">\(F_s= 48 \text{ kHz}\)</span></p></li>
-<li><p><span class="math notranslate nohighlight">\(F_{\text{pass1}}=1.4\text{ kHz}\)</span></p></li>
-<li><p><span class="math notranslate nohighlight">\(F_{\text{pass2}}=1.5\text{ kHz}\)</span></p></li>
+<li><p><span class="math notranslate nohighlight">\(F_{\text{pass1}}=1.45\text{ kHz}\)</span></p></li>
+<li><p><span class="math notranslate nohighlight">\(F_{\text{pass2}}=1.55\text{ kHz}\)</span></p></li>
 <li><p><span class="math notranslate nohighlight">\(A_{\text{stop}}=80 \text{dB}\)</span></p></li>
 <li><p><span class="math notranslate nohighlight">\(A_{\text{pass}}=1 \text{dB}\)</span></p></li>
 </ul>
@@ -598,8 +598,8 @@
 <li><p>Design method: Elliptic</p></li>
 <li><p>Filter order <span class="math notranslate nohighlight">\(N=2\)</span></p></li>
 <li><p>Sampling Frequency <span class="math notranslate nohighlight">\(F_s= 48 \text{ kHz}\)</span></p></li>
-<li><p><span class="math notranslate nohighlight">\(F_{\text{pass1}}=3.8\text{ kHz}\)</span></p></li>
-<li><p><span class="math notranslate nohighlight">\(F_{\text{pass2}}=4.2\text{ kHz}\)</span></p></li>
+<li><p><span class="math notranslate nohighlight">\(F_{\text{pass1}}=2.9\text{ kHz}\)</span></p></li>
+<li><p><span class="math notranslate nohighlight">\(F_{\text{pass2}}=3.1\text{ kHz}\)</span></p></li>
 <li><p><span class="math notranslate nohighlight">\(A_{\text{stop}}=80 \text{dB}\)</span></p></li>
 <li><p><span class="math notranslate nohighlight">\(A_{\text{pass}}=1 \text{dB}\)</span></p></li>
 </ul>

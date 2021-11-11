@@ -330,7 +330,7 @@ In this exercise we will add a symbol clock recovery subsystem and implement the
     ```
     int8_t xcorr[32] = {0};
     int8_t header[32] = {1,-1,-1,1,-1,1,1,-1,-1,1,1,1,1,1,-1,-1,-1,1,1,-1,1,1,1,-1,1,-1,1,-1,-1,-1,-1,1};
-    int8_t r = 0;
+    int8_t R = 0;
     int8_t header_matched = 0;
     ```
 
@@ -344,10 +344,10 @@ In this exercise we will add a symbol clock recovery subsystem and implement the
 3. Perform the correlation as an FIR filter (the header variable as defined above has already been flipped).
 
     ```
-    r = 0;
+    R = 0;
     for (uint32_t i_hdr = 0; i_hdr < 32; i_hdr +=1)
     {
-        r += xcorr[i_hdr]*header[i_hdr];
+        R += xcorr[i_hdr]*header[i_hdr];
     }
     for (uint32_t i_hdr = 31; i_hdr > 0; i_hdr -=1)
     {
@@ -358,7 +358,7 @@ In this exercise we will add a symbol clock recovery subsystem and implement the
 4. If the cross correlation reaches the maximum possible value, update the semaphore.
 
     ```
-    if (r > 30) {header_matched = 1;}
+    if (R > 30) {header_matched = 1;}
     ```
 
 5. Move the data collection code block into an if statement so that it only occurs after the header is detected
@@ -382,8 +382,8 @@ In this exercise we will add a symbol clock recovery subsystem and implement the
     * Design method: Elliptic
     * Filter order $N=2$
     * Sampling Frequency $F_s= 48 \text{ kHz}$
-    * $F_{\text{pass1}}=1.4\text{ kHz}$
-    * $F_{\text{pass2}}=1.5\text{ kHz}$
+    * $F_{\text{pass1}}=1.45\text{ kHz}$
+    * $F_{\text{pass2}}=1.55\text{ kHz}$
     * $A_{\text{stop}}=80 \text{dB}$
     * $A_{\text{pass}}=1 \text{dB}$
 
@@ -391,8 +391,8 @@ In this exercise we will add a symbol clock recovery subsystem and implement the
     * Design method: Elliptic
     * Filter order $N=2$
     * Sampling Frequency $F_s= 48 \text{ kHz}$
-    * $F_{\text{pass1}}=3.8\text{ kHz}$
-    * $F_{\text{pass2}}=4.2\text{ kHz}$
+    * $F_{\text{pass1}}=2.9\text{ kHz}$
+    * $F_{\text{pass2}}=3.1\text{ kHz}$
     * $A_{\text{stop}}=80 \text{dB}$
     * $A_{\text{pass}}=1 \text{dB}$
 
