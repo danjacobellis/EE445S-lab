@@ -69,8 +69,6 @@ K = 39; a = [1, zeros(1,K), 1]; freqz(1,a,n,16000)
 
 ![](../img/comb2_freq.svg)
 
-## Variations
-
 ### Echo/Delay
 
 With sufficiently high delay $K$, the comb filter becomes an audible echo. If the IIR form is used, it will create multiple echos.
@@ -116,8 +114,6 @@ Many types of nonlinearities can produce harmonic distortion. As a result, this 
 * Overdrive
 * Bit crusher
 
-##
-
 ## Amplitude Modulation
 
 Any effect which only modifies the amplitude and not the phase can be considered "amplitude modulation"
@@ -159,7 +155,7 @@ Dispose(speech_synth);
 </audio>
 ```
 
-The source is typically modeled on the pressure wave that occurs when the vocal folds repeatedly open and close. We can model this as a pulse which is modulated by an impulse train.
+The source is typically modeled on the pressure wave that occurs when the vocal folds repeatedly open and close. One possible model is a pulse which is modulated by an impulse train.
 
 ![](../img/gauss_shah.svg)
 
@@ -240,7 +236,7 @@ end
 
 ### Modeling the vocal tract
 
-Now that we have a model of the source, we can attempt to learn (for each new sample) an LTI approximation of the articulatory filter (lips, tounge, pharynx, etc). Many adaptive filtering techniques exist for this task, Though it has some limitations, [Least mean square filter][5], could be used for this application.
+Now that we have a model of the source, we can attempt to learn (for each new sample) an LTI approximation of the articulatory filter (lips, tounge, pharynx, etc). Many adaptive filtering techniques exist for this task. Though it has some limitations, [Least mean square equalizer][5], could be used for this application.
 
 ```
 y = y(1:length(x1));
