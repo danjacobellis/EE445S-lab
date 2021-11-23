@@ -17,4 +17,6 @@ lab5/primer
 lab5/index
 lab6/primer
 lab6/index
+lab7/primer
+lab7/index
 ```
