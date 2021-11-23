@@ -7,7 +7,7 @@
   
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   
-  <title>Lab 7. Vocoder &mdash; 445S Lab Manual  documentation</title>
+  <title>Lab 7. Vocoder and Guitar Effects &mdash; 445S Lab Manual  documentation</title>
   
 
   
@@ -35,12 +35,15 @@
         <script src="../_static/jquery.js"></script>
         <script src="../_static/underscore.js"></script>
         <script src="../_static/doctools.js"></script>
+        <script async="async" src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-mml-chtml.js"></script>
+        <script>window.MathJax = {"options": {"processHtmlClass": "tex2jax_process|mathjax_process|math|output_area"}}</script>
     
     <script type="text/javascript" src="../_static/js/theme.js"></script>
 
     
     <link rel="index" title="Index" href="../genindex.html" />
-    <link rel="search" title="Search" href="../search.html" /> 
+    <link rel="search" title="Search" href="../search.html" />
+    <link rel="prev" title="Lab 7 Primer" href="primer.html" /> 
 </head>
 
 <body class="wy-body-for-nav">
@@ -85,7 +88,7 @@
               
             
             
-              <ul>
+              <ul class="current">
 <li class="toctree-l1"><a class="reference internal" href="../overview.html">EE 445S Lab Component</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../primer.html">Lab Primer</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../stm32h735g.html">STM32H735G Discovery Kit Setup Guide</a></li>
@@ -101,6 +104,20 @@
 <li class="toctree-l1"><a class="reference internal" href="../lab5/index.html">Lab 5. Digital Data Transmission by Baseband Pulse Amplitude Modulation (PAM)</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../lab6/primer.html">Lab 6 Primer</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../lab6/index.html">Lab 6. Quadrature Amplitude Modulation (QAM)</a></li>
+<li class="toctree-l1"><a class="reference internal" href="primer.html">Lab 7 Primer</a></li>
+<li class="toctree-l1 current"><a class="current reference internal" href="#">Lab 7. Vocoder and Guitar Effects</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="#aim-of-the-experiment">Aim of the experiment</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#reading-assignment">Reading assignment</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#lab-7-instructions">Lab 7 instructions</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="#vocoder-training-in-matlab">Vocoder training in MATLAB</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#vocoder-in-c">Vocoder in C</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#flanger">Flanger</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#distortion">Distortion</a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="#lab-report-contents">Lab report contents</a></li>
+</ul>
+</li>
 </ul>
 
             
@@ -149,7 +166,7 @@
     
       <li><a href="../index.html" class="icon icon-home"></a> &raquo;</li>
         
-      <li>Lab 7. Vocoder</li>
+      <li>Lab 7. Vocoder and Guitar Effects</li>
     
     
       <li class="wy-breadcrumbs-aside">
@@ -168,19 +185,99 @@
           <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
            <div itemprop="articleBody">
             
-  <div class="tex2jax_ignore mathjax_ignore section" id="lab-7-vocoder">
-<h1>Lab 7. Vocoder<a class="headerlink" href="#lab-7-vocoder" title="Permalink to this headline">¶</a></h1>
+  <div class="tex2jax_ignore mathjax_ignore section" id="lab-7-vocoder-and-guitar-effects">
+<h1>Lab 7. Vocoder and Guitar Effects<a class="headerlink" href="#lab-7-vocoder-and-guitar-effects" title="Permalink to this headline">¶</a></h1>
 <div class="section" id="aim-of-the-experiment">
 <h2>Aim of the experiment<a class="headerlink" href="#aim-of-the-experiment" title="Permalink to this headline">¶</a></h2>
+<p>This experiment demonstrates audio effects commonly applied to harmonic instruments like the guitar.</p>
 </div>
 <div class="section" id="reading-assignment">
 <h2>Reading assignment<a class="headerlink" href="#reading-assignment" title="Permalink to this headline">¶</a></h2>
+<ul class="simple">
+<li><p>Lab 7 primer</p></li>
+</ul>
 </div>
 <div class="section" id="lab-7-instructions">
 <h2>Lab 7 instructions<a class="headerlink" href="#lab-7-instructions" title="Permalink to this headline">¶</a></h2>
+<div class="section" id="vocoder-training-in-matlab">
+<h3>Vocoder training in MATLAB<a class="headerlink" href="#vocoder-training-in-matlab" title="Permalink to this headline">¶</a></h3>
+<p>In this exercise, we will encode a voice recording into a matrix of IIR filter coefficients.</p>
+<ol>
+<li><p>Record or generate a short segment of speech and save it to a file with 48kHz sampling rate.</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">NET</span><span class="o">.</span><span class="n">addAssembly</span><span class="p">(</span><span class="s1">&#39;System.Speech&#39;</span><span class="p">);</span>
+<span class="n">speech_synth</span> <span class="o">=</span> <span class="n">System</span><span class="o">.</span><span class="n">Speech</span><span class="o">.</span><span class="n">Synthesis</span><span class="o">.</span><span class="n">SpeechSynthesizer</span><span class="p">;</span>
+<span class="n">SetOutputToWaveFile</span><span class="p">(</span><span class="n">speech_synth</span><span class="p">,</span><span class="s1">&#39;example.wav&#39;</span><span class="p">);</span>
+<span class="n">Speak</span><span class="p">(</span><span class="n">speech_synth</span><span class="p">,</span><span class="s1">&#39;Put your hands up. This is a filter bank robbery&#39;</span><span class="p">);</span>
+<span class="n">Dispose</span><span class="p">(</span><span class="n">speech_synth</span><span class="p">);</span>
+<span class="p">[</span><span class="n">y</span><span class="p">,</span><span class="n">fs</span><span class="p">]</span> <span class="o">=</span> <span class="n">audioread</span><span class="p">(</span><span class="s1">&#39;example.wav&#39;</span><span class="p">);</span> <span class="n">y</span> <span class="o">=</span> <span class="n">resample</span><span class="p">(</span><span class="n">y</span><span class="p">,</span><span class="mi">320</span><span class="p">,</span><span class="mi">147</span><span class="p">);</span> <span class="n">fs</span> <span class="o">=</span> <span class="mf">48e3</span><span class="p">;</span>
+</pre></div>
+</div>
+</li>
+<li><p>Break the signal into frames that match the DMA buffer size.</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">L</span> <span class="o">=</span> <span class="mi">2048</span><span class="p">;</span> <span class="n">N</span> <span class="o">=</span> <span class="n">floor</span><span class="p">(</span><span class="n">length</span><span class="p">(</span><span class="n">y</span><span class="p">)</span><span class="o">/</span><span class="n">L</span><span class="p">);</span>
+<span class="n">y</span><span class="p">(</span><span class="n">N</span><span class="o">*</span><span class="n">L</span><span class="o">+</span><span class="mi">1</span><span class="p">:</span><span class="n">end</span><span class="p">)</span> <span class="o">=</span> <span class="p">[];</span>
+<span class="n">y</span> <span class="o">=</span> <span class="n">reshape</span><span class="p">(</span><span class="n">y</span><span class="p">,</span><span class="n">L</span><span class="p">,</span><span class="n">N</span><span class="p">);</span>
+</pre></div>
+</div>
+</li>
+<li><p>Learn the filter corresponding to each frame of data</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">order</span> <span class="o">=</span> <span class="mi">12</span><span class="p">;</span>
+<span class="n">period</span> <span class="o">=</span> <span class="mi">480</span><span class="o">*</span><span class="n">ones</span><span class="p">(</span><span class="n">N</span><span class="p">,</span><span class="mi">1</span><span class="p">);</span>
+<span class="n">peak</span> <span class="o">=</span> <span class="n">zeros</span><span class="p">(</span><span class="n">N</span><span class="p">,</span><span class="mi">1</span><span class="p">);</span>
+<span class="n">a</span> <span class="o">=</span> <span class="n">zeros</span><span class="p">(</span><span class="n">N</span><span class="p">,</span><span class="n">order</span><span class="p">);</span>
+<span class="k">for</span> <span class="n">i_frame</span> <span class="o">=</span> <span class="mi">1</span><span class="p">:</span><span class="n">N</span>
+    <span class="p">[</span><span class="n">r</span><span class="p">,</span><span class="n">lg</span><span class="p">]</span> <span class="o">=</span> <span class="n">xcorr</span><span class="p">(</span><span class="n">y</span><span class="p">(:,</span><span class="n">i_frame</span><span class="p">),</span><span class="s1">&#39;biased&#39;</span><span class="p">);</span> <span class="n">r</span><span class="p">(</span><span class="n">lg</span><span class="o">&lt;</span><span class="mi">0</span><span class="p">)</span> <span class="o">=</span> <span class="p">[];</span>
+    <span class="p">[</span><span class="n">peak</span><span class="p">(</span><span class="n">i_frame</span><span class="p">),</span><span class="n">period</span><span class="p">(</span><span class="n">i_frame</span><span class="p">)]</span> <span class="o">=</span> <span class="nb">max</span><span class="p">(</span><span class="n">r</span><span class="p">(</span><span class="mi">200</span><span class="p">:</span><span class="mi">1000</span><span class="p">));</span>
+    <span class="n">a</span><span class="p">(</span><span class="n">i_frame</span><span class="p">,:)</span> <span class="o">=</span> <span class="n">levinson</span><span class="p">(</span><span class="n">r</span><span class="p">,</span><span class="n">order</span><span class="o">-</span><span class="mi">1</span><span class="p">);</span>
+<span class="n">end</span>
+</pre></div>
+</div>
+</li>
+<li><p>Export the coefficients to C.</p></li>
+</ol>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span>    <span class="n">a</span><span class="p">(</span><span class="n">isnan</span><span class="p">(</span><span class="n">a</span><span class="p">))</span> <span class="o">=</span> <span class="mi">0</span><span class="p">;</span>
+    <span class="n">sprintf</span><span class="p">(</span> <span class="p">[</span><span class="s1">&#39;{&#39;</span><span class="p">,</span> <span class="n">repmat</span><span class="p">(</span><span class="s1">&#39;</span><span class="si">%f</span><span class="s1">,&#39;</span><span class="p">,[</span><span class="mi">1</span><span class="p">,</span><span class="n">order</span><span class="p">])</span> <span class="s1">&#39;},</span><span class="se">\n</span><span class="s1">&#39;</span><span class="p">],</span> <span class="n">a</span><span class="s1">&#39;)</span>
+</pre></div>
+</div>
+</div>
+<div class="section" id="vocoder-in-c">
+<h3>Vocoder in C<a class="headerlink" href="#vocoder-in-c" title="Permalink to this headline">¶</a></h3>
+<p>In this exercise, you will apply the learned vocal filter to input data in real time.</p>
+<ol class="simple">
+<li><p>Initialize a matrix with the filter coefficients computed in MATLAB.</p></li>
+<li><p>In process_input_buffer, apply the filter to the current input frame using the <a class="reference external" href="https://arm-software.github.io/CMSIS_5/DSP/html/group__groupFilters.html">CMSIS IIR filtering function</a>.</p></li>
+<li><p>Add a counter so that the filter coefficients are updated after processing each frame.</p></li>
+<li><p>Using a separate phone/laptop, play a recording which contains harmonically rich instrument(s), like a guitar, violin, or synthesizer. Verify that the output shares characteristics of the original speech signal.</p></li>
+</ol>
+</div>
+<div class="section" id="flanger">
+<h3>Flanger<a class="headerlink" href="#flanger" title="Permalink to this headline">¶</a></h3>
+<p>In this exercise, you will implement the flanger using the feedforward form of the comb filter.</p>
+<div class="math notranslate nohighlight">
+\[y[n] = x[n] + \alpha x\left[n-K[n]\right]\]</div>
+<div class="math notranslate nohighlight">
+\[K[n] = R \cos(\omega_{\text{flanger}}) + \frac{R}{2}\]</div>
+<ol class="simple">
+<li><p>Using a separate phone/laptop, play a recording which contains harmonically rich instrument(s), like a guitar, violin, or synthesizer, and listen to the output.</p></li>
+</ol>
+</div>
+<div class="section" id="distortion">
+<h3>Distortion<a class="headerlink" href="#distortion" title="Permalink to this headline">¶</a></h3>
+<p>In this exercise, you will implement harmonic distortion using two methods.</p>
+<ol class="simple">
+<li><p>Add a nonlinearity to the input signal to increase the energy at higher harmonics.</p>
+<ul class="simple">
+<li><p>Option 1 (Overdrive/clipping) : Whenever the absolute value of the signal exceeds some threshold <span class="math notranslate nohighlight">\(L\)</span>, set the value equal to <span class="math notranslate nohighlight">\(\text{sgn}(x[n]) L\)</span></p></li>
+<li><p>Option 2 (Bitcrusher/Quantization) : Scale the (fixed point) input signal by <span class="math notranslate nohighlight">\(\alpha = 2^-\B\)</span> so that the <span class="math notranslate nohighlight">\(B\)</span> least significant bits of information are discarded. then, scale the input by <span class="math notranslate nohighlight">\(2^B\)</span> so that the original level is restored.</p></li>
+</ul>
+</li>
+<li><p>Using a separate phone/laptop, play a recording which contains harmonically rich instrument(s), like a guitar, violin, or synthesizer, and listen to the output.</p></li>
+</ol>
+</div>
 </div>
 <div class="section" id="lab-report-contents">
 <h2>Lab report contents<a class="headerlink" href="#lab-report-contents" title="Permalink to this headline">¶</a></h2>
+<p>Good luck on exam two!</p>
 </div>
 </div>
 
@@ -189,6 +286,9 @@
            
           </div>
           <footer>
+    <div class="rst-footer-buttons" role="navigation" aria-label="footer navigation">
+        <a href="primer.html" class="btn btn-neutral float-left" title="Lab 7 Primer" accesskey="p" rel="prev"><span class="fa fa-arrow-circle-left" aria-hidden="true"></span> Previous</a>
+    </div>
 
   <hr/>
 
