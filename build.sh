@@ -19,6 +19,7 @@ do
     sed -i 's#http://users.ece.utexas.edu/~bevans/courses/realtime/#../../../../#g' $f
 done
 cp -r _build/html/* ../stm32h735gdk/
+cp ../docs/_static/*.wav ../stm32h735gdk/_static
 
 cd ..
 zip -r stm32h735gdk.zip stm32h735gdk
