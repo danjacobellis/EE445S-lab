@@ -45,26 +45,68 @@ In this exercise, we will encode a voice recording into a matrix of IIR filter c
         [peak(i_frame),period(i_frame)] = max(r(200:1000));
         a(i_frame,:) = levinson(r,order-1);
     end
+    a(isnan(a)) = 0;
     ```
     
-4. Export the coefficients to C.
+4. Format the coefficients for C
 
-```
-    a(isnan(a)) = 0;
-    sprintf( ['{', repmat('%f,',[1,order]) '},\n'], a')
-```
+    ```
+    sprintf( ['{', repmat('%f,',[1,order]) '},\n'], a');
+    ```    
     
-### Vocoder in C
+### Vocoder effect in C
 
 In this exercise, you will apply the learned vocal filter to input data in real time.
 
 1. Initialize a matrix with the filter coefficients computed in MATLAB.
 
-2. In process_input_buffer, apply the filter to the current input frame using the [CMSIS IIR filtering function](https://arm-software.github.io/CMSIS_5/DSP/html/group__groupFilters.html).
+    ```
+    float32_t A[<N>][<order>] = {<exported filter coefficients>};
+    ```
+    
+2. Create variables to track the current filter index
 
-3. Add a counter so that the filter coefficients are updated after processing each frame.
+    ```
+    uint32_t i_sample = 0;
+    uint32_t i_filter = 0;
+    ```
+    
+3. Create an array to hold the previous output values
 
-4. Using a separate phone/laptop, play a recording which contains harmonically rich instrument(s), like a guitar, violin, or synthesizer. Verify that the output shares characteristics of the original speech signal.
+    ```
+    float32_t y[12] = {0};
+    ```
+    
+
+3. In process_left_sample, apply the all-pole IIR filter
+
+    ```
+    y[0] = INPUT_SCALE_FACTOR*input_sample;
+	for (uint32_t delay = 1; delay < 12; delay+=1)
+	{
+		y[0] -= y[delay]*A[i_filter][delay];
+	}
+
+	output_sample = OUTPUT_SCALE_FACTOR*y[0];
+
+	for (delay = 11; delay > 0; delay-=1)
+	{
+		y[delay] = y[delay-1];
+	}
+    ```
+    
+4. Increment the variables which track the current filter index
+
+    ```
+    i_sample += 1;
+    if (i_sample == 2048)
+    {
+        i_filter += 1;
+        if (i_filter == 104){i_filter = 0;}
+    }
+    ```
+
+5. Using a separate phone/laptop, play a recording which contains harmonically rich instrument(s), like a guitar, violin, or synthesizer. Verify that the output shares characteristics of the original speech signal.
 
 ### Flanger
 
