@@ -20,7 +20,7 @@ In this exercise, we will encode a voice recording into a matrix of IIR filter c
     NET.addAssembly('System.Speech');
     speech_synth = System.Speech.Synthesis.SpeechSynthesizer;
     SetOutputToWaveFile(speech_synth,'example.wav');
-    Speak(speech_synth,'do re mi faso la tee do');
+    Speak(speech_synth,'do re mi fa so la tee');
     Dispose(speech_synth);
     [y,fs] = audioread('example.wav'); y = resample(y,320,147); fs = 48e3;
     ```
@@ -29,14 +29,14 @@ In this exercise, we will encode a voice recording into a matrix of IIR filter c
     
     ```
     y = flipud(y);
-    ind = find(abs(y) > 1e-3);
+    ind = find(abs(y) > 5e-3);
     y(1:ind(1)) = [];
     y = flipud(y);
-    ind = find(abs(y) > 1e-3);
+    ind = find(abs(y) > 5e-3);
     y(1:ind(1)) = [];
     ```
     
-2. Break the signal into frames of length $L = \frac{\text{sample_rate}}{\text{vocoder parameter update rate}}$
+2. Break the signal into frames of length $L = \frac{\text{sample rate}}{\text{vocoder parameter update rate}}$
 
     ```
     L = 1024; N = floor(length(y)/L);
@@ -48,13 +48,10 @@ In this exercise, we will encode a voice recording into a matrix of IIR filter c
 
     ```
     order = 16;
-    period = 480*ones(N,1);
-    peak = zeros(N,1);
     a = zeros(N,order);
     b = zeros(N,1);
     for i_frame = 1:N
         [r,lg] = xcorr(y(:,i_frame),'biased'); r(lg<0) = [];
-        [peak(i_frame),period(i_frame)] = max(r(200:1000));
         a(i_frame,:) = levinson(r,order-1);
         b(i_frame) = 1./freqz(1,a(i_frame,:),1);
     end
@@ -77,7 +74,7 @@ In this exercise, you will apply the learned vocal filter to input data in real 
 
     ```
     #define L 1024
-    #define N 80
+    #define N 68
     #define ORDER 16
     ```
 
@@ -139,7 +136,7 @@ In this exercise, you will apply the learned vocal filter to input data in real 
 
 8. Using a separate phone/laptop, provide any input which contains harmonically rich instrument(s), like a guitar, violin, or synthesizer. Verify that the output shares characteristics of the original speech signal.
 
-    One option is to use a [synthesizer app in your browser controlled by the top row (QWERTY..) of your keyboard](https://www.errozero.co.uk/stuff/poly/).
+    One option is to use a [synthesizer app in your browser controlled by the top row (QWERTY...) of your keyboard](https://www.errozero.co.uk/stuff/poly/).
 
    
 ### Flanger
@@ -148,19 +145,105 @@ In this exercise, you will implement the flanger using the feedforward form of t
 
 $$y[n] = x[n] + \alpha x\left[n-K[n]\right]$$
 
-$$K[n] = R \cos(\omega_{\text{flanger}}) + \frac{R}{2}$$
+$$K[n] = \frac{R}{2} \left( \cos(\omega_{\text{flanger}}) + 1 \right)$$
 
-4. Using a separate phone/laptop, play a recording which contains harmonically rich instrument(s), like a guitar, violin, or synthesizer, and listen to the output.
+
+1. Define the parameters of the flanger. For this example, the flanger has frequency of 0.5 Hz and a maximum delay of 10 ms so $\omega_{\text{flanger}} = 2 \pi \frac{0.5}{48000} = 6.5 \times 10^{-05} \frac{\text{radians}}{\text{sample}}$ and $R = 48000 \text{ Hz} \times 10 \text{ ms} = 480 \text{ samples}$
+
+    ```
+    #define alpha 0.75
+    #define R 480
+    #define BUFFER_LENGTH 481
+    #define OMEGA 0.0000654498469497874
+    #define FLANGER_PERIOD 96000
+    ```
+
+2. Create two circular buffers (one for each channel) to store previous input values. Also create a counter to track the oscillation.
+
+    ```
+    int16_t x_circ[2][BUFFER_LENGTH] = {0};
+    int32_t i1 = 0;
+    int32_t i2 = 0;
+    int32_t n = 0;
+    ```
+    
+3. In process_left_sample, update the indices of the circular buffer and add the most recent sample.
+
+    ```
+    i2 = i1;
+    i1 = (i1+1) % BUFFER_LENGTH;
+    x_circ[0][i2] = input_sample;
+    ```
+    
+4. In process_right_sample, add the newest input sample but leave the indices unchanged
+
+    ```
+    x_circ[1][i2] = input_sample;
+    ```
+    
+5. Implement the flanger
+
+    ```
+    float32_t x_current;
+    float32_t x_delayed;
+    size_t Kn;
+    size_t ind;
+    
+    x_current = INPUT_SCALE_FACTOR*x_circ[<channel>][i2];
+    
+    Kn = 0.5*R*(arm_cos_f32(OMEGA*n) + 1.0);
+
+    if (Kn > i2)
+    {
+        ind = (i2 + BUFFER_LENGTH) - Kn;
+    } else
+    {
+        ind = i2 - Kn;
+    }
+    
+    x_delayed = INPUT_SCALE_FACTOR*x_circ[<channel>][ind];
+
+    output_sample = OUTPUT_SCALE_FACTOR*(alpha*x_delayed + x_current);
+    ```
+
+6. In process_right_sample only, increment the counter
+
+    ```
+    n = (n+1) % FLANGER_PERIOD;
+    ```
+
+7. Using a separate phone/laptop, play a recording which contains harmonically rich instrument(s), like a guitar, violin, or synthesizer, and listen to the output.
 
 ### Distortion
 
-In this exercise, you will implement harmonic distortion using two methods.
+In this exercise, you will implement harmonic distortion by clipping.
 
-1. Add a nonlinearity to the input signal to increase the energy at higher harmonics.
-    
-    * Option 1 (Overdrive/clipping) : Whenever the absolute value of the signal exceeds some threshold $L$, set the value equal to $\text{sgn}(x[n]) L$
-    
-    * Option 2 (Bitcrusher/Quantization) : Scale the (fixed point) input signal by $\alpha = 2^-\B$ so that the $B$ least significant bits of information are discarded. then, scale the input by $2^B$ so that the original level is restored.
+1. Add a nonlinearity to the input signal to increase the energy at higher harmonics. Whenever the absolute value of the signal exceeds some threshold $L$, set the value equal to $\text{sgn}(x[n]) L$
+       
+    ```
+    #define CLIP 0.1
+    ```
+
+    ```
+    float32_t x;
+    float32_t y;
+    x = INPUT_SCALE_FACTOR*input_sample;
+    if (x < -CLIP)
+    {
+        y = -CLIP;
+    }
+    else if ( x > CLIP )
+    {
+        y = CLIP;
+    }
+    else
+    {
+        y = CLIP;
+    }
+    output_sample = OUTPUT_SCALE_FACTOR*y;
+    ```
+        
+     Ensure that the same effect is active on both channels.
 
 2. Using a separate phone/laptop, play a recording which contains harmonically rich instrument(s), like a guitar, violin, or synthesizer, and listen to the output.
 

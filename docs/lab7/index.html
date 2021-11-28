@@ -207,22 +207,22 @@
 <div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">NET</span><span class="o">.</span><span class="n">addAssembly</span><span class="p">(</span><span class="s1">&#39;System.Speech&#39;</span><span class="p">);</span>
 <span class="n">speech_synth</span> <span class="o">=</span> <span class="n">System</span><span class="o">.</span><span class="n">Speech</span><span class="o">.</span><span class="n">Synthesis</span><span class="o">.</span><span class="n">SpeechSynthesizer</span><span class="p">;</span>
 <span class="n">SetOutputToWaveFile</span><span class="p">(</span><span class="n">speech_synth</span><span class="p">,</span><span class="s1">&#39;example.wav&#39;</span><span class="p">);</span>
-<span class="n">Speak</span><span class="p">(</span><span class="n">speech_synth</span><span class="p">,</span><span class="s1">&#39;do re mi faso la tee do&#39;</span><span class="p">);</span>
+<span class="n">Speak</span><span class="p">(</span><span class="n">speech_synth</span><span class="p">,</span><span class="s1">&#39;do re mi fa so la tee&#39;</span><span class="p">);</span>
 <span class="n">Dispose</span><span class="p">(</span><span class="n">speech_synth</span><span class="p">);</span>
 <span class="p">[</span><span class="n">y</span><span class="p">,</span><span class="n">fs</span><span class="p">]</span> <span class="o">=</span> <span class="n">audioread</span><span class="p">(</span><span class="s1">&#39;example.wav&#39;</span><span class="p">);</span> <span class="n">y</span> <span class="o">=</span> <span class="n">resample</span><span class="p">(</span><span class="n">y</span><span class="p">,</span><span class="mi">320</span><span class="p">,</span><span class="mi">147</span><span class="p">);</span> <span class="n">fs</span> <span class="o">=</span> <span class="mf">48e3</span><span class="p">;</span>
 </pre></div>
 </div>
 <p>optionally, remove silence from the beginning and end of the clip</p>
 <div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">y</span> <span class="o">=</span> <span class="n">flipud</span><span class="p">(</span><span class="n">y</span><span class="p">);</span>
-<span class="n">ind</span> <span class="o">=</span> <span class="n">find</span><span class="p">(</span><span class="nb">abs</span><span class="p">(</span><span class="n">y</span><span class="p">)</span> <span class="o">&gt;</span> <span class="mf">1e-3</span><span class="p">);</span>
+<span class="n">ind</span> <span class="o">=</span> <span class="n">find</span><span class="p">(</span><span class="nb">abs</span><span class="p">(</span><span class="n">y</span><span class="p">)</span> <span class="o">&gt;</span> <span class="mf">5e-3</span><span class="p">);</span>
 <span class="n">y</span><span class="p">(</span><span class="mi">1</span><span class="p">:</span><span class="n">ind</span><span class="p">(</span><span class="mi">1</span><span class="p">))</span> <span class="o">=</span> <span class="p">[];</span>
 <span class="n">y</span> <span class="o">=</span> <span class="n">flipud</span><span class="p">(</span><span class="n">y</span><span class="p">);</span>
-<span class="n">ind</span> <span class="o">=</span> <span class="n">find</span><span class="p">(</span><span class="nb">abs</span><span class="p">(</span><span class="n">y</span><span class="p">)</span> <span class="o">&gt;</span> <span class="mf">1e-3</span><span class="p">);</span>
+<span class="n">ind</span> <span class="o">=</span> <span class="n">find</span><span class="p">(</span><span class="nb">abs</span><span class="p">(</span><span class="n">y</span><span class="p">)</span> <span class="o">&gt;</span> <span class="mf">5e-3</span><span class="p">);</span>
 <span class="n">y</span><span class="p">(</span><span class="mi">1</span><span class="p">:</span><span class="n">ind</span><span class="p">(</span><span class="mi">1</span><span class="p">))</span> <span class="o">=</span> <span class="p">[];</span>
 </pre></div>
 </div>
 </li>
-<li><p>Break the signal into frames of length <span class="math notranslate nohighlight">\(L = \frac{\text{sample_rate}}{\text{vocoder parameter update rate}}\)</span></p>
+<li><p>Break the signal into frames of length <span class="math notranslate nohighlight">\(L = \frac{\text{sample rate}}{\text{vocoder parameter update rate}}\)</span></p>
 <div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">L</span> <span class="o">=</span> <span class="mi">1024</span><span class="p">;</span> <span class="n">N</span> <span class="o">=</span> <span class="n">floor</span><span class="p">(</span><span class="n">length</span><span class="p">(</span><span class="n">y</span><span class="p">)</span><span class="o">/</span><span class="n">L</span><span class="p">);</span>
 <span class="n">y</span><span class="p">(</span><span class="n">N</span><span class="o">*</span><span class="n">L</span><span class="o">+</span><span class="mi">1</span><span class="p">:</span><span class="n">end</span><span class="p">)</span> <span class="o">=</span> <span class="p">[];</span>
 <span class="n">y</span> <span class="o">=</span> <span class="n">reshape</span><span class="p">(</span><span class="n">y</span><span class="p">,</span><span class="n">L</span><span class="p">,</span><span class="n">N</span><span class="p">);</span>
@@ -231,13 +231,10 @@
 </li>
 <li><p>Learn the filter corresponding to each frame of data</p>
 <div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">order</span> <span class="o">=</span> <span class="mi">16</span><span class="p">;</span>
-<span class="n">period</span> <span class="o">=</span> <span class="mi">480</span><span class="o">*</span><span class="n">ones</span><span class="p">(</span><span class="n">N</span><span class="p">,</span><span class="mi">1</span><span class="p">);</span>
-<span class="n">peak</span> <span class="o">=</span> <span class="n">zeros</span><span class="p">(</span><span class="n">N</span><span class="p">,</span><span class="mi">1</span><span class="p">);</span>
 <span class="n">a</span> <span class="o">=</span> <span class="n">zeros</span><span class="p">(</span><span class="n">N</span><span class="p">,</span><span class="n">order</span><span class="p">);</span>
 <span class="n">b</span> <span class="o">=</span> <span class="n">zeros</span><span class="p">(</span><span class="n">N</span><span class="p">,</span><span class="mi">1</span><span class="p">);</span>
 <span class="k">for</span> <span class="n">i_frame</span> <span class="o">=</span> <span class="mi">1</span><span class="p">:</span><span class="n">N</span>
     <span class="p">[</span><span class="n">r</span><span class="p">,</span><span class="n">lg</span><span class="p">]</span> <span class="o">=</span> <span class="n">xcorr</span><span class="p">(</span><span class="n">y</span><span class="p">(:,</span><span class="n">i_frame</span><span class="p">),</span><span class="s1">&#39;biased&#39;</span><span class="p">);</span> <span class="n">r</span><span class="p">(</span><span class="n">lg</span><span class="o">&lt;</span><span class="mi">0</span><span class="p">)</span> <span class="o">=</span> <span class="p">[];</span>
-    <span class="p">[</span><span class="n">peak</span><span class="p">(</span><span class="n">i_frame</span><span class="p">),</span><span class="n">period</span><span class="p">(</span><span class="n">i_frame</span><span class="p">)]</span> <span class="o">=</span> <span class="nb">max</span><span class="p">(</span><span class="n">r</span><span class="p">(</span><span class="mi">200</span><span class="p">:</span><span class="mi">1000</span><span class="p">));</span>
     <span class="n">a</span><span class="p">(</span><span class="n">i_frame</span><span class="p">,:)</span> <span class="o">=</span> <span class="n">levinson</span><span class="p">(</span><span class="n">r</span><span class="p">,</span><span class="n">order</span><span class="o">-</span><span class="mi">1</span><span class="p">);</span>
     <span class="n">b</span><span class="p">(</span><span class="n">i_frame</span><span class="p">)</span> <span class="o">=</span> <span class="mf">1.</span><span class="o">/</span><span class="n">freqz</span><span class="p">(</span><span class="mi">1</span><span class="p">,</span><span class="n">a</span><span class="p">(</span><span class="n">i_frame</span><span class="p">,:),</span><span class="mi">1</span><span class="p">);</span>
 <span class="n">end</span>
@@ -260,7 +257,7 @@
 <ol>
 <li><p>Define <code class="docutils literal notranslate"><span class="pre">L</span></code>, <code class="docutils literal notranslate"><span class="pre">N</span></code>, and <code class="docutils literal notranslate"><span class="pre">ORDER</span></code> based on the vocoder filters from MATLAB</p>
 <div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="c1">#define L 1024</span>
-<span class="c1">#define N 80</span>
+<span class="c1">#define N 68</span>
 <span class="c1">#define ORDER 16</span>
 </pre></div>
 </div>
@@ -315,7 +312,7 @@
 </div>
 </li>
 <li><p>Using a separate phone/laptop, provide any input which contains harmonically rich instrument(s), like a guitar, violin, or synthesizer. Verify that the output shares characteristics of the original speech signal.</p>
-<p>One option is to use a <a class="reference external" href="https://www.errozero.co.uk/stuff/poly/">synthesizer app in your browser controlled by the top row (QWERTY..) of your keyboard</a>.</p>
+<p>One option is to use a <a class="reference external" href="https://www.errozero.co.uk/stuff/poly/">synthesizer app in your browser controlled by the top row (QWERTY…) of your keyboard</a>.</p>
 </li>
 </ol>
 </div>
@@ -325,20 +322,96 @@
 <div class="math notranslate nohighlight">
 \[y[n] = x[n] + \alpha x\left[n-K[n]\right]\]</div>
 <div class="math notranslate nohighlight">
-\[K[n] = R \cos(\omega_{\text{flanger}}) + \frac{R}{2}\]</div>
-<ol class="simple">
+\[K[n] = \frac{R}{2} \left( \cos(\omega_{\text{flanger}}) + 1 \right)\]</div>
+<ol>
+<li><p>Define the parameters of the flanger. For this example, the flanger has frequency of 0.5 Hz and a maximum delay of 10 ms so <span class="math notranslate nohighlight">\(\omega_{\text{flanger}} = 2 \pi \frac{0.5}{48000} = 6.5 \times 10^{-05} \frac{\text{radians}}{\text{sample}}\)</span> and <span class="math notranslate nohighlight">\(R = 48000 \text{ Hz} \times 10 \text{ ms} = 480 \text{ samples}\)</span></p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="c1">#define alpha 0.75</span>
+<span class="c1">#define R 480</span>
+<span class="c1">#define BUFFER_LENGTH 481</span>
+<span class="c1">#define OMEGA 0.0000654498469497874</span>
+<span class="c1">#define FLANGER_PERIOD 96000</span>
+</pre></div>
+</div>
+</li>
+<li><p>Create two circular buffers (one for each channel) to store previous input values. Also create a counter to track the oscillation.</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">int16_t</span> <span class="n">x_circ</span><span class="p">[</span><span class="mi">2</span><span class="p">][</span><span class="n">BUFFER_LENGTH</span><span class="p">]</span> <span class="o">=</span> <span class="p">{</span><span class="mi">0</span><span class="p">};</span>
+<span class="n">int32_t</span> <span class="n">i1</span> <span class="o">=</span> <span class="mi">0</span><span class="p">;</span>
+<span class="n">int32_t</span> <span class="n">i2</span> <span class="o">=</span> <span class="mi">0</span><span class="p">;</span>
+<span class="n">int32_t</span> <span class="n">n</span> <span class="o">=</span> <span class="mi">0</span><span class="p">;</span>
+</pre></div>
+</div>
+</li>
+<li><p>In process_left_sample, update the indices of the circular buffer and add the most recent sample.</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">i2</span> <span class="o">=</span> <span class="n">i1</span><span class="p">;</span>
+<span class="n">i1</span> <span class="o">=</span> <span class="p">(</span><span class="n">i1</span><span class="o">+</span><span class="mi">1</span><span class="p">)</span> <span class="o">%</span> <span class="n">BUFFER_LENGTH</span><span class="p">;</span>
+<span class="n">x_circ</span><span class="p">[</span><span class="mi">0</span><span class="p">][</span><span class="n">i2</span><span class="p">]</span> <span class="o">=</span> <span class="n">input_sample</span><span class="p">;</span>
+</pre></div>
+</div>
+</li>
+<li><p>In process_right_sample, add the newest input sample but leave the indices unchanged</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">x_circ</span><span class="p">[</span><span class="mi">1</span><span class="p">][</span><span class="n">i2</span><span class="p">]</span> <span class="o">=</span> <span class="n">input_sample</span><span class="p">;</span>
+</pre></div>
+</div>
+</li>
+<li><p>Implement the flanger</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">float32_t</span> <span class="n">x_current</span><span class="p">;</span>
+<span class="n">float32_t</span> <span class="n">x_delayed</span><span class="p">;</span>
+<span class="n">size_t</span> <span class="n">Kn</span><span class="p">;</span>
+<span class="n">size_t</span> <span class="n">ind</span><span class="p">;</span>
+
+<span class="n">x_current</span> <span class="o">=</span> <span class="n">INPUT_SCALE_FACTOR</span><span class="o">*</span><span class="n">x_circ</span><span class="p">[</span><span class="o">&lt;</span><span class="n">channel</span><span class="o">&gt;</span><span class="p">][</span><span class="n">i2</span><span class="p">];</span>
+
+<span class="n">Kn</span> <span class="o">=</span> <span class="mf">0.5</span><span class="o">*</span><span class="n">R</span><span class="o">*</span><span class="p">(</span><span class="n">arm_cos_f32</span><span class="p">(</span><span class="n">OMEGA</span><span class="o">*</span><span class="n">n</span><span class="p">)</span> <span class="o">+</span> <span class="mf">1.0</span><span class="p">);</span>
+
+<span class="k">if</span> <span class="p">(</span><span class="n">Kn</span> <span class="o">&gt;</span> <span class="n">i2</span><span class="p">)</span>
+<span class="p">{</span>
+    <span class="n">ind</span> <span class="o">=</span> <span class="p">(</span><span class="n">i2</span> <span class="o">+</span> <span class="n">BUFFER_LENGTH</span><span class="p">)</span> <span class="o">-</span> <span class="n">Kn</span><span class="p">;</span>
+<span class="p">}</span> <span class="k">else</span>
+<span class="p">{</span>
+    <span class="n">ind</span> <span class="o">=</span> <span class="n">i2</span> <span class="o">-</span> <span class="n">Kn</span><span class="p">;</span>
+<span class="p">}</span>
+
+<span class="n">x_delayed</span> <span class="o">=</span> <span class="n">INPUT_SCALE_FACTOR</span><span class="o">*</span><span class="n">x_circ</span><span class="p">[</span><span class="o">&lt;</span><span class="n">channel</span><span class="o">&gt;</span><span class="p">][</span><span class="n">ind</span><span class="p">];</span>
+
+<span class="n">output_sample</span> <span class="o">=</span> <span class="n">OUTPUT_SCALE_FACTOR</span><span class="o">*</span><span class="p">(</span><span class="n">alpha</span><span class="o">*</span><span class="n">x_delayed</span> <span class="o">+</span> <span class="n">x_current</span><span class="p">);</span>
+</pre></div>
+</div>
+</li>
+<li><p>In process_right_sample only, increment the counter</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">n</span> <span class="o">=</span> <span class="p">(</span><span class="n">n</span><span class="o">+</span><span class="mi">1</span><span class="p">)</span> <span class="o">%</span> <span class="n">FLANGER_PERIOD</span><span class="p">;</span>
+</pre></div>
+</div>
+</li>
 <li><p>Using a separate phone/laptop, play a recording which contains harmonically rich instrument(s), like a guitar, violin, or synthesizer, and listen to the output.</p></li>
 </ol>
 </div>
 <div class="section" id="distortion">
 <h3>Distortion<a class="headerlink" href="#distortion" title="Permalink to this headline">¶</a></h3>
-<p>In this exercise, you will implement harmonic distortion using two methods.</p>
-<ol class="simple">
-<li><p>Add a nonlinearity to the input signal to increase the energy at higher harmonics.</p>
-<ul class="simple">
-<li><p>Option 1 (Overdrive/clipping) : Whenever the absolute value of the signal exceeds some threshold <span class="math notranslate nohighlight">\(L\)</span>, set the value equal to <span class="math notranslate nohighlight">\(\text{sgn}(x[n]) L\)</span></p></li>
-<li><p>Option 2 (Bitcrusher/Quantization) : Scale the (fixed point) input signal by <span class="math notranslate nohighlight">\(\alpha = 2^-\B\)</span> so that the <span class="math notranslate nohighlight">\(B\)</span> least significant bits of information are discarded. then, scale the input by <span class="math notranslate nohighlight">\(2^B\)</span> so that the original level is restored.</p></li>
-</ul>
+<p>In this exercise, you will implement harmonic distortion by clipping.</p>
+<ol>
+<li><p>Add a nonlinearity to the input signal to increase the energy at higher harmonics. Whenever the absolute value of the signal exceeds some threshold <span class="math notranslate nohighlight">\(L\)</span>, set the value equal to <span class="math notranslate nohighlight">\(\text{sgn}(x[n]) L\)</span></p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="c1">#define CLIP 0.1</span>
+</pre></div>
+</div>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">float32_t</span> <span class="n">x</span><span class="p">;</span>
+<span class="n">float32_t</span> <span class="n">y</span><span class="p">;</span>
+<span class="n">x</span> <span class="o">=</span> <span class="n">INPUT_SCALE_FACTOR</span><span class="o">*</span><span class="n">input_sample</span><span class="p">;</span>
+<span class="k">if</span> <span class="p">(</span><span class="n">x</span> <span class="o">&lt;</span> <span class="o">-</span><span class="n">CLIP</span><span class="p">)</span>
+<span class="p">{</span>
+    <span class="n">y</span> <span class="o">=</span> <span class="o">-</span><span class="n">CLIP</span><span class="p">;</span>
+<span class="p">}</span>
+<span class="k">else</span> <span class="k">if</span> <span class="p">(</span> <span class="n">x</span> <span class="o">&gt;</span> <span class="n">CLIP</span> <span class="p">)</span>
+<span class="p">{</span>
+    <span class="n">y</span> <span class="o">=</span> <span class="n">CLIP</span><span class="p">;</span>
+<span class="p">}</span>
+<span class="k">else</span>
+<span class="p">{</span>
+    <span class="n">y</span> <span class="o">=</span> <span class="n">CLIP</span><span class="p">;</span>
+<span class="p">}</span>
+<span class="n">output_sample</span> <span class="o">=</span> <span class="n">OUTPUT_SCALE_FACTOR</span><span class="o">*</span><span class="n">y</span><span class="p">;</span>
+</pre></div>
+</div>
+<p>Ensure that the same effect is active on both channels.</p>
 </li>
 <li><p>Using a separate phone/laptop, play a recording which contains harmonically rich instrument(s), like a guitar, violin, or synthesizer, and listen to the output.</p></li>
 </ol>
