@@ -238,7 +238,7 @@ In this exercise, you will implement harmonic distortion by clipping.
     }
     else
     {
-        y = CLIP;
+        y = x;
     }
     output_sample = OUTPUT_SCALE_FACTOR*y;
     ```
